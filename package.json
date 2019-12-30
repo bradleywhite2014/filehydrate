@@ -1,7 +1,7 @@
 {
   "scripts": {
     "start": "node index.js",
-    "deploy": "aws s3 sync ./ s3://documerge/server --region us-east-2 --delete"
+    "deploy": "aws s3 sync ./ s3://documerge.me/server --region us-east-2 --delete"
   },
   "dependencies": {
     "@babel/polyfill": "^7.4.0",

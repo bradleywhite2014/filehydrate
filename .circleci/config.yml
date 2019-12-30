@@ -10,7 +10,6 @@ jobs:
     steps:
       - checkout
       - run: curl -o- -L https://yarnpkg.com/install.sh | bash
-      - run: cd client && yarn install && yarn upgrade && yarn
       - run: sudo apt-get -y -qq install awscli
       - run: aws --version
       - run: aws s3 ls
