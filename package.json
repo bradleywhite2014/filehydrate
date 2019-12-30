@@ -1,0 +1,28 @@
+{
+  "scripts": {
+    "start": "node index.js",
+    "deploy": "aws s3 sync ./ s3://documerge/server --region us-east-2 --delete"
+  },
+  "dependencies": {
+    "@babel/polyfill": "^7.4.0",
+    "@okta/jwt-verifier": "0.0.14",
+    "@okta/okta-auth-js": "^2.1.0",
+    "aws-sdk": "2.450.0",
+    "body-parser": "^1.18.3",
+    "dotenv": "^7.0.0",
+    "es6-promise": "^4.2.6",
+    "express": "^4.16.4",
+    "pg": "7.9.0",
+    "react": "16.8.5",
+    "react-router-dom": "^4.3.1",
+    "redux-saga": "^1.0.2",
+    "sqs-consumer": "^5.2.0",
+    "jsonwebtoken":"8.5.1"
+  },
+  "devDependencies": {
+    "@babel/cli": "^7.2.3",
+    "@babel/core": "^7.4.0",
+    "@babel/preset-env": "^7.4.2",
+    "@babel/preset-react": "^7.0.0"
+  }
+}

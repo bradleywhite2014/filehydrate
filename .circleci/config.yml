@@ -1,0 +1,19 @@
+version: 2
+jobs:
+  build:
+    docker:
+      # specify the version you desire here
+      - image: circleci/node:8
+    working_directory: ~/dm
+    environment: 
+      CI: false
+    steps:
+      - checkout
+      - run: curl -o- -L https://yarnpkg.com/install.sh | bash
+      - run: cd client && yarn install && yarn upgrade && yarn
+      - run: sudo apt-get -y -qq install awscli
+      - run: aws --version
+      - run: aws s3 ls
+      - run: pwd
+      - run: ls -al
+      - run: yarn run deploy
