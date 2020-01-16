@@ -14,7 +14,7 @@ const bodyParser = require('body-parser');
 app.use(bodyParser.json()); // support json encoded bodies
 app.use(bodyParser.urlencoded({ extended: true })); // support encoded bodies
 app.use(function(req,res,next) {
-    res.header("Access-Control-Allow-Origin", "http://upset.city");
+    res.header("Access-Control-Allow-Origin", "http://documerge.me");
     res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, Authorization");
     next();
 })
