@@ -38,7 +38,7 @@ class Home extends Component {
     <div className="app">
     <div className="opaque-overlay" />
     <Menu menuOpen={menuOpen} handleToggle={this.handleHeaderToggle} handleClose={this.handleHeaderClose} />  
-      <h1 className="home_text">Documerge</h1>
+      <h1 className="home_text">DocuMerge</h1>
       
     </div>
     );
