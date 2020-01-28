@@ -55,16 +55,10 @@ export default class Menu extends Component {
                     <Link to={'./'}>
                       <MenuItem className="white" onClick={handleClose}>Admin</MenuItem>
                       </Link>
-                    <Link to={'./'}>
+                      <Link to={'./'}>
                       <MenuItem className="white" onClick={handleClose}>Home</MenuItem>
                       </Link>
-                      <Link to={'./games'}>
-                      <MenuItem className="white" onClick={handleClose}>Make Picks</MenuItem>
-                      </Link>
-                      <Link to={'./games'}>
-                      <MenuItem className="white" onClick={handleClose}>Table</MenuItem>
-                      </Link>
-                      <Link to={'./games'}>
+                      <Link to={'./'}>
                       <MenuItem className="white" onClick={handleClose}>Logout</MenuItem>
                       </Link>
                     </MenuList>
