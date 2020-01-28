@@ -14,20 +14,12 @@ code {
 }
 
 .app {
-  background-image: url('../images/hoop_background.jpg');
+  background-image: url('../images/ray_underwater.jpg');
   background-size: cover;
   height: 100vh;
   display: flex;
 }
 
-
-.opaque-overlay {
-  width: 100vw;
-  height: 100vh;
-  position: absolute;
-  z-index: 10;
-  background: rgba(121, 81, 6, 0.28);
-}
 
 .disabled {
   color: red;

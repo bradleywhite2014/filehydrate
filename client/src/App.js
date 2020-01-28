@@ -26,22 +26,22 @@ var config = {
 class App extends Component {
   constructor() {
     super()
-    this.state = {
-      authed: false
-    }
-    this.authClient = new OktaAuth({
-      url: config.domain,
-      clientId: config.clientId,
-      redirectUri: config.redirectUri,
-      issuer: config.issuer,
-      responseType: ['id_token', 'token'],
-      scopes: ['openid', 'profile']
+    // this.state = {
+    //   authed: false
+    // }
+    // this.authClient = new OktaAuth({
+    //   url: config.domain,
+    //   clientId: config.clientId,
+    //   redirectUri: config.redirectUri,
+    //   issuer: config.issuer,
+    //   responseType: ['id_token', 'token'],
+    //   scopes: ['openid', 'profile']
 
-    })
+    // })
 
-    this.makeOidcUrl = this.makeOidcUrl.bind(this);
-    this.attemptSSO = this.attemptSSO.bind(this);
-    this.attemptSSO();
+    // this.makeOidcUrl = this.makeOidcUrl.bind(this);
+    // this.attemptSSO = this.attemptSSO.bind(this);
+    // this.attemptSSO();
   }
 
   makeOidcUrl() {
@@ -61,27 +61,26 @@ class App extends Component {
     }
   }
 
-  async attemptSSO() {
-    try{
-      const session = await this.authClient.session.refresh();
-      const response = await this.authClient.token.getWithoutPrompt({
-        responseType: ['id_token', 'token'],
-        sessionToken: session
-      })
-      sessionStorage.setItem('id_token', response[0].idToken)
-      sessionStorage.setItem('access_token', response[1].accessToken)
-      this.setState({authed: true})
-    }catch(err){
-      // dont have a valid session, send to okta
-      window.location = this.makeOidcUrl();
-    }
+  // async attemptSSO() {
+  //   try{
+  //     const session = await this.authClient.session.refresh();
+  //     const response = await this.authClient.token.getWithoutPrompt({
+  //       responseType: ['id_token', 'token'],
+  //       sessionToken: session
+  //     })
+  //     sessionStorage.setItem('id_token', response[0].idToken)
+  //     sessionStorage.setItem('access_token', response[1].accessToken)
+  //     this.setState({authed: true})
+  //   }catch(err){
+  //     // dont have a valid session, send to okta
+  //     window.location = this.makeOidcUrl();
+  //   }
     
-  }
+  // }
   
 
   render() {
     const { teams, games, menuOpen } = this.props.reducer ? this.props.reducer : {teams: [], games: []};
-    if(this.state.authed) {
       return (
         <Router>
             <Switch>
@@ -98,11 +97,7 @@ class App extends Component {
             </Switch>
         </Router>
       );
-    } else {
-      return null;
-    }
-    
-  }
+    } 
 }
 
 export default connect(
