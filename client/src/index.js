@@ -9,6 +9,7 @@ import createSagaMiddleware from 'redux-saga'
 
 import reducer from './reducers';
 import rootSagas from './middleware/sagas';
+import Home from './homepage/Home';
 const sagaMiddleware = createSagaMiddleware();
 
 const store = createStore(
@@ -22,7 +23,7 @@ sagaMiddleware.run(rootSagas);
 render((
     <BrowserRouter>
     <Provider store={store}>
-        <App/>
+        <Home/>
     </Provider>
     </BrowserRouter>
 ), document.getElementById('root'));

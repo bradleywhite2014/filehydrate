@@ -95,9 +95,9 @@ h3 {
   z-index: 10000;
 }
 
-a {
+/* a {
   color: transparent !important;
-}
+} */
 
 .bracket-wrapper {
   display: flex;
