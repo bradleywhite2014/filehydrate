@@ -6,6 +6,13 @@ import Link from '@material-ui/core/Link';
 import AppBar from '../components/AppBar';
 import Typography from '../components/Typography';
 import Toolbar, { styles as toolbarStyles } from '../components/Toolbar';
+import { connect } from 'react-redux'
+import { setUserInfo } from '../../../lib/actions'
+import GoogleLogin from 'react-google-login';
+
+const googleScopes = 'https://www.googleapis.com/auth/documents https://www.googleapis.com/auth/drive email profile'
+
+
 
 const styles = theme => ({
   title: {
@@ -35,12 +42,42 @@ const styles = theme => ({
   linkSecondary: {
     color: theme.palette.secondary.main,
   },
-});
+  profileIcon: {
+    borderRadius: '50%',
+    width: '20px',
+    height: '20px',
+    marginRight: '10px'
+  }});
 
 function AppAppBar(props) {
   const { classes } = props;
 
-  return (
+  const responseGoogleSuccess = (response) => {
+    //console.log('props: ' + JSON.stringify(props));
+    props.setUserInfo(response);
+  }
+  
+  const responseGoogleError = (response) => {
+    console.log(response);
+  }
+
+  return props.state.userInfo.imageUrl.length > 0 ?  <div>
+  <AppBar position="fixed">
+    <Toolbar className={classes.toolbar}>
+      <div className={classes.left} />
+      <Typography color="inherit" align="center" variant="h5" className={classes.h5}>
+        DocuMerge
+      </Typography>
+      <div className={classes.right}>
+      <img src={props.state.userInfo.imageUrl} className={classes.profileIcon}/>
+      <Typography color="inherit" align="center" variant="body2" className={classes.h4}>
+        {props.state.userInfo.name}
+      </Typography>
+      </div>
+    </Toolbar>
+  </AppBar>
+  <div className={classes.placeholder} />
+</div> : (
     <div>
       <AppBar position="fixed">
         <Toolbar className={classes.toolbar}>
@@ -49,23 +86,14 @@ function AppAppBar(props) {
             DocuMerge
           </Typography>
           <div className={classes.right}>
-            <Link
-              color="inherit"
-              variant="h6"
-              underline="none"
-              className={classes.rightLink}
-              href="/premium-themes/onepirate/sign-in/"
-            >
-              {'Sign In'}
-            </Link>
-            <Link
-              variant="h6"
-              underline="none"
-              className={clsx(classes.rightLink, classes.linkSecondary)}
-              href="/premium-themes/onepirate/sign-up/"
-            >
-              {'Sign Up'}
-            </Link>
+          <GoogleLogin
+            clientId="382267252700-gvhfvt7467hqlsuro9v4g7fc31v75q4h.apps.googleusercontent.com"
+            buttonText="Login"
+            scope={googleScopes}
+            onSuccess={responseGoogleSuccess}
+            onFailure={responseGoogleError}
+            cookiePolicy={'single_host_origin'}
+          />
           </div>
         </Toolbar>
       </AppBar>
@@ -78,4 +106,11 @@ AppAppBar.propTypes = {
   classes: PropTypes.object.isRequired,
 };
 
-export default withStyles(styles)(AppAppBar);
+export default connect((state) => (
+  {
+    state: state
+  }
+),
+  { setUserInfo }
+)
+(withStyles(styles)(AppAppBar));

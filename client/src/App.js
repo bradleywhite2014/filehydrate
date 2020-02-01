@@ -2,9 +2,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux'
 import { BrowserRouter as Router, Route, Switch , Redirect} from 'react-router-dom';
-import Home from './home';
-import Teams from './teams';
-import Games from './games';
 import {
   randomString
 } from './utils'
@@ -84,16 +81,7 @@ class App extends Component {
       return (
         <Router>
             <Switch>
-            <Route path='/' exact={true} render={(props) => <Home {...props} menuOpen={menuOpen}/>} />
-            <Route path='/auth/callback' render={(props) => <Redirect to="/"/> }/>
-            <Route 
-                path="/teams" 
-                render={(props) => <Teams {...props} teams={teams}/>} 
-            />
-            <Route 
-                path="/games" 
-                render={(props) => <Games {...props} games={games} menuOpen={menuOpen}/>} 
-            />
+            <Route path='/' exact={true} render={(props) => <div/>} />
             </Switch>
         </Router>
       );

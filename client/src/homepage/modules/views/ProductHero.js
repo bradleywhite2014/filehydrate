@@ -7,9 +7,6 @@ import ProductHeroLayout from './ProductHeroLayout';
 
 import backgroundImg from '../../../assets/images/turtle_cropped_background.png';
 
-const backgroundImage =
-  'https://images.unsplash.com/photo-1534854638093-bada1813ca19?auto=format&fit=crop&w=1400&q=80';
-
 const styles = theme => ({
   background: {
     backgroundImage: `url(${backgroundImg})`,
@@ -37,23 +34,12 @@ function ProductHero(props) {
   return (
     <ProductHeroLayout backgroundClassName={classes.background}>
       {/* Increase the network loading priority of the background image. */}
-      <img style={{ display: 'none' }} src={backgroundImage} alt="increase priority" />
       <Typography color="inherit" align="center" variant="h2" marked="center">
         Relax
       </Typography>
       <Typography color="inherit" align="center" variant="h5" className={classes.h5}>
         Document automation made easy
       </Typography>
-      <Button
-        color="secondary"
-        variant="contained"
-        size="large"
-        className={classes.button}
-        component="a"
-        href="/premium-themes/onepirate/sign-up/"
-      >
-        Register
-      </Button>
       <Typography variant="body2" color="inherit" className={classes.more}>
         Discover the experience
       </Typography>
