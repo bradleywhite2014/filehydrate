@@ -54,6 +54,7 @@ function AppAppBar(props) {
 
   const responseGoogleSuccess = (response) => {
     //console.log('props: ' + JSON.stringify(props));
+    console.log(response);
     props.setUserInfo(response);
   }
   
