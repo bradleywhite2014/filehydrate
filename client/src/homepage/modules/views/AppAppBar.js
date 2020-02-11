@@ -7,8 +7,10 @@ import AppBar from '../components/AppBar';
 import Typography from '../components/Typography';
 import Toolbar, { styles as toolbarStyles } from '../components/Toolbar';
 import { connect } from 'react-redux'
-import { setUserInfo } from '../../../lib/actions'
-import GoogleLogin from 'react-google-login';
+import { setUserInfo , removeUserInfo} from '../../../lib/actions'
+import { GoogleLogin, GoogleLogout} from 'react-google-login';
+import { useHistory } from "react-router-dom";
+
 
 const googleScopes = 'https://www.googleapis.com/auth/documents https://www.googleapis.com/auth/drive email profile'
 
@@ -33,6 +35,7 @@ const styles = theme => ({
     flex: 1,
     display: 'flex',
     justifyContent: 'flex-end',
+    alignItems: 'center'
   },
   rightLink: {
     fontSize: 16,
@@ -50,30 +53,45 @@ const styles = theme => ({
   }});
 
 function AppAppBar(props) {
-  const { classes } = props;
+  const history = useHistory();
+  const { classes } = props; 
 
   const responseGoogleSuccess = (response) => {
     //console.log('props: ' + JSON.stringify(props));
     console.log(response);
     props.setUserInfo(response);
   }
+
+  const responseGoogleLogout = (response) => {
+    props.removeUserInfo();
+    history.push("/");
+  }
   
   const responseGoogleError = (response) => {
     console.log(response);
   }
-
+  console.log(props.state)
   return props.state.userInfo.imageUrl.length > 0 ?  <div>
   <AppBar position="fixed">
     <Toolbar className={classes.toolbar}>
       <div className={classes.left} />
-      <Typography color="inherit" align="center" variant="h5" className={classes.h5}>
-        DocuMerge
+      <Typography align="center" variant="body2" className={classes.h4}>
+        <Link href="/" underline="none" color="white">
+          DocuMerge
+        </Link>
       </Typography>
       <div className={classes.right}>
       <img src={props.state.userInfo.imageUrl} className={classes.profileIcon}/>
       <Typography color="inherit" align="center" variant="body2" className={classes.h4}>
         {props.state.userInfo.name}
       </Typography>
+      <GoogleLogout
+      clientId="382267252700-gvhfvt7467hqlsuro9v4g7fc31v75q4h.apps.googleusercontent.com"
+      buttonText="Logout"
+      onLogoutSuccess={responseGoogleLogout}
+      className={classes.rightLink}
+      >
+      </GoogleLogout>
       </div>
     </Toolbar>
   </AppBar>
@@ -112,6 +130,6 @@ export default connect((state) => (
     state: state
   }
 ),
-  { setUserInfo }
+  { setUserInfo , removeUserInfo}
 )
 (withStyles(styles)(AppAppBar));

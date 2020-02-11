@@ -5,6 +5,7 @@ import Grid from '@material-ui/core/Grid';
 import Container from '@material-ui/core/Container';
 import Button from '../components/Button';
 import Typography from '../components/Typography';
+import { connect } from 'react-redux'
 
 const styles = theme => ({
   root: {
@@ -54,7 +55,7 @@ const styles = theme => ({
 function ProductHowItWorks(props) {
   const { classes } = props;
 
-  return (
+  return  (
     <section className={classes.root}>
       <Container className={classes.container}>
         <img
@@ -114,9 +115,10 @@ function ProductHowItWorks(props) {
           variant="contained"
           className={classes.button}
           component="a"
-          href="/premium-themes/onepirate/sign-up/"
+          href="/merge"
+          disabled={!!!props.state.accessToken}
         >
-          Get started
+          {!!!props.state.accessToken ? 'Please login first...' : 'Get started'}
         </Button>
       </Container>
     </section>
@@ -127,4 +129,11 @@ ProductHowItWorks.propTypes = {
   classes: PropTypes.object.isRequired,
 };
 
-export default withStyles(styles)(ProductHowItWorks);
+export default connect((state) => (
+  {
+    state: state
+  }
+),
+  {}
+)
+(withStyles(styles)(ProductHowItWorks));
