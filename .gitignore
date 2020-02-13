@@ -102,3 +102,5 @@ dist
 
 # TernJS port file
 .tern-port
+py/credentials.json
+py/token.json

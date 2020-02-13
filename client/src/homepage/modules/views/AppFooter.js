@@ -6,17 +6,17 @@ import Container from '@material-ui/core/Container';
 import Typography from '../components/Typography';
 import TextField from '../components/TextField';
 
-function Copyright() {
-  return (
-    <React.Fragment>
-      {'© '}
-      <Link color="inherit" href="https://documerge.me/">
-        Documerge
-      </Link>{' '}
-      {new Date().getFullYear()}
-    </React.Fragment>
-  );
-}
+// function Copyright() {
+//   return (
+//     <React.Fragment>
+//       {'© '}
+//       <Typography variant="body2" color="inherit" >
+//       Documerge
+//       </Typography>{' '}
+//       {new Date().getFullYear()}
+//     </React.Fragment>
+//   );
+// }
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -94,9 +94,6 @@ export default function AppFooter() {
                 <a href="" className={classes.icon}>
                   <img src={require("../../../assets/images/appFooterTwitter.png")} alt="Twitter" />
                 </a>
-              </Grid>
-              <Grid item>
-                <Copyright />
               </Grid>
             </Grid>
           </Grid>

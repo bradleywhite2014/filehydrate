@@ -82,9 +82,6 @@ function AppAppBar(props) {
       </Typography>
       <div className={classes.right}>
       <img src={props.state.userInfo.imageUrl} className={classes.profileIcon}/>
-      <Typography color="inherit" align="center" variant="body2" className={classes.h4}>
-        {props.state.userInfo.name}
-      </Typography>
       <GoogleLogout
       clientId="382267252700-gvhfvt7467hqlsuro9v4g7fc31v75q4h.apps.googleusercontent.com"
       buttonText="Logout"
