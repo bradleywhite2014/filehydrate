@@ -1,6 +1,7 @@
 import {
     SET_USER_INFO,
-    REMOVE_USER_INTO
+    REMOVE_USER_INTO,
+    FETCH_MERGE_FIELDS_SUCCESS
   } from '../utils/constants'
 
   const initializeState = () => {
@@ -9,7 +10,8 @@ import {
             name: '',
             imageUrl: ''
         },
-        accessToken: ''
+        accessToken: '',
+        mergeFields: ['{{MY_WHATEVER}}', '{{MY_ADDRESS}}', '{{MY_PHONE}}', '{{MY_EMAIL}}', '{{DATE}}', '{{TO_NAME}}', '{{TO_TITLE}}', '{{TO_COMPANY}}', '{{TO_ADDRESS}}', '{{TO_NAME}}', '{{BODY}}', '{{MY_NAME}}']
     }
 };
 
@@ -53,6 +55,12 @@ const reducer = (state = initialState, action) => {
         localStorage.removeItem('documerge_state');
 
         return Object.assign({}, state, initializeState());
+      }
+      case FETCH_MERGE_FIELDS_SUCCESS: {
+        const mergeFields = action.payload
+        return Object.assign({}, state, {
+            mergeFields: mergeFields
+        })
       }
       default:  
         return Object.assign({}, state,loadState())
