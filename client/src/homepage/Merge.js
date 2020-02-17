@@ -7,10 +7,12 @@ import TextField from '@material-ui/core/TextField';
 import Typography from './modules/components/Typography';
 import Toolbar, { styles as toolbarStyles } from './modules/components/Toolbar';
 import { connect } from 'react-redux'
-import { fetchMergeFields } from './../lib/actions'
+import { fetchMergeFields, updateMergeField } from './../lib/actions'
 import ProductHeroLayout from './modules/views/ProductHeroLayout';
 import Grid from '@material-ui/core/Grid';
 import Container from '@material-ui/core/Container';
+import Button from './modules/components/Button';
+import _ from 'underscore'
 
 const styles = theme => ({
   root: {
@@ -61,7 +63,8 @@ class Merge extends Component {
 
     constructor(props) {
       super(props)
-
+      this.onSubmit = this.onSubmit.bind(this);
+      this.updateField = this.updateField.bind(this);
     }
 
     // Fetch the list on first mount
@@ -69,15 +72,34 @@ class Merge extends Component {
       //this.props.fetchMergeFields()
     }
 
+    updateField = (event, field) => {
+      //console.log(field + " " + event.target.value);
+      this.props.updateMergeField({
+        fieldKey: field, 
+        fieldVal: event.target.value
+      });
+    }
+
+    onSubmit = () => {
+      console.log(this.props.state.formFields)
+    }
 
     render() {
       
       return  (
         <section className={styles.root}>
           <Container className={styles.container}>
-          {this.props.state.mergeFields.map((field) => {
-            return <TextField style={{width: '-webkit-fill-available' , marginTop: 15, marginBottom: 15}} id="outlined-basic" label={field.substring(2,field.length - 2)} variant="outlined" />
+          {_.keys(this.props.state.formFields).map((field) => {
+            return <TextField onChange={(event) => this.updateField(event, field)} style={{width: '-webkit-fill-available' , marginTop: 15, marginBottom: 15}} id="outlined-basic" label={field.substring(2,field.length - 2)} variant="outlined" />
           })}
+          <Button
+          color="secondary"
+          size="large"
+          variant="contained"
+          onClick={this.onSubmit}
+        >
+          {'Submit'}
+        </Button>
           </Container>
         </section>
       ); 
@@ -92,6 +114,6 @@ export default connect((state) => (
     state: state
   }
 ),
-  { fetchMergeFields }
+  { fetchMergeFields , updateMergeField}
 )
 (withStyles(styles)(Merge));

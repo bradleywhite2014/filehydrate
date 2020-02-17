@@ -14,3 +14,11 @@ export const randomString = (length) => {
     });
     return result.join('');
   };
+
+export const convertMergeFieldsToFormFields = (mergeFields) => {
+  const temp = {}
+  mergeFields.forEach((field) => {
+    temp[field] = '';
+  })
+  return temp;
+}

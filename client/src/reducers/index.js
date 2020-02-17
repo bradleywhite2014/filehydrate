@@ -1,8 +1,11 @@
 import {
     SET_USER_INFO,
     REMOVE_USER_INTO,
-    FETCH_MERGE_FIELDS_SUCCESS
+    FETCH_MERGE_FIELDS_SUCCESS,
+    UPDATE_MERGE_FIELD
   } from '../utils/constants'
+
+import {convertMergeFieldsToFormFields} from '../utils/index'
 
   const initializeState = () => {
     return {
@@ -11,8 +14,23 @@ import {
             imageUrl: ''
         },
         accessToken: '',
-        mergeFields: ['{{MY_WHATEVER}}', '{{MY_ADDRESS}}', '{{MY_PHONE}}', '{{MY_EMAIL}}', '{{DATE}}', '{{TO_NAME}}', '{{TO_TITLE}}', '{{TO_COMPANY}}', '{{TO_ADDRESS}}', '{{TO_NAME}}', '{{BODY}}', '{{MY_NAME}}']
+        mergeFields: ['{{MY_WHATEVER}}', '{{MY_ADDRESS}}', '{{MY_PHONE}}', '{{MY_EMAIL}}', '{{DATE}}', '{{TO_NAME}}', '{{TO_TITLE}}', '{{TO_COMPANY}}', '{{TO_ADDRESS}}', '{{TO_NAME}}', '{{BODY}}', '{{MY_NAME}}'],
+        formFields: {
+            '{{MY_WHATEVER}}': '',
+            '{{MY_ADDRESS}}': '',
+            '{{MY_PHONE}}': '',
+            '{{MY_EMAIL}}': '',
+            '{{DATE}}': '',
+            '{{TO_NAME}}': '',
+            '{{TO_TITLE}}': '',
+            '{{TO_COMPANY}}': '',
+            '{{TO_ADDRESS}}': '',
+            '{{TO_NAME}}': '',
+            '{{BODY}}': '',
+            '{{MY_NAME}}': '',
+        }
     }
+    
 };
 
 const loadState = () => {
@@ -59,7 +77,17 @@ const reducer = (state = initialState, action) => {
       case FETCH_MERGE_FIELDS_SUCCESS: {
         const mergeFields = action.payload
         return Object.assign({}, state, {
-            mergeFields: mergeFields
+            formFields: convertMergeFieldsToFormFields(mergeFields)
+        })
+      }
+      case UPDATE_MERGE_FIELD: {
+          const fieldKey = action.payload.fieldKey
+          const fieldVal = action.payload.fieldVal
+          const updatedFormFields = state.formFields
+          updatedFormFields[fieldKey] = fieldVal
+
+          return Object.assign({}, state, {
+            formFields: updatedFormFields
         })
       }
       default:  

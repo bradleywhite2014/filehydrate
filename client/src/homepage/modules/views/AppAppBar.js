@@ -70,7 +70,6 @@ function AppAppBar(props) {
   const responseGoogleError = (response) => {
     console.log(response);
   }
-  console.log(props.state)
   return props.state.userInfo.imageUrl.length > 0 ?  <div>
   <AppBar position="fixed">
     <Toolbar className={classes.toolbar}>
