@@ -74,8 +74,6 @@ class Merge extends Component {
       
       return  (
         <section className={styles.root}>
-        
-        
           <Container className={styles.container}>
           {this.props.state.mergeFields.map((field) => {
             return <TextField style={{width: '-webkit-fill-available' , marginTop: 15, marginBottom: 15}} id="outlined-basic" label={field.substring(2,field.length - 2)} variant="outlined" />

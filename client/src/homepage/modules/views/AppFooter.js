@@ -88,10 +88,10 @@ export default function AppFooter() {
               spacing={2}
             >
               <Grid item className={classes.icons}>
-                <a href="" className={classes.icon}>
+                <a href="" className={classes.icon} style={{backgorundColor: '#00b4f9', borderRadius: '5px'}}>
                   <img src={require("../../../assets/images/appFooterFacebook.png")} alt="Facebook" />
                 </a>
-                <a href="" className={classes.icon}>
+                <a href="" className={classes.icon} style={{backgorundColor: '#00b4f9', borderRadius: '5px'}}>
                   <img src={require("../../../assets/images/appFooterTwitter.png")} alt="Twitter" />
                 </a>
               </Grid>
