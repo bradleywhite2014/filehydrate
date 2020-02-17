@@ -9,16 +9,21 @@ import ProductValues from './modules/views/ProductValues';
 import ProductHowItWorks from './modules/views/ProductHowItWorks';
 import ProductCTA from './modules/views/ProductCTA';
 import AppAppBar from './modules/views/AppAppBar';
+import Merge from './Merge'
 
-function Index() {
-  return (
+function Index(props) {
+  return props.merge ? (
     <React.Fragment>
       <AppAppBar />
-      <ProductHero />
-      <ProductHowItWorks />
+       <Merge />
       <AppFooter />
     </React.Fragment>
-  );
+  ) : (<React.Fragment>
+    <AppAppBar />
+    <ProductHero />
+    <ProductHowItWorks />
+    <AppFooter />
+  </React.Fragment>);
 }
 
 export default withRoot(Index);

@@ -8,7 +8,6 @@ import { createStore, applyMiddleware } from 'redux'
 import reducer from './reducers';
 import rootSagas from './middleware/sagas';
 import Home from './homepage/Home';
-import Merge from './homepage/Merge';
 import createSagaMiddleware from 'redux-saga'
 
 const sagaMiddleware = createSagaMiddleware();
@@ -44,7 +43,7 @@ render((
         <BrowserRouter>
             <Switch>
                 <Route path='/' exact={true} render={(props) => <Home/> } />
-                <Route path='/merge' exact={true} render={(props) => <Merge/> } />
+                <Route path='/merge' exact={true} render={(props) => <Home merge={true} /> } />
             </Switch>
         </BrowserRouter>
     </Provider>

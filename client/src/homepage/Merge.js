@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import clsx from 'clsx';
 import { withStyles } from '@material-ui/core/styles';
 import Link from '@material-ui/core/Link';
+import TextField from '@material-ui/core/TextField';
 import Typography from './modules/components/Typography';
 import Toolbar, { styles as toolbarStyles } from './modules/components/Toolbar';
 import { connect } from 'react-redux'
@@ -61,39 +62,24 @@ class Merge extends Component {
     constructor(props) {
       super(props)
 
-      this.renderLabelAndField = this.renderLabelAndField.bind(this);
     }
 
     // Fetch the list on first mount
     componentDidMount() {
-      this.props.fetchMergeFields()
+      //this.props.fetchMergeFields()
     }
 
-    renderLabelAndField() {
-      this.props.state.mergeFields.forEach( (field) => {
-        return <p>{field}</p>
-      })
-    }
 
     render() {
       
       return  (
         <section className={styles.root}>
-        {this.props.state.mergeFields}
+        
+        
           <Container className={styles.container}>
-            <img
-              src={require("./../assets/images/productCurvyLines.png")}
-              className={styles.curvyLines}
-              alt="curvy lines"
-            />
-            <div>
-              <Grid container spacing={5}>
-                <Grid item xs={12} md={4}>
-                    <Typography variant="h5" align="center">
-                    </Typography>
-                </Grid>
-              </Grid>
-            </div>
+          {this.props.state.mergeFields.map((field) => {
+            return <div style={{ width: 600 }}> <TextField style={{width: 600 , marginTop: 15, marginBottom: 15}} id="outlined-basic" label={field.substring(2,field.length - 2)} variant="outlined" /> </div>
+          })}
           </Container>
         </section>
       ); 
