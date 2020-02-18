@@ -106,3 +106,4 @@ py/credentials.json
 py/token.json
 
 lambda
+py/package
