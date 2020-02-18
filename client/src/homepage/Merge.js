@@ -7,7 +7,7 @@ import TextField from '@material-ui/core/TextField';
 import Typography from './modules/components/Typography';
 import Toolbar, { styles as toolbarStyles } from './modules/components/Toolbar';
 import { connect } from 'react-redux'
-import { fetchMergeFields, updateMergeField } from './../lib/actions'
+import { fetchMergeFields, updateMergeField, submitMergeFields } from './../lib/actions'
 import ProductHeroLayout from './modules/views/ProductHeroLayout';
 import Grid from '@material-ui/core/Grid';
 import Container from '@material-ui/core/Container';
@@ -81,7 +81,9 @@ class Merge extends Component {
     }
 
     onSubmit = () => {
-      console.log(this.props.state.formFields)
+      //console.log(this.props.state.formFields)
+      //https://lipyjnw0f8.execute-api.us-east-2.amazonaws.com/main
+      this.props.submitMergeFields(this.props.state.formFields)
     }
 
     render() {
@@ -114,6 +116,6 @@ export default connect((state) => (
     state: state
   }
 ),
-  { fetchMergeFields , updateMergeField}
+  { fetchMergeFields , updateMergeField, submitMergeFields}
 )
 (withStyles(styles)(Merge));

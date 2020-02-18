@@ -188,13 +188,14 @@ if __name__ == '__main__':
     found_merges = []
     #asdfasdfaldf{{alsdkfjalsdf}}
     for i, char in enumerate(textfromdoc):
+        print(textfromdoc[i])
         if char == '{':
             if index1 > -1:
-                print('{{')
+                print('already got 1st, adding snd {{')
                 #if we have 1, we will hit 2 or reset. aka.. if 1 exists, we just saw it and have our opener
                 index2 = i
             else:
-                print('{')
+                print('found start {')
                 index1 = i
         elif char == '}' :
             if index1 > -1 and index2 > -1 :
@@ -217,16 +218,19 @@ if __name__ == '__main__':
                         index4 = -1
                 else:
                     #we can mark 3 if we got 1 and 2, and 3 isnt immediately following
+                    print("221")
                     if i - index2 == 1:
                         #if we got a closer but no gap, consider it middle
                         index3 = -1
                         index4 = -1  
                     else:
+                        print("227")
                         #we got two openers and a gap, we got 3 now
                         index3 = i               
                         print('{{}')      
             else :
                 #reset if we get a close and we dont have the opening {{
+                print("233")
                 index1 = -1
                 index2 = -1
                 index3 = -1
@@ -238,23 +242,14 @@ if __name__ == '__main__':
                 if index3 > -1:
                     #if we have 3, we just failed to close, but 3 was a lie, time to hide it
                     index3 = -1
+                    print("245")
 
                 #chillin, in da middle
-                print("chillin")
-            else:
-                index1 = -1
-                index2 = -1
-                index3 = -1
-                index4 = -1 
         
 
     #print(textfromdoc)
     print("found")
     print(found_merges)
-    uniq_merge_set = set(found_merges)
-    print("uniqued")
-    uniq_merge_fields = list(uniq_merge_set)
-    print(uniq_merge_fields)
 
     # get row data, then loop through & process each form letter
     data = get_data(SOURCE) # get data from data source

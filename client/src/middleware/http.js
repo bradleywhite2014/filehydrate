@@ -58,7 +58,7 @@ export const del = async (path, body) => {
 }
 
 export const get = async (path) => {
-    const response = await fetch(appConfig.API_SERVER + path, {
+    const response = await fetch(path, {
         method: 'GET',
         headers: {
         'Accept': 'application/json',

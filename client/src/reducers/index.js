@@ -2,7 +2,8 @@ import {
     SET_USER_INFO,
     REMOVE_USER_INTO,
     FETCH_MERGE_FIELDS_SUCCESS,
-    UPDATE_MERGE_FIELD
+    UPDATE_MERGE_FIELD,
+    SUBMIT_MERGE_FIELDS_SUCCESS
   } from '../utils/constants'
 
 import {convertMergeFieldsToFormFields} from '../utils/index'
@@ -86,9 +87,13 @@ const reducer = (state = initialState, action) => {
           const updatedFormFields = state.formFields
           updatedFormFields[fieldKey] = fieldVal
 
-          return Object.assign({}, state, {
+        return Object.assign({}, state, {
             formFields: updatedFormFields
         })
+      }
+      case SUBMIT_MERGE_FIELDS_SUCCESS: {
+        console.log('WE DID THE SUBMIT THING!!')
+        return state
       }
       default:  
         return Object.assign({}, state,loadState())

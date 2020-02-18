@@ -15,6 +15,11 @@ export function* fetchMergeFields() {
     
 }
 
+export function* submitMergeFields(fields) {
+  const results = yield call(get,'https://lipyjnw0f8.execute-api.us-east-2.amazonaws.com/main')
+  yield put(actions.submitMergeFieldsSuccess())
+}
+
 function * watcher () {
   if (appConfig.OFFLINE_MODE) {
     // going to use mocked out versions
@@ -22,6 +27,7 @@ function * watcher () {
   } else {
     //yield takeEvery(constants.GET_TEAMS, getTeams)
     yield takeEvery(constants.FETCH_MERGE_FIELDS, fetchMergeFields)
+    yield takeEvery(constants.SUBMIT_MERGE_FIELDS, submitMergeFields)
   }
 }
 
