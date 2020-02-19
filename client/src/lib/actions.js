@@ -7,4 +7,5 @@ export const fetchMergeFieldsSuccess = (payload) => ({type: constants.FETCH_MERG
 export const updateMergeField = (payload) => ({type: constants.UPDATE_MERGE_FIELD, payload});
 export const submitMergeFields = (payload) => ({type: constants.SUBMIT_MERGE_FIELDS, payload});
 export const submitMergeFieldsSuccess = (payload) => ({type: constants.SUBMIT_MERGE_FIELDS_SUCCESS, payload});
+export const setFileId = (payload) => ({type: constants.SET_FILE_ID, payload});
 

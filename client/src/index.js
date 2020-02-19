@@ -43,7 +43,8 @@ render((
         <BrowserRouter>
             <Switch>
                 <Route path='/' exact={true} render={(props) => <Home/> } />
-                <Route path='/merge' exact={true} render={(props) => <Home merge={true} /> } />
+                <Route path='/merge' exact={true} render={(props) => <Home mainSection={'merge'} /> } />
+                <Route path='/fileSelect' exact={true} render={(props) => <Home mainSection={'fileSelect'} /> } />
             </Switch>
         </BrowserRouter>
     </Provider>

@@ -3,7 +3,8 @@ import {
     REMOVE_USER_INTO,
     FETCH_MERGE_FIELDS_SUCCESS,
     UPDATE_MERGE_FIELD,
-    SUBMIT_MERGE_FIELDS_SUCCESS
+    SUBMIT_MERGE_FIELDS_SUCCESS,
+    SET_FILE_ID
   } from '../utils/constants'
 
 import {convertMergeFieldsToFormFields} from '../utils/index'
@@ -29,7 +30,8 @@ import {convertMergeFieldsToFormFields} from '../utils/index'
             '{{TO_NAME}}': '',
             '{{BODY}}': '',
             '{{MY_NAME}}': '',
-        }
+        },
+        docId: ''
     }
     
 };
@@ -94,6 +96,11 @@ const reducer = (state = initialState, action) => {
       case SUBMIT_MERGE_FIELDS_SUCCESS: {
         console.log('WE DID THE SUBMIT THING!!')
         return state
+      }
+      case SET_FILE_ID: {
+        return Object.assign({}, state, {
+            docId: action.payload
+        })
       }
       default:  
         return Object.assign({}, state,loadState())

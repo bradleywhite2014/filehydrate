@@ -115,7 +115,7 @@ function ProductHowItWorks(props) {
           variant="contained"
           className={classes.button}
           component="a"
-          href="/merge"
+          href="/fileSelect"
           disabled={!!!props.state.accessToken}
         >
           {!!!props.state.accessToken ? 'Please login first...' : 'Get started'}

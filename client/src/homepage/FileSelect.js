@@ -7,7 +7,7 @@ import TextField from '@material-ui/core/TextField';
 import Typography from './modules/components/Typography';
 import Toolbar, { styles as toolbarStyles } from './modules/components/Toolbar';
 import { connect } from 'react-redux'
-import { fetchMergeFields, updateMergeField, submitMergeFields } from './../lib/actions'
+import { setFileId } from './../lib/actions'
 import ProductHeroLayout from './modules/views/ProductHeroLayout';
 import Grid from '@material-ui/core/Grid';
 import Container from '@material-ui/core/Container';
@@ -59,31 +59,21 @@ const styles = theme => ({
   },
 });
 
-class Merge extends Component {
+class FileSelect extends Component {
 
     constructor(props) {
       super(props)
-      this.onSubmit = this.onSubmit.bind(this);
-      this.updateField = this.updateField.bind(this);
+      this.updateFileId = this.updateFileId.bind(this);
     }
 
     // Fetch the list on first mount
     componentDidMount() {
-      this.props.fetchMergeFields(this.props.state.docId)
+      //this.props.fetchMergeFields()
     }
 
-    updateField = (event, field) => {
+    updateFileId = (event, value) => {
       //console.log(field + " " + event.target.value);
-      this.props.updateMergeField({
-        fieldKey: field, 
-        fieldVal: event.target.value
-      });
-    }
-
-    onSubmit = () => {
-      //console.log(this.props.state.formFields)
-      //https://lipyjnw0f8.execute-api.us-east-2.amazonaws.com/main
-      this.props.submitMergeFields(this.props.state.formFields)
+      this.props.setFileId(value);
     }
 
     render() {
@@ -91,16 +81,15 @@ class Merge extends Component {
       return  (
         <section className={styles.root}>
           <Container className={styles.container}>
-          {_.keys(this.props.state.formFields).map((field) => {
-            return <TextField onChange={(event) => this.updateField(event, field)} style={{width: '-webkit-fill-available' , marginTop: 15, marginBottom: 15}} id="outlined-basic" label={field.substring(2,field.length - 2)} variant="outlined" />
-          })}
+          <TextField onChange={(event) => this.updateFileId(event, event.target.value)} style={{width: '-webkit-fill-available' , marginTop: 15, marginBottom: 15}} id="outlined-basic" label={'Enter Document ID'} variant="outlined" />
           <Button
           color="secondary"
           size="large"
           variant="contained"
-          onClick={this.onSubmit}
+          href="/merge"
+          disabled={this.props.state.docId.length < 1}
         >
-          {'Submit'}
+          {'Continue...'}
         </Button>
           </Container>
         </section>
@@ -108,7 +97,7 @@ class Merge extends Component {
   }
 }
 
-Merge.propTypes = {
+FileSelect.propTypes = {
 };
 
 export default connect((state) => (
@@ -116,6 +105,6 @@ export default connect((state) => (
     state: state
   }
 ),
-  { fetchMergeFields , updateMergeField, submitMergeFields}
+  { setFileId }
 )
-(withStyles(styles)(Merge));
+(withStyles(styles)(FileSelect));

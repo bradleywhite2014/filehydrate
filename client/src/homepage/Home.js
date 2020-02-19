@@ -10,20 +10,33 @@ import ProductHowItWorks from './modules/views/ProductHowItWorks';
 import ProductCTA from './modules/views/ProductCTA';
 import AppAppBar from './modules/views/AppAppBar';
 import Merge from './Merge'
+import FileSelect from './FileSelect'
 
 function Index(props) {
-  return props.merge ? (
-    <React.Fragment>
-      <AppAppBar />
-       <Merge />
-      <AppFooter />
-    </React.Fragment>
-  ) : (<React.Fragment>
-    <AppAppBar />
-    <ProductHero />
-    <ProductHowItWorks />
-    <AppFooter />
-  </React.Fragment>);
+  switch(props.mainSection){
+    case 'merge': 
+      return ( <React.Fragment>
+          <AppAppBar />
+          <Merge />
+          <AppFooter />
+        </React.Fragment>
+      );
+    case 'fileSelect': 
+      return ( <React.Fragment>
+          <AppAppBar />
+          <FileSelect />
+          <AppFooter />
+        </React.Fragment>
+      );
+    default: 
+      return (<React.Fragment>
+        <AppAppBar />
+        <ProductHero />
+        <ProductHowItWorks />
+        <AppFooter />
+      </React.Fragment>
+      );
+  };
 }
 
 export default withRoot(Index);

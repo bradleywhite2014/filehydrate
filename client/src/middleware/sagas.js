@@ -9,9 +9,9 @@ import {appConfig} from '../config'
 import {get, post, httpPut} from './http'
 
   
-export function* fetchMergeFields() {
-    const teams = yield call(get, '/api/getTeams')
-    yield put(actions.fetchMergeFieldsSuccess(teams))
+export function* fetchMergeFields({payload}) {
+    const mergeFields = yield call(get, 'https://lipyjnw0f8.execute-api.us-east-2.amazonaws.com/main' + '?docId=' + payload)
+    yield put(actions.fetchMergeFieldsSuccess(mergeFields))
     
 }
 
