@@ -16,21 +16,8 @@ import {convertMergeFieldsToFormFields} from '../utils/index'
             imageUrl: ''
         },
         accessToken: '',
-        mergeFields: ['{{MY_WHATEVER}}', '{{MY_ADDRESS}}', '{{MY_PHONE}}', '{{MY_EMAIL}}', '{{DATE}}', '{{TO_NAME}}', '{{TO_TITLE}}', '{{TO_COMPANY}}', '{{TO_ADDRESS}}', '{{TO_NAME}}', '{{BODY}}', '{{MY_NAME}}'],
-        formFields: {
-            '{{MY_WHATEVER}}': '',
-            '{{MY_ADDRESS}}': '',
-            '{{MY_PHONE}}': '',
-            '{{MY_EMAIL}}': '',
-            '{{DATE}}': '',
-            '{{TO_NAME}}': '',
-            '{{TO_TITLE}}': '',
-            '{{TO_COMPANY}}': '',
-            '{{TO_ADDRESS}}': '',
-            '{{TO_NAME}}': '',
-            '{{BODY}}': '',
-            '{{MY_NAME}}': '',
-        },
+        mergeFields: [],
+        formFields: {},
         docId: ''
     }
     

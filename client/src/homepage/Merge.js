@@ -83,7 +83,7 @@ class Merge extends Component {
     onSubmit = () => {
       //console.log(this.props.state.formFields)
       //https://lipyjnw0f8.execute-api.us-east-2.amazonaws.com/main
-      this.props.submitMergeFields(this.props.state.formFields)
+      this.props.submitMergeFields({docId: this.props.state.docId, formFields: this.props.state.formFields})
     }
 
     render() {

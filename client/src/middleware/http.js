@@ -1,7 +1,7 @@
 import {appConfig} from '../config'
 
 export const post = async (path, body) => {
-    const response = await fetch(appConfig.API_SERVER + path, {
+    const response = await fetch(path, {
         method: 'POST',
         headers: {
         'Accept': 'application/json',
@@ -20,7 +20,7 @@ export const post = async (path, body) => {
 }
 
 export const httpPut = async (path, body) => {
-    const response = await fetch(appConfig.API_SERVER + path, {
+    const response = await fetch(path, {
         method: 'PUT',
         headers: {
         'Accept': 'application/json',
@@ -39,7 +39,7 @@ export const httpPut = async (path, body) => {
 }
 
 export const del = async (path, body) => {
-    const response = await fetch(appConfig.API_SERVER + path, {
+    const response = await fetch(path, {
         method: 'DELETE',
         headers: {
         'Accept': 'application/json',

@@ -15,8 +15,8 @@ export function* fetchMergeFields({payload}) {
     
 }
 
-export function* submitMergeFields(fields) {
-  const results = yield call(get,'https://lipyjnw0f8.execute-api.us-east-2.amazonaws.com/main')
+export function* submitMergeFields({payload}) {
+  const results = yield call(post,'https://lipyjnw0f8.execute-api.us-east-2.amazonaws.com/main'  + '?docId=' + payload.docId + '&access_token=' + sessionStorage.getItem('accessToken'), payload.formFields)
   yield put(actions.submitMergeFieldsSuccess())
 }
 
