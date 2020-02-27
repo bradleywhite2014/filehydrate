@@ -6,7 +6,7 @@ export const post = async (path, body) => {
         headers: {
         'Accept': 'application/json',
         'Content-Type': 'application/json',
-        'Authorization': sessionStorage.getItem('accessToken')
+        'Authorization': sessionStorage.getItem('idToken')
         },
         body: JSON.stringify(body)
     })
@@ -25,7 +25,7 @@ export const httpPut = async (path, body) => {
         headers: {
         'Accept': 'application/json',
         'Content-Type': 'application/json',
-        'Authorization': sessionStorage.getItem('accessToken')
+        'Authorization': sessionStorage.getItem('idToken')
         },
         body: JSON.stringify(body)
     })
@@ -44,7 +44,7 @@ export const del = async (path, body) => {
         headers: {
         'Accept': 'application/json',
         'Content-Type': 'application/json',
-        'Authorization': sessionStorage.getItem('accessToken')
+        'Authorization': sessionStorage.getItem('idToken')
         },
         body: JSON.stringify(body)
     })
@@ -63,7 +63,7 @@ export const get = async (path) => {
         headers: {
         'Accept': 'application/json',
         'Content-Type': 'application/json',
-        'Authorization': sessionStorage.getItem('accessToken')
+        'Authorization': sessionStorage.getItem('idToken')
         }
     })
 

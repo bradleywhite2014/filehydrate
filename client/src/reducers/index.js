@@ -59,7 +59,8 @@ const reducer = (state = initialState, action) => {
         // Remove any old data from sessionStorage
         sessionStorage.removeItem('accessToken');
         // Save new key
-        sessionStorage.setItem('accessToken', action.payload.tokenObj.id_token);
+        sessionStorage.setItem('accessToken', action.payload.uc.access_token);
+        sessionStorage.setItem('idToken', action.payload.tokenObj.id_token);
         const userInfo = action.payload.profileObj
         return Object.assign({}, state, {
             userInfo: {

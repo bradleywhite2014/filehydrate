@@ -10,7 +10,7 @@ import {get, post, httpPut} from './http'
 
   
 export function* fetchMergeFields({payload}) {
-    const mergeFields = yield call(get, 'https://lipyjnw0f8.execute-api.us-east-2.amazonaws.com/main' + '?docId=' + payload)
+    const mergeFields = yield call(get, 'https://lipyjnw0f8.execute-api.us-east-2.amazonaws.com/main' + '?docId=' + payload + '&access_token=' + sessionStorage.getItem('accessToken'))
     yield put(actions.fetchMergeFieldsSuccess(mergeFields))
     
 }
