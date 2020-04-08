@@ -12,6 +12,7 @@ import ProductHeroLayout from './modules/views/ProductHeroLayout';
 import Grid from '@material-ui/core/Grid';
 import Container from '@material-ui/core/Container';
 import Button from './modules/components/Button';
+import Merge from './Merge'
 import _ from 'underscore'
 
 const styles = theme => ({
@@ -89,8 +90,23 @@ class FileSelect extends Component {
           href="/merge"
           disabled={this.props.state.docId.length < 1}
         >
-          {'Continue...'}
+          {'Load...'}
         </Button>
+        <div >
+        <Grid container spacing={5}>
+            <Grid item xs={12} md={6}>
+              <div >
+                <Merge/>
+              </div>
+            </Grid>
+            <Grid item xs={12} md={6}>
+            <div >
+            <Merge/>
+              </div>
+            </Grid>
+          </Grid>
+        </div>
+        
           </Container>
         </section>
       ); 

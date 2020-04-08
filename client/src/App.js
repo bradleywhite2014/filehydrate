@@ -57,23 +57,6 @@ class App extends Component {
       throw new Error('Sorry, cant connect to OIDC meta');
     }
   }
-
-  // async attemptSSO() {
-  //   try{
-  //     const session = await this.authClient.session.refresh();
-  //     const response = await this.authClient.token.getWithoutPrompt({
-  //       responseType: ['id_token', 'token'],
-  //       sessionToken: session
-  //     })
-  //     sessionStorage.setItem('id_token', response[0].idToken)
-  //     sessionStorage.setItem('access_token', response[1].accessToken)
-  //     this.setState({authed: true})
-  //   }catch(err){
-  //     // dont have a valid session, send to okta
-  //     window.location = this.makeOidcUrl();
-  //   }
-    
-  // }
   
 
   render() {

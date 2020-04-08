@@ -56,6 +56,7 @@ const styles = theme => ({
   },
   button: {
     marginTop: theme.spacing(8),
+    marginBottom: theme.spacing(8),
   },
 });
 
@@ -98,6 +99,7 @@ class Merge extends Component {
           color="secondary"
           size="large"
           variant="contained"
+          style={{marginBottom: 15}} 
           onClick={this.onSubmit}
         >
           {'Submit'}
