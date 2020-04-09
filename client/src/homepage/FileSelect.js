@@ -7,10 +7,11 @@ import TextField from '@material-ui/core/TextField';
 import Typography from './modules/components/Typography';
 import Toolbar, { styles as toolbarStyles } from './modules/components/Toolbar';
 import { connect } from 'react-redux'
-import { setFileId } from './../lib/actions'
+import { setFileId, performFileSearch, fetchMergeFields } from './../lib/actions'
 import ProductHeroLayout from './modules/views/ProductHeroLayout';
 import Grid from '@material-ui/core/Grid';
 import Container from '@material-ui/core/Container';
+import AutoComplete from '@material-ui/lab/Autocomplete';
 import Button from './modules/components/Button';
 import Merge from './Merge'
 import _ from 'underscore'
@@ -65,11 +66,14 @@ class FileSelect extends Component {
     constructor(props) {
       super(props)
       this.updateFileId = this.updateFileId.bind(this);
+      this.onUpdateInput = this.onUpdateInput.bind(this);
+      this.selectFile = this.selectFile.bind(this);
     }
 
     // Fetch the list on first mount
     componentDidMount() {
       //this.props.fetchMergeFields()
+      this.props.performFileSearch();
     }
 
     updateFileId = (event, value) => {
@@ -77,31 +81,59 @@ class FileSelect extends Component {
       this.props.setFileId(value);
     }
 
+    selectFile(event, inputValue, reason) {
+      if(reason === 'select-option') {
+        this.props.setFileId(inputValue.value);
+        this.props.fetchMergeFields(inputValue.value);
+      }
+    }
+
+    onUpdateInput(event, inputValue, reason) {
+      this.props.performFileSearch(inputValue);
+      //this.props.setFileText(inputValue)
+      //          <TextField onChange={(event) => this.updateFileId(event, event.target.value)} style={{width: '-webkit-fill-available' , marginTop: 15, marginBottom: 15}} id="outlined-basic" label={'Enter Document ID'} variant="outlined" />
+    //   <Button
+    //   color="secondary"
+    //   size="large"
+    //   variant="contained"
+    //   href="/merge"
+    //   disabled={this.props.state.docId.length < 1}
+    // >
+    //   {'Load...'}
+    // </Button>
+    }
+
     render() {
       
-      return  (
+      return (
         <section className={styles.root}>
           <Container className={styles.container}>
-          <TextField onChange={(event) => this.updateFileId(event, event.target.value)} style={{width: '-webkit-fill-available' , marginTop: 15, marginBottom: 15}} id="outlined-basic" label={'Enter Document ID'} variant="outlined" />
-          <Button
-          color="secondary"
-          size="large"
-          variant="contained"
-          href="/merge"
-          disabled={this.props.state.docId.length < 1}
-        >
-          {'Load...'}
-        </Button>
-        <div >
+          
+          <AutoComplete
+            id="tags-standard"
+            options={this.props.state.fileList}
+            getOptionLabel={(option) => option.label}
+            onChange={this.selectFile}
+            onInputChange={this.onUpdateInput} 
+            style={{marginTop: "16px"}}
+            renderInput={(params) => (
+              <TextField
+                {...params}
+                variant="standard"
+                label="File Search"
+                placeholder="Type to search..."
+              />
+            )}
+          />
+         
+        <div style={{marginTop: "36px"}}>
         <Grid container spacing={5}>
             <Grid item xs={12} md={6}>
-              <div >
-                <Merge/>
-              </div>
+              <iframe id="viewer" src={"https://docs.google.com/document/d/" + this.props.state.docId + "/preview"} style={{width: "100%", height: "600px" ,marginTop: "15px"}}></iframe>
             </Grid>
             <Grid item xs={12} md={6}>
             <div >
-            <Merge/>
+            <Merge docId={this.props.state.docId} />
               </div>
             </Grid>
           </Grid>
@@ -109,7 +141,7 @@ class FileSelect extends Component {
         
           </Container>
         </section>
-      ); 
+      )
   }
 }
 
@@ -121,6 +153,6 @@ export default connect((state) => (
     state: state
   }
 ),
-  { setFileId }
+  { setFileId , performFileSearch, fetchMergeFields}
 )
 (withStyles(styles)(FileSelect));

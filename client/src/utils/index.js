@@ -22,3 +22,23 @@ export const convertMergeFieldsToFormFields = (mergeFields) => {
   })
   return temp;
 }
+
+export const convertGoogleFileResponseToAutocompleteFields = (files) => {
+  const newFileArray = []
+  console.log(files)
+  files.forEach((file) => {
+    newFileArray.push({
+      label: file.name,
+      value: file.id
+    });
+  })
+  newFileArray.sort(function(a,b) {
+    var nameA=a.label.toLowerCase(), nameB=b.label.toLowerCase()
+    if (nameA < nameB) //sort string ascending
+        return -1 
+    if (nameA > nameB)
+        return 1
+    return 0
+  })
+  return newFileArray;
+}

@@ -4,10 +4,12 @@ import {
     FETCH_MERGE_FIELDS_SUCCESS,
     UPDATE_MERGE_FIELD,
     SUBMIT_MERGE_FIELDS_SUCCESS,
-    SET_FILE_ID
+    SET_FILE_ID,
+    PERFORM_FILE_SEARCH_SUCCESS,
+    PERFORM_FILE_SEARCH_ERROR
   } from '../utils/constants'
 
-import {convertMergeFieldsToFormFields} from '../utils/index'
+import {convertMergeFieldsToFormFields, convertGoogleFileResponseToAutocompleteFields} from '../utils/index'
 
   const initializeState = () => {
     return {
@@ -18,7 +20,8 @@ import {convertMergeFieldsToFormFields} from '../utils/index'
         accessToken: '',
         mergeFields: [],
         formFields: {},
-        docId: ''
+        docId: '',
+        fileList: []
     }
     
 };
@@ -88,6 +91,13 @@ const reducer = (state = initialState, action) => {
       case SET_FILE_ID: {
         return Object.assign({}, state, {
             docId: action.payload
+        })
+      }
+      case PERFORM_FILE_SEARCH_SUCCESS: {
+          console.log(action.payload);
+        const resp = action.payload
+        return Object.assign({}, state, {
+            fileList: convertGoogleFileResponseToAutocompleteFields(resp.files)
         })
       }
       default:  

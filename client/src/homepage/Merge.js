@@ -70,7 +70,7 @@ class Merge extends Component {
 
     // Fetch the list on first mount
     componentDidMount() {
-      this.props.fetchMergeFields(this.props.state.docId)
+      //this.props.fetchMergeFields(this.props.docId)
     }
 
     updateField = (event, field) => {
@@ -93,7 +93,7 @@ class Merge extends Component {
         <section className={styles.root}>
           <Container className={styles.container}>
           {_.keys(this.props.state.formFields).map((field) => {
-            return <TextField onChange={(event) => this.updateField(event, field)} style={{width: '-webkit-fill-available' , marginTop: 15, marginBottom: 15}} id="outlined-basic" label={field.substring(2,field.length - 2)} variant="outlined" />
+            return <TextField onChange={(event) => this.updateField(event, field)} style={{width: '-webkit-fill-available' , marginTop: 8, marginBottom: 8}} id="outlined-basic" label={field.substring(2,field.length - 2)} variant="outlined" />
           })}
           <Button
           color="secondary"

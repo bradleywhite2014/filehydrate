@@ -1,5 +1,5 @@
 /* global URL */
-import {takeEvery, fork, put, call, all} from 'redux-saga/effects'
+import {takeEvery,takeLatest, fork, put, call, all} from 'redux-saga/effects'
 
 import * as constants from '../utils/constants'
 import * as actions from '../lib/actions'
@@ -20,6 +20,16 @@ export function* submitMergeFields({payload}) {
   yield put(actions.submitMergeFieldsSuccess())
 }
 
+export function* performFileSearch({payload}) {
+  var files = [];
+  if(payload) {
+    files = yield call(get, 'https://www.googleapis.com/drive/v3/files' + "?q=name contains " + "'" + payload + "'" , sessionStorage.getItem('accessToken'))
+  } else {
+    files = yield call(get, 'https://www.googleapis.com/drive/v3/files', sessionStorage.getItem('accessToken'))
+  }
+  yield put(actions.performFileSearchSuccess(files)) 
+}
+
 function * watcher () {
   if (appConfig.OFFLINE_MODE) {
     // going to use mocked out versions
@@ -28,6 +38,7 @@ function * watcher () {
     //yield takeEvery(constants.GET_TEAMS, getTeams)
     yield takeEvery(constants.FETCH_MERGE_FIELDS, fetchMergeFields)
     yield takeEvery(constants.SUBMIT_MERGE_FIELDS, submitMergeFields)
+    yield takeLatest(constants.PERFORM_FILE_SEARCH, performFileSearch)
   }
 }
 

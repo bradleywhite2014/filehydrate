@@ -4,8 +4,9 @@
   "private": true,
   "dependencies": {
     "@babel/polyfill": "^7.4.0",
-    "@material-ui/core": "4.9.0",
+    "@material-ui/core": "4.9.9",
     "@material-ui/icons": "^4.5.1",
+    "@material-ui/lab": "^4.0.0-alpha.48",
     "@material/button": "^4.0.0",
     "@okta/okta-auth-js": "^2.5.0",
     "googleapis": "^43.0.0",
