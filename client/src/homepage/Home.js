@@ -11,6 +11,7 @@ import ProductCTA from './modules/views/ProductCTA';
 import AppAppBar from './modules/views/AppAppBar';
 import Merge from './Merge'
 import FileSelect from './FileSelect'
+import ToastMessage from '../components/ToastMessage'
 
 function Index(props) {
   switch(props.mainSection){
@@ -18,6 +19,7 @@ function Index(props) {
       return ( <React.Fragment>
           <AppAppBar />
           <Merge />
+          <ToastMessage />
           <AppFooter />
         </React.Fragment>
       );
@@ -25,6 +27,7 @@ function Index(props) {
       return ( <React.Fragment>
           <AppAppBar />
           <FileSelect />
+          <ToastMessage />
           <AppFooter />
         </React.Fragment>
       );
@@ -33,6 +36,7 @@ function Index(props) {
         <AppAppBar />
         <ProductHero />
         <ProductHowItWorks />
+        <ToastMessage />
         <AppFooter />
       </React.Fragment>
       );

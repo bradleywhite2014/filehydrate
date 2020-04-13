@@ -12,5 +12,6 @@ export const setFileText = (payload) => ({type: constants.SET_FILE_TEXT, payload
 export const performFileSearch = (payload) => ({type: constants.PERFORM_FILE_SEARCH, payload});
 export const performFileSearchSuccess = (payload) => ({type: constants.PERFORM_FILE_SEARCH_SUCCESS, payload});
 export const performFileSearchFailure = (payload) => ({type: constants.PERFORM_FILE_SEARCH_FAILURE, payload});
+export const removeMessage = (payload) => ({type: constants.REMOVE_MESSAGE, payload});
 
 

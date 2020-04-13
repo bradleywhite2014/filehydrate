@@ -92,6 +92,9 @@ class Merge extends Component {
       return  (
         <section className={styles.root}>
           <Container className={styles.container}>
+          <Typography style={{marginTop: "8px"}} variant="h5" marked="center" component="h2">
+            Fields
+          </Typography>
           {_.keys(this.props.state.formFields).map((field) => {
             return <TextField onChange={(event) => this.updateField(event, field)} style={{width: '-webkit-fill-available' , marginTop: 8, marginBottom: 8}} id="outlined-basic" label={field.substring(2,field.length - 2)} variant="outlined" />
           })}

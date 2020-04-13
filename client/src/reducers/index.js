@@ -6,8 +6,11 @@ import {
     SUBMIT_MERGE_FIELDS_SUCCESS,
     SET_FILE_ID,
     PERFORM_FILE_SEARCH_SUCCESS,
-    PERFORM_FILE_SEARCH_ERROR
+    PERFORM_FILE_SEARCH_ERROR,
+    REMOVE_MESSAGE
   } from '../utils/constants'
+
+import _ from 'underscore';
 
 import {convertMergeFieldsToFormFields, convertGoogleFileResponseToAutocompleteFields} from '../utils/index'
 
@@ -21,7 +24,12 @@ import {convertMergeFieldsToFormFields, convertGoogleFileResponseToAutocompleteF
         mergeFields: [],
         formFields: {},
         docId: '',
-        fileList: []
+        fileList: [],
+        messages: [{
+            id: 'somethign',
+            type: 'success',
+            message: 'This is a test message'
+        }]
     }
     
 };
@@ -49,7 +57,7 @@ const reducer = (state = initialState, action) => {
         // Remove any old data from sessionStorage
         sessionStorage.removeItem('accessToken');
         // Save new key
-        sessionStorage.setItem('accessToken', action.payload.uc.access_token);
+        sessionStorage.setItem('accessToken', action.payload.tokenObj.access_token);
         sessionStorage.setItem('idToken', action.payload.tokenObj.id_token);
         const userInfo = action.payload.profileObj
         return Object.assign({}, state, {
@@ -85,7 +93,6 @@ const reducer = (state = initialState, action) => {
         })
       }
       case SUBMIT_MERGE_FIELDS_SUCCESS: {
-        console.log('WE DID THE SUBMIT THING!!')
         return state
       }
       case SET_FILE_ID: {
@@ -94,10 +101,19 @@ const reducer = (state = initialState, action) => {
         })
       }
       case PERFORM_FILE_SEARCH_SUCCESS: {
-          console.log(action.payload);
         const resp = action.payload
         return Object.assign({}, state, {
             fileList: convertGoogleFileResponseToAutocompleteFields(resp.files)
+        })
+      }
+      case REMOVE_MESSAGE: {
+        const removeId = action.payload
+        let tempMessages = state.messages
+        tempMessages = _.filter(tempMessages, (msg) => {
+            return msg.id !== removeId
+        })
+        return Object.assign({}, state, {
+            messages: tempMessages
         })
       }
       default:  

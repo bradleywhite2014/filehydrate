@@ -12,6 +12,8 @@ import ProductHeroLayout from './modules/views/ProductHeroLayout';
 import Grid from '@material-ui/core/Grid';
 import Container from '@material-ui/core/Container';
 import AutoComplete from '@material-ui/lab/Autocomplete';
+import Card from '@material-ui/core/Card';
+import CardContent from '@material-ui/core/CardContent';
 import Button from './modules/components/Button';
 import Merge from './Merge'
 import _ from 'underscore'
@@ -59,6 +61,9 @@ const styles = theme => ({
   button: {
     marginTop: theme.spacing(8),
   },
+  card: {
+    boxShadow: "1px 1px 8px 1px rgba(0,0,0,0.2), 0px 1px 1px 0px rgba(0,0,0,0.14), 0px 1px 3px 0px rgba(0,0,0,0.12);"
+  }
 });
 
 class FileSelect extends Component {
@@ -129,12 +134,17 @@ class FileSelect extends Component {
         <div style={{marginTop: "36px"}}>
         <Grid container spacing={5}>
             <Grid item xs={12} md={6}>
-              <iframe id="viewer" src={"https://docs.google.com/document/d/" + this.props.state.docId + "/preview"} style={{width: "100%", height: "600px" ,marginTop: "15px"}}></iframe>
+            <Card elevation={5}>
+              <CardContent>
+              <iframe id="viewer" src={"https://docs.google.com/document/d/" + this.props.state.docId + "/preview"} style={{width: "100%", height: "700px" ,marginTop: "15px"}}></iframe>
+              </CardContent>
+            </Card>
+              
             </Grid>
             <Grid item xs={12} md={6}>
-            <div >
+            <Card elevation={5}>
             <Merge docId={this.props.state.docId} />
-              </div>
+              </Card>
             </Grid>
           </Grid>
         </div>
