@@ -7,7 +7,7 @@ import AppBar from '../components/AppBar';
 import Typography from '../components/Typography';
 import Toolbar, { styles as toolbarStyles } from '../components/Toolbar';
 import { connect } from 'react-redux'
-import { setUserInfo , removeUserInfo} from '../../../lib/actions'
+import { setUserInfo , logoutUser} from '../../../lib/actions'
 import { GoogleLogin, GoogleLogout} from 'react-google-login';
 import { useHistory } from "react-router-dom";
 //1E5Us1TfM8QojOqgfe0-pdmSaw3VOFBK-jTIl6dziPcY
@@ -29,7 +29,7 @@ const styles = theme => ({
     flex: 1,
   },
   leftLinkActive: {
-    color: theme.palette.common.white,
+    color: '#FFF',
   },
   right: {
     flex: 1,
@@ -39,7 +39,7 @@ const styles = theme => ({
   },
   rightLink: {
     fontSize: 16,
-    color: theme.palette.common.white,
+    color: '#FFF',
     marginLeft: theme.spacing(3),
   },
   linkSecondary: {
@@ -58,12 +58,11 @@ function AppAppBar(props) {
 
   const responseGoogleSuccess = (response) => {
     //console.log('props: ' + JSON.stringify(props));
-    console.log(response);
     props.setUserInfo(response);
   }
 
   const responseGoogleLogout = (response) => {
-    props.removeUserInfo();
+    props.logoutUser();
     history.push("/");
   }
   
@@ -75,7 +74,7 @@ function AppAppBar(props) {
     <Toolbar className={classes.toolbar}>
       <div className={classes.left} />
       <Typography align="center" variant="body2" className={classes.h4}>
-        <Link href="/" underline="none" color="white">
+        <Link href="/" underline="none">
           DocuMerge
         </Link>
       </Typography>
@@ -103,8 +102,13 @@ function AppAppBar(props) {
           <div className={classes.right}>
           <GoogleLogin
             clientId="382267252700-gvhfvt7467hqlsuro9v4g7fc31v75q4h.apps.googleusercontent.com"
+            includeAuthorizationData={true}
             buttonText="Login"
+            responseType="token"
             scope={googleScopes}
+            prompt='consent'
+            accessType='online'
+            approvalPrompt="force"
             onSuccess={responseGoogleSuccess}
             onFailure={responseGoogleError}
             cookiePolicy={'single_host_origin'}
@@ -126,6 +130,6 @@ export default connect((state) => (
     state: state
   }
 ),
-  { setUserInfo , removeUserInfo}
+  { setUserInfo , logoutUser}
 )
 (withStyles(styles)(AppAppBar));

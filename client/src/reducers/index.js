@@ -1,18 +1,20 @@
 import {
     SET_USER_INFO,
-    REMOVE_USER_INTO,
+    FETCH_MERGE_FIELDS,
     FETCH_MERGE_FIELDS_SUCCESS,
     UPDATE_MERGE_FIELD,
     SUBMIT_MERGE_FIELDS_SUCCESS,
     SET_FILE_ID,
     PERFORM_FILE_SEARCH_SUCCESS,
     PERFORM_FILE_SEARCH_ERROR,
-    REMOVE_MESSAGE
+    REMOVE_MESSAGE,
+    PUT_ERROR_MESSAGE,
+    LOGOUT_USER
   } from '../utils/constants'
 
 import _ from 'underscore';
 
-import {convertMergeFieldsToFormFields, convertGoogleFileResponseToAutocompleteFields} from '../utils/index'
+import {convertMergeFieldsToFormFields, convertGoogleFileResponseToAutocompleteFields, genMsgId} from '../utils/index'
 
   const initializeState = () => {
     return {
@@ -25,11 +27,8 @@ import {convertMergeFieldsToFormFields, convertGoogleFileResponseToAutocompleteF
         formFields: {},
         docId: '',
         fileList: [],
-        messages: [{
-            id: 'somethign',
-            type: 'success',
-            message: 'This is a test message'
-        }]
+        messages: [],
+        loadingFields: false
     }
     
 };
@@ -54,32 +53,32 @@ const initialState = initializeState();
 const reducer = (state = initialState, action) => {
     switch (action.type) {
       case SET_USER_INFO: {
+          console.log(action)
         // Remove any old data from sessionStorage
         sessionStorage.removeItem('accessToken');
         // Save new key
-        sessionStorage.setItem('accessToken', action.payload.tokenObj.access_token);
-        sessionStorage.setItem('idToken', action.payload.tokenObj.id_token);
+        sessionStorage.setItem('accessToken', action.payload.accessToken);
+        sessionStorage.setItem('idToken', action.payload.tokenId);
         const userInfo = action.payload.profileObj
         return Object.assign({}, state, {
             userInfo: {
               name: userInfo.name,
               imageUrl: userInfo.imageUrl
             },
-            accessToken: action.payload.tokenObj.id_token
+            accessToken: action.payload.tokenId
         })
         
       }
-      case REMOVE_USER_INTO: {
-          // Remove any old data from sessionStorage
-        sessionStorage.removeItem('accessToken');
-        localStorage.removeItem('documerge_state');
-
-        return Object.assign({}, state, initializeState());
+      case FETCH_MERGE_FIELDS: {
+        return Object.assign({}, state, {
+            loadingFields: true
+        })
       }
       case FETCH_MERGE_FIELDS_SUCCESS: {
         const mergeFields = action.payload
         return Object.assign({}, state, {
-            formFields: convertMergeFieldsToFormFields(mergeFields)
+            formFields: convertMergeFieldsToFormFields(mergeFields),
+            loadingFields: false
         })
       }
       case UPDATE_MERGE_FIELD: {
@@ -93,7 +92,15 @@ const reducer = (state = initialState, action) => {
         })
       }
       case SUBMIT_MERGE_FIELDS_SUCCESS: {
-        return state
+        let currentMessages = state.messages;
+        currentMessages.push({
+            id: genMsgId(),
+            type: 'success',
+            message: 'Merge completed successfully!'
+        })
+        return Object.assign({}, state, {
+            messages: currentMessages
+        })
       }
       case SET_FILE_ID: {
         return Object.assign({}, state, {
@@ -115,6 +122,25 @@ const reducer = (state = initialState, action) => {
         return Object.assign({}, state, {
             messages: tempMessages
         })
+      }
+      case PUT_ERROR_MESSAGE: {
+        const errorMsg = action.payload
+        let currentMessages = state.messages;
+        currentMessages.push({
+            id: genMsgId(),
+            type: 'error',
+            message: 'Error: ' + errorMsg
+        })
+        return Object.assign({}, state, {
+            messages: currentMessages
+        })
+      }
+      case LOGOUT_USER: {
+        // Remove any old data from sessionStorage
+        sessionStorage.removeItem('accessToken');
+        localStorage.removeItem('documerge_state');
+
+        return Object.assign({}, state, initializeState());
       }
       default:  
         return Object.assign({}, state,loadState())

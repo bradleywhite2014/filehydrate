@@ -15,6 +15,7 @@ import AutoComplete from '@material-ui/lab/Autocomplete';
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
 import Button from './modules/components/Button';
+import Skeleton from '@material-ui/lab/Skeleton';
 import Merge from './Merge'
 import _ from 'underscore'
 
@@ -78,7 +79,7 @@ class FileSelect extends Component {
     // Fetch the list on first mount
     componentDidMount() {
       //this.props.fetchMergeFields()
-      this.props.performFileSearch();
+      //this.props.performFileSearch();
     }
 
     updateFileId = (event, value) => {
@@ -130,13 +131,22 @@ class FileSelect extends Component {
               />
             )}
           />
-         
-        <div style={{marginTop: "36px"}}>
+         { this.props.state.docId ?
+        <div style={{marginTop: "36px", marginBottom: "8px"}}>
         <Grid container spacing={5}>
             <Grid item xs={12} md={6}>
             <Card elevation={5}>
               <CardContent>
-              <iframe id="viewer" src={"https://docs.google.com/document/d/" + this.props.state.docId + "/preview"} style={{width: "100%", height: "700px" ,marginTop: "15px"}}></iframe>
+                {
+                  this.props.state.loadingFields ? (
+                    <React.Fragment>
+                      <Skeleton animation="wave" height={60} />
+                      <Skeleton animation="wave" height={600} />
+                    </React.Fragment>
+                  ) : (
+                    <iframe id="viewer" src={"https://docs.google.com/document/d/" + this.props.state.docId + "/preview"} style={{width: "100%", height: "700px" ,marginTop: "15px"}}></iframe>
+                  )
+                }
               </CardContent>
             </Card>
               
@@ -148,6 +158,13 @@ class FileSelect extends Component {
             </Grid>
           </Grid>
         </div>
+        :
+        <div style={{marginTop: "36px", marginBottom: "8px"}}>
+        <Typography style={{marginTop: "8px"}} variant="h5" marked="center" component="h2">
+            Please select a document...
+          </Typography>
+        </div>
+      }
         
           </Container>
         </section>

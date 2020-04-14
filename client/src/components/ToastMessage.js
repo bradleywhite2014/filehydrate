@@ -41,7 +41,7 @@ class ToastMessage extends Component {
     return (
       <div styles={{width: '100%', }}>
         <Snackbar
-          key={message ? id : undefined}
+          key={id}
           anchorOrigin={{
             vertical: 'bottom',
             horizontal: 'left',

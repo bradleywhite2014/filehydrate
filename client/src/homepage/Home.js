@@ -17,27 +17,33 @@ function Index(props) {
   switch(props.mainSection){
     case 'merge': 
       return ( <React.Fragment>
+        <div style={{minHeight: '100%'}}>
           <AppAppBar />
           <Merge />
           <ToastMessage />
+        </div>
           <AppFooter />
         </React.Fragment>
       );
     case 'fileSelect': 
       return ( <React.Fragment>
+        <div style={{minHeight: '100%'}}>
           <AppAppBar />
           <FileSelect />
           <ToastMessage />
+          </div>
           <AppFooter />
         </React.Fragment>
       );
     default: 
       return (<React.Fragment>
+        <div style={{minHeight: '100%'}}>
         <AppAppBar />
         <ProductHero />
         <ProductHowItWorks />
         <ToastMessage />
         <AppFooter />
+        </div>
       </React.Fragment>
       );
   };
