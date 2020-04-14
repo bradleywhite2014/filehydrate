@@ -126,8 +126,8 @@ class Merge extends Component {
           <Typography style={{marginTop: "8px"}} variant="h5" marked="center" component="h2">
             Fields
           </Typography>
-          {_.keys(this.props.state.formFields).map((field) => {
-            return <TextField key={randomString(10)} onChange={(event) => this.updateField(event, field)} style={{width: '-webkit-fill-available' , marginTop: 8, marginBottom: 8}} label={field.substring(2,field.length - 2)} variant="outlined" />
+          {_.keys(this.props.state.formFields).map((field, index) => {
+            return <TextField key={index} onChange={(event) => this.updateField(event, field)} style={{width: '-webkit-fill-available' , marginTop: 8, marginBottom: 8}} label={field.substring(2,field.length - 2)} variant="outlined" />
           })}
           <Button
           color="secondary"

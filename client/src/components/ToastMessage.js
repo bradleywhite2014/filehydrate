@@ -37,9 +37,9 @@ class ToastMessage extends Component {
     this.props.removeMessage(msg)
   };
 
-  renderMessage(id, type, message, handleClose) {
+  renderMessage(id, type, message, handleClose, index) {
     return (
-      <div styles={{width: '100%', }}>
+      <div key={index} styles={{width: '100%', }}>
         <Snackbar
           key={id}
           anchorOrigin={{
@@ -71,8 +71,8 @@ class ToastMessage extends Component {
       
     return  (
       <React.Fragment>
-        {_.map(this.props.state.messages, (msg) => {
-          return this.renderMessage(msg.id,msg.type,msg.message, this.handleClose)
+        {_.map(this.props.state.messages, (msg, index) => {
+          return this.renderMessage(msg.id,msg.type,msg.message, this.handleClose, index)
         })}
         </React.Fragment>
     ); 
