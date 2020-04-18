@@ -7,7 +7,7 @@ import TextField from '@material-ui/core/TextField';
 import Typography from './modules/components/Typography';
 import Toolbar, { styles as toolbarStyles } from './modules/components/Toolbar';
 import { connect } from 'react-redux'
-import { setFileId, performFileSearch, fetchMergeFields } from './../lib/actions'
+import { setFileId, performFileSearch, fetchMergeFields , changeMergeStyle, updateMiraklToken} from './../lib/actions'
 import ProductHeroLayout from './modules/views/ProductHeroLayout';
 import Grid from '@material-ui/core/Grid';
 import Container from '@material-ui/core/Container';
@@ -15,7 +15,10 @@ import AutoComplete from '@material-ui/lab/Autocomplete';
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
 import Button from './modules/components/Button';
+import SearchDataTable from './modules/components/SearchDataTable'
 import Skeleton from '@material-ui/lab/Skeleton';
+import ToggleButton from '@material-ui/lab/ToggleButton';
+import ToggleButtonGroup from '@material-ui/lab/ToggleButtonGroup';
 import Merge from './Merge'
 import _ from 'underscore'
 
@@ -74,6 +77,8 @@ class FileSelect extends Component {
       this.updateFileId = this.updateFileId.bind(this);
       this.onUpdateInput = this.onUpdateInput.bind(this);
       this.selectFile = this.selectFile.bind(this);
+      this.changeMergeStyle = this.changeMergeStyle.bind(this);
+      this.updateMiraklToken = this.updateMiraklToken.bind(this);
     }
 
     // Fetch the list on first mount
@@ -96,17 +101,14 @@ class FileSelect extends Component {
 
     onUpdateInput(event, inputValue, reason) {
       this.props.performFileSearch(inputValue);
-      //this.props.setFileText(inputValue)
-      //          <TextField onChange={(event) => this.updateFileId(event, event.target.value)} style={{width: '-webkit-fill-available' , marginTop: 15, marginBottom: 15}} id="outlined-basic" label={'Enter Document ID'} variant="outlined" />
-    //   <Button
-    //   color="secondary"
-    //   size="large"
-    //   variant="contained"
-    //   href="/merge"
-    //   disabled={this.props.state.docId.length < 1}
-    // >
-    //   {'Load...'}
-    // </Button>
+    }
+
+    changeMergeStyle(event) {
+      this.props.changeMergeStyle(event.currentTarget.value);
+    }
+
+    updateMiraklToken(event) {
+      this.props.updateMiraklToken(event.currentTarget.value);
     }
 
     render() {
@@ -131,7 +133,29 @@ class FileSelect extends Component {
               />
             )}
           />
-         { this.props.state.docId ?
+          <Grid style={{marginTop: "36px", marginBottom: "8px"}} item>
+            <Typography style={{marginTop: "8px"}} variant="h5" marked="center" component="h2">
+              Data Source:
+            </Typography>
+            <ToggleButtonGroup size="large" value={this.props.state.mergeStyle} exclusive onChange={this.changeMergeStyle}>
+              <ToggleButton key={1} value="manual">
+                <Typography style={{marginTop: "8px"}} variant="h5" marked="center" component="h2">
+                  Manual
+                </Typography>
+              </ToggleButton>,
+              <ToggleButton key={2} value="mirakl">
+                <Typography style={{marginTop: "8px"}} variant="h5" marked="center" component="h2">
+                  Mirakl
+                </Typography>
+              </ToggleButton>,
+              <ToggleButton key={3} value="gsheet" disabled={true}>
+                <Typography style={{marginTop: "8px"}} variant="h5" marked="center" component="h2">
+                  Google Sheets
+                </Typography>
+              </ToggleButton>,
+            </ToggleButtonGroup>
+          </Grid>
+         { this.props.state.docId && this.props.state.mergeStyle === 'manual' ?
         <div style={{marginTop: "36px", marginBottom: "8px"}}>
         <Grid container spacing={5}>
             <Grid item xs={12} md={6}>
@@ -158,7 +182,16 @@ class FileSelect extends Component {
             </Grid>
           </Grid>
         </div>
-        :
+        : this.props.state.docId && this.props.state.mergeStyle === 'mirakl' ?
+          <div>
+            <TextField key={123} onChange={(event) => this.updateMiraklToken(event)} style={{width: '-webkit-fill-available' , marginTop: 8, marginBottom: 8}} label={"Mirakl API Token"} variant="outlined" />
+          {
+            this.props.state.miraklApiToken ? 
+            <SearchDataTable /> 
+            : <React.Fragment />
+          }
+          </div>
+        : 
         <div style={{marginTop: "36px", marginBottom: "8px"}}>
         <Typography style={{marginTop: "8px"}} variant="h5" marked="center" component="h2">
             Please select a document...
@@ -180,6 +213,6 @@ export default connect((state) => (
     state: state
   }
 ),
-  { setFileId , performFileSearch, fetchMergeFields}
+  { setFileId , performFileSearch, fetchMergeFields, changeMergeStyle, updateMiraklToken}
 )
 (withStyles(styles)(FileSelect));

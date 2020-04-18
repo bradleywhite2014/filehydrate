@@ -13,7 +13,8 @@ export const performFileSearchSuccess = (payload) => ({type: constants.PERFORM_F
 export const performFileSearchFailure = (payload) => ({type: constants.PERFORM_FILE_SEARCH_FAILURE, payload});
 export const removeMessage = (payload) => ({type: constants.REMOVE_MESSAGE, payload});
 export const logoutUser = (payload) => ({type: constants.LOGOUT_USER, payload});
-
+export const changeMergeStyle = (payload) => ({type: constants.CHANGE_MERGE_STYLE, payload});
+export const updateMiraklToken = (payload) => ({type: constants.UPDATE_MIRAKL_TOKEN, payload});
 
 //error
 export const putErrorMessage = (payload) => ({type: constants.PUT_ERROR_MESSAGE, payload});

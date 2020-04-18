@@ -9,7 +9,9 @@ import {
     PERFORM_FILE_SEARCH_ERROR,
     REMOVE_MESSAGE,
     PUT_ERROR_MESSAGE,
-    LOGOUT_USER
+    LOGOUT_USER,
+    CHANGE_MERGE_STYLE,
+    UPDATE_MIRAKL_TOKEN
   } from '../utils/constants'
 
 import _ from 'underscore';
@@ -28,7 +30,9 @@ import {convertMergeFieldsToFormFields, convertGoogleFileResponseToAutocompleteF
         docId: '',
         fileList: [],
         messages: [],
-        loadingFields: false
+        loadingFields: false,
+        mergeStyle: "manual",
+        miraklApiToken: "",
     }
     
 };
@@ -111,6 +115,18 @@ const reducer = (state = initialState, action) => {
         const resp = action.payload
         return Object.assign({}, state, {
             fileList: convertGoogleFileResponseToAutocompleteFields(resp.files)
+        })
+      }
+      case CHANGE_MERGE_STYLE: {
+        const newMergeStyle = action.payload
+        return Object.assign({}, state, {
+            mergeStyle: newMergeStyle
+        })
+      }
+      case UPDATE_MIRAKL_TOKEN: {
+        const newApiTokenValue = action.payload
+        return Object.assign({}, state, {
+            miraklApiToken: newApiTokenValue
         })
       }
       case REMOVE_MESSAGE: {
