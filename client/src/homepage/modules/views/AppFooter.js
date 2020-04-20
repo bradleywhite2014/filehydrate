@@ -76,29 +76,9 @@ export default function AppFooter() {
   const classes = useStyles();
 
   return (
-    <Typography component="footer" className={classes.root}>
-      <Container className={classes.container}>
-        <Grid container spacing={5}>
-          <Grid item xs={6} sm={4} md={3}>
-            <Grid
-              container
-              direction="column"
-              justify="flex-end"
-              className={classes.iconsWrapper}
-              spacing={2}
-            >
-              <Grid item className={classes.icons}>
-                <a href="" className={classes.icon} style={{backgorundColor: '#00b4f9', borderRadius: '5px'}}>
-                  <img src={require("../../../assets/images/appFooterFacebook.png")} alt="Facebook" />
-                </a>
-                <a href="" className={classes.icon} style={{backgorundColor: '#00b4f9', borderRadius: '5px'}}>
-                  <img src={require("../../../assets/images/appFooterTwitter.png")} alt="Twitter" />
-                </a>
-              </Grid>
-            </Grid>
-          </Grid>
-        </Grid>
-      </Container>
+    <Typography style={{
+      height: '60px' , alignItems: 'center', paddingLeft: '8px'}}component="footer" className={classes.root} variant="h5" marked="center" component="h2">
+      @DocuMerge 2020
     </Typography>
   );
 }

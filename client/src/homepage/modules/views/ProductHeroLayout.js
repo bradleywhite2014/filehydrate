@@ -6,7 +6,7 @@ import Container from '@material-ui/core/Container';
 
 const styles = theme => ({
   root: {
-    color: theme.palette.common.white,
+    color: '#FFF',
     position: 'relative',
     display: 'flex',
     alignItems: 'center',

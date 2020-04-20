@@ -14,7 +14,7 @@ const styles = theme => ({
   },
   input: {
     minWidth: theme.spacing(6),
-    backgroundColor: theme.palette.common.white,
+    backgroundColor: '#FFF',
     '&$disabled': {
       backgroundColor: theme.palette.divider,
     },

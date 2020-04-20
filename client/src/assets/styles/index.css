@@ -165,3 +165,11 @@ h3 {
   margin-left: 16px;
   margin-bottom: 0px;
 }
+
+html, body {
+  height: 100%;
+}
+
+#root {
+  height: 100%;
+}

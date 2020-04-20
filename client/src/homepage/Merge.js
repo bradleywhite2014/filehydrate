@@ -13,6 +13,8 @@ import Grid from '@material-ui/core/Grid';
 import Container from '@material-ui/core/Container';
 import Button from './modules/components/Button';
 import _ from 'underscore'
+import {randomString} from '../utils/index'
+import Skeleton from '@material-ui/lab/Skeleton';
 
 const styles = theme => ({
   root: {
@@ -89,11 +91,43 @@ class Merge extends Component {
 
     render() {
       
-      return  (
+      return this.props.state.loadingFields ? (
+        <React.Fragment>
+          <Skeleton animation="wave" height={60} />
+          <Skeleton animation="wave" height={60} />
+          <Skeleton animation="wave" height={60} />
+          <Skeleton animation="wave" height={60} />
+          <Skeleton animation="wave" height={60} />
+          <Skeleton animation="wave" height={60} />
+          <Skeleton animation="wave" height={60} />
+          <Skeleton animation="wave" height={60} />
+          <Skeleton animation="wave" height={60} />
+          <Skeleton animation="wave" height={60} />
+          <Skeleton animation="wave" height={60} />
+          <Skeleton animation="wave" height={60} />
+          <Skeleton animation="wave" height={60} />
+          <Skeleton animation="wave" height={60} />
+          <Skeleton animation="wave" height={60} />
+          <Skeleton animation="wave" height={60} />
+          <Skeleton animation="wave" height={60} />
+          <Skeleton animation="wave" height={60} />
+          <Skeleton animation="wave" height={60} />
+          <Skeleton animation="wave" height={60} />
+          <Skeleton animation="wave" height={60} />
+          <Skeleton animation="wave" height={60} />
+          <Skeleton animation="wave" height={60} />
+          <Skeleton animation="wave" height={60} />
+          <Skeleton animation="wave" height={60} />
+        </React.Fragment>
+      ) :
+      (
         <section className={styles.root}>
           <Container className={styles.container}>
-          {_.keys(this.props.state.formFields).map((field) => {
-            return <TextField onChange={(event) => this.updateField(event, field)} style={{width: '-webkit-fill-available' , marginTop: 8, marginBottom: 8}} id="outlined-basic" label={field.substring(2,field.length - 2)} variant="outlined" />
+          <Typography style={{marginTop: "8px"}} variant="h5" marked="center" component="h2">
+            Fields
+          </Typography>
+          {_.keys(this.props.state.formFields).map((field, index) => {
+            return <TextField key={index} onChange={(event) => this.updateField(event, field)} style={{width: '-webkit-fill-available' , marginTop: 8, marginBottom: 8}} label={field.substring(2,field.length - 2)} variant="outlined" />
           })}
           <Button
           color="secondary"

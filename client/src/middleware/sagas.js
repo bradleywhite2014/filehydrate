@@ -10,24 +10,66 @@ import {get, post, httpPut} from './http'
 
   
 export function* fetchMergeFields({payload}) {
+  try{
     const mergeFields = yield call(get, 'https://lipyjnw0f8.execute-api.us-east-2.amazonaws.com/main' + '?docId=' + payload + '&access_token=' + sessionStorage.getItem('accessToken'))
-    yield put(actions.fetchMergeFieldsSuccess(mergeFields))
+    
+    if(mergeFields.error){
+      if(mergeFields.error.code === 401) {
+        //lets go a head and get logged out
+        yield put(actions.logoutUser())
+      }
+      yield put(actions.putErrorMessage(mergeFields.error.message))
+    }else {
+      yield put(actions.fetchMergeFieldsSuccess(mergeFields))
+    }
+  }catch(e){
+    yield put(actions.putErrorMessage(e))
+  }
+    
     
 }
 
 export function* submitMergeFields({payload}) {
-  const results = yield call(post,'https://lipyjnw0f8.execute-api.us-east-2.amazonaws.com/main'  + '?docId=' + payload.docId + '&access_token=' + sessionStorage.getItem('accessToken'), payload.formFields)
-  yield put(actions.submitMergeFieldsSuccess())
+  try{
+    const results = yield call(post,'https://lipyjnw0f8.execute-api.us-east-2.amazonaws.com/main'  + '?docId=' + payload.docId + '&access_token=' + sessionStorage.getItem('accessToken'), payload.formFields)
+    
+    if(results.error){
+      if(results.error.code === 401) {
+        //lets go a head and get logged out
+        yield put(actions.logoutUser())
+      }
+      yield put(actions.putErrorMessage(results.error.message))
+    }else {
+      yield put(actions.submitMergeFieldsSuccess())
+    }
+  }catch(e){
+    yield put(actions.putErrorMessage(e))
+  }
+  
 }
 
 export function* performFileSearch({payload}) {
-  var files = [];
-  if(payload) {
-    files = yield call(get, 'https://www.googleapis.com/drive/v3/files' + "?q=name contains " + "'" + payload + "'" , sessionStorage.getItem('accessToken'))
-  } else {
-    files = yield call(get, 'https://www.googleapis.com/drive/v3/files', sessionStorage.getItem('accessToken'))
+  try{
+    var files = [];
+    if(payload) {
+      files = yield call(get, 'https://www.googleapis.com/drive/v3/files' + "?q=name contains " + "'" + payload + "'" , sessionStorage.getItem('accessToken'))
+    } else {
+      files = yield call(get, 'https://www.googleapis.com/drive/v3/files', sessionStorage.getItem('accessToken'))
+    }
+    if(files.error){
+      if(files.error.code === 401) {
+        //lets go a head and get logged out
+        yield put(actions.logoutUser())
+      }
+      yield put(actions.putErrorMessage(files.error.message))
+    }else {
+      yield put(actions.performFileSearchSuccess(files)) 
+    }
+    
+  }catch(e){
+    yield put(actions.putErrorMessage(e))
   }
-  yield put(actions.performFileSearchSuccess(files)) 
+  
 }
 
 function * watcher () {

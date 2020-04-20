@@ -47,7 +47,7 @@ const styles = theme => ({
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
-    color: theme.palette.common.white,
+    color: '#FFF',
   },
   imageSrc: {
     position: 'absolute',
@@ -75,7 +75,7 @@ const styles = theme => ({
   imageMarked: {
     height: 3,
     width: 18,
-    background: theme.palette.common.white,
+    background: '#FFF',
     position: 'absolute',
     bottom: -2,
     left: 'calc(50% - 9px)',
