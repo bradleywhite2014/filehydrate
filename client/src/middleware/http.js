@@ -57,13 +57,17 @@ export const del = async (path, body) => {
     }
 }
 
-export const get = async (path, token) => {
+export const get = async (path, token, includeBearer = true) => {
+    let bearerString = ''
+    if(includeBearer){
+        bearerString = 'Bearer '
+    }
     const response = await fetch(path, {
         method: 'GET',
         headers: {
         'Accept': 'application/json',
         'Content-Type': 'application/json',
-        'Authorization': token ? 'Bearer ' + token : sessionStorage.getItem('idToken')
+        'Authorization': token ? bearerString + token : sessionStorage.getItem('idToken')
         }
     })
 

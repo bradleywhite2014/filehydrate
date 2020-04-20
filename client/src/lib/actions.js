@@ -15,6 +15,9 @@ export const removeMessage = (payload) => ({type: constants.REMOVE_MESSAGE, payl
 export const logoutUser = (payload) => ({type: constants.LOGOUT_USER, payload});
 export const changeMergeStyle = (payload) => ({type: constants.CHANGE_MERGE_STYLE, payload});
 export const updateMiraklToken = (payload) => ({type: constants.UPDATE_MIRAKL_TOKEN, payload});
+export const updateMiraklUrl = (payload) => ({type: constants.UPDATE_MIRAKL_URL, payload});
+export const searchMiraklOrders = (payload) => ({type: constants.SEARCH_MIRAKL_ORDERS, payload});
+export const searchMiraklOrdersSuccess = (payload) => ({type: constants.SEARCH_MIRAKL_ORDERS_SUCCESS, payload});
 
 //error
 export const putErrorMessage = (payload) => ({type: constants.PUT_ERROR_MESSAGE, payload});

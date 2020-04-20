@@ -11,7 +11,9 @@ import {
     PUT_ERROR_MESSAGE,
     LOGOUT_USER,
     CHANGE_MERGE_STYLE,
-    UPDATE_MIRAKL_TOKEN
+    UPDATE_MIRAKL_TOKEN,
+    UPDATE_MIRAKL_URL,
+    SEARCH_MIRAKL_ORDERS_SUCCESS
   } from '../utils/constants'
 
 import _ from 'underscore';
@@ -33,6 +35,8 @@ import {convertMergeFieldsToFormFields, convertGoogleFileResponseToAutocompleteF
         loadingFields: false,
         mergeStyle: "manual",
         miraklApiToken: "",
+        miraklUrlHost: "",
+        miraklOrders: []
     }
     
 };
@@ -127,6 +131,19 @@ const reducer = (state = initialState, action) => {
         const newApiTokenValue = action.payload
         return Object.assign({}, state, {
             miraklApiToken: newApiTokenValue
+        })
+      }
+      case UPDATE_MIRAKL_URL: {
+        const newUrlValue = action.payload
+        return Object.assign({}, state, {
+            miraklUrlHost: newUrlValue
+        })
+      }
+      case SEARCH_MIRAKL_ORDERS_SUCCESS: {
+          console.log(action.payload)
+        const resp = action.payload
+        return Object.assign({}, state, {
+            miraklOrders: resp
         })
       }
       case REMOVE_MESSAGE: {

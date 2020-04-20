@@ -72,6 +72,29 @@ export function* performFileSearch({payload}) {
   
 }
 
+export function* performMiraklSearch({payload}) {
+  try{
+    var orders = [];
+
+    orders = yield call(get, payload.url + '/api/orders', payload.token, false)
+    
+    console.log(orders)
+    if(orders.error){
+      if(orders.error.code === 401) {
+        //lets go a head and get logged out
+        yield put(actions.logoutUser())
+      }
+      yield put(actions.putErrorMessage(orders.error.message))
+    }else {
+      yield put(actions.searchMiraklOrdersSuccess(orders.orders)) 
+    }
+    
+  }catch(e){
+    yield put(actions.putErrorMessage(e))
+  }
+  
+}
+
 function * watcher () {
   if (appConfig.OFFLINE_MODE) {
     // going to use mocked out versions
@@ -81,6 +104,7 @@ function * watcher () {
     yield takeEvery(constants.FETCH_MERGE_FIELDS, fetchMergeFields)
     yield takeEvery(constants.SUBMIT_MERGE_FIELDS, submitMergeFields)
     yield takeLatest(constants.PERFORM_FILE_SEARCH, performFileSearch)
+    yield takeEvery(constants.SEARCH_MIRAKL_ORDERS, performMiraklSearch)
   }
 }
 

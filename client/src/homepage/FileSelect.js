@@ -7,7 +7,7 @@ import TextField from '@material-ui/core/TextField';
 import Typography from './modules/components/Typography';
 import Toolbar, { styles as toolbarStyles } from './modules/components/Toolbar';
 import { connect } from 'react-redux'
-import { setFileId, performFileSearch, fetchMergeFields , changeMergeStyle, updateMiraklToken} from './../lib/actions'
+import { setFileId, performFileSearch, fetchMergeFields , changeMergeStyle, updateMiraklToken, updateMiraklUrl, searchMiraklOrders} from './../lib/actions'
 import ProductHeroLayout from './modules/views/ProductHeroLayout';
 import Grid from '@material-ui/core/Grid';
 import Container from '@material-ui/core/Container';
@@ -79,6 +79,8 @@ class FileSelect extends Component {
       this.selectFile = this.selectFile.bind(this);
       this.changeMergeStyle = this.changeMergeStyle.bind(this);
       this.updateMiraklToken = this.updateMiraklToken.bind(this);
+      this.updateMiraklUrl = this.updateMiraklUrl.bind(this);
+      this.onSearchOrders = this.onSearchOrders.bind(this);
     }
 
     // Fetch the list on first mount
@@ -109,6 +111,14 @@ class FileSelect extends Component {
 
     updateMiraklToken(event) {
       this.props.updateMiraklToken(event.currentTarget.value);
+    }
+
+    updateMiraklUrl(event) {
+      this.props.updateMiraklUrl(event.currentTarget.value);
+    }
+
+    onSearchOrders(event) {
+      this.props.searchMiraklOrders({url: this.props.state.miraklApiUrl, token: this.props.state.miraklApiToken});
     }
 
     render() {
@@ -184,12 +194,26 @@ class FileSelect extends Component {
         </div>
         : this.props.state.docId && this.props.state.mergeStyle === 'mirakl' ?
           <div>
+            <TextField key={123} onChange={(event) => this.updateMiraklUrl(event)} style={{width: '-webkit-fill-available' , marginTop: 8, marginBottom: 8}} label={"Mirakl Host URL"} variant="outlined" />
             <TextField key={123} onChange={(event) => this.updateMiraklToken(event)} style={{width: '-webkit-fill-available' , marginTop: 8, marginBottom: 8}} label={"Mirakl API Token"} variant="outlined" />
           {
-            this.props.state.miraklApiToken ? 
-            <SearchDataTable /> 
+            this.props.state.miraklApiToken && this.props.state.miraklUrlHost ? 
+            <Button
+              color="secondary"
+              size="large"
+              variant="contained"
+              style={{marginBottom: 15}} 
+              onClick={this.onSearchOrders}
+            >
+              {'Get Files'}
+            </Button>     
             : <React.Fragment />
           }
+          {
+              this.props.state.miraklOrders && this.props.state.miraklOrders.length > 0 ? 
+              <SearchDataTable /> :
+              <React.Fragment />
+            }
           </div>
         : 
         <div style={{marginTop: "36px", marginBottom: "8px"}}>
@@ -213,6 +237,6 @@ export default connect((state) => (
     state: state
   }
 ),
-  { setFileId , performFileSearch, fetchMergeFields, changeMergeStyle, updateMiraklToken}
+  { setFileId , performFileSearch, fetchMergeFields, changeMergeStyle, updateMiraklToken, updateMiraklUrl, searchMiraklOrders}
 )
 (withStyles(styles)(FileSelect));
