@@ -13,12 +13,14 @@ import {
     CHANGE_MERGE_STYLE,
     UPDATE_MIRAKL_TOKEN,
     UPDATE_MIRAKL_URL,
-    SEARCH_MIRAKL_ORDERS_SUCCESS
+    SEARCH_MIRAKL_ORDERS_SUCCESS,
+    LOGIN_PENDING,
+    PARSE_TOKENS_FROM_URL
   } from '../utils/constants'
 
 import _ from 'underscore';
 
-import {convertMergeFieldsToFormFields, convertGoogleFileResponseToAutocompleteFields, genMsgId} from '../utils/index'
+import {convertMergeFieldsToFormFields, convertGoogleFileResponseToAutocompleteFields, genMsgId, parseTokenFromUrl} from '../utils/index'
 
   const initializeState = () => {
     return {
@@ -36,7 +38,8 @@ import {convertMergeFieldsToFormFields, convertGoogleFileResponseToAutocompleteF
         mergeStyle: "manual",
         miraklApiToken: "",
         miraklUrlHost: "",
-        miraklOrders: []
+        miraklOrders: [],
+        authState: 'PENDING'
     }
     
 };
@@ -146,6 +149,21 @@ const reducer = (state = initialState, action) => {
             miraklOrders: resp
         })
       }
+      case LOGIN_PENDING: {
+        return Object.assign({}, state, {
+            authState: 'PENDING'
+        })
+      }
+
+      case PARSE_TOKENS_FROM_URL: {
+        parseTokenFromUrl();
+        window.location.href = window.origin // lets go to root, we got this token in our sessionstorage
+        return Object.assign({}, state, {
+            authState: 'VALID'
+        })
+        
+      }
+
       case REMOVE_MESSAGE: {
         const removeId = action.payload
         let tempMessages = state.messages

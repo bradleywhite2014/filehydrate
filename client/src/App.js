@@ -15,7 +15,7 @@ var config = {
     storage: 'sessionStorage'
   },
   clientId: '0oadvtnnf927LpwaE356',
-  redirectUri: window.location.origin + '/auth/callback',
+  redirectUri: window.origin + '/auth/callback',
   wellKnown: 'https://dev-192910.okta.com/oauth2/ausdvtadl6vMkGVcj356/.well-known/openid-configuration',
   authz_endpoint: 'https://dev-192910.okta.com/oauth2/ausdvtadl6vMkGVcj356/v1/authorize'
 };

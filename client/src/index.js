@@ -9,6 +9,7 @@ import reducer from './reducers';
 import rootSagas from './middleware/sagas';
 import Home from './homepage/Home';
 import createSagaMiddleware from 'redux-saga'
+import LoginCallback from './homepage/LoginCallback';
 
 const sagaMiddleware = createSagaMiddleware();
 
@@ -37,12 +38,13 @@ store.subscribe(() => {
 sagaMiddleware.run(rootSagas);
 
 // render the application
-
 render((
     <Provider store={store}>
         <BrowserRouter>
             <Switch>
                 <Route path='/' exact={true} render={(props) => <Home/> } />
+                <Route path='/implicit/callback' component={LoginCallback}/>
+            
                 <Route path='/merge' exact={true} render={(props) => <Home mainSection={'merge'} /> } />
                 <Route path='/fileSelect' exact={true} render={(props) => <Home mainSection={'fileSelect'} /> } />
             </Switch>

@@ -8,8 +8,8 @@ import Typography from '../components/Typography';
 import Toolbar, { styles as toolbarStyles } from '../components/Toolbar';
 import { connect } from 'react-redux'
 import { setUserInfo , logoutUser} from '../../../lib/actions'
-import { GoogleLogin, GoogleLogout} from 'react-google-login';
 import { useHistory } from "react-router-dom";
+import OIDCLoginButton from '../components/OIDCLoginButton';
 //1E5Us1TfM8QojOqgfe0-pdmSaw3VOFBK-jTIl6dziPcY
 
 const googleScopes = 'https://www.googleapis.com/auth/documents https://www.googleapis.com/auth/drive email profile'
@@ -69,7 +69,7 @@ function AppAppBar(props) {
   const responseGoogleError = (response) => {
     console.log(response);
   }
-  return props.state.userInfo.imageUrl.length > 0 ?  <div>
+  return <div>
   <AppBar position="fixed">
     <Toolbar className={classes.toolbar}>
       <div className={classes.left} />
@@ -80,45 +80,12 @@ function AppAppBar(props) {
       </Typography>
       <div className={classes.right}>
       <img src={props.state.userInfo.imageUrl} className={classes.profileIcon}/>
-      <GoogleLogout
-      clientId="382267252700-gvhfvt7467hqlsuro9v4g7fc31v75q4h.apps.googleusercontent.com"
-      buttonText="Logout"
-      onLogoutSuccess={responseGoogleLogout}
-      className={classes.rightLink}
-      >
-      </GoogleLogout>
+      <OIDCLoginButton />
       </div>
     </Toolbar>
   </AppBar>
   <div className={classes.placeholder} />
-</div> : (
-    <div>
-      <AppBar position="fixed">
-        <Toolbar className={classes.toolbar}>
-          <div className={classes.left} />
-          <Typography color="inherit" align="center" variant="h5" className={classes.h5}>
-            DocuMerge
-          </Typography>
-          <div className={classes.right}>
-          <GoogleLogin
-            clientId="382267252700-gvhfvt7467hqlsuro9v4g7fc31v75q4h.apps.googleusercontent.com"
-            includeAuthorizationData={true}
-            buttonText="Login"
-            responseType="token"
-            scope={googleScopes}
-            prompt='consent'
-            accessType='online'
-            approvalPrompt="force"
-            onSuccess={responseGoogleSuccess}
-            onFailure={responseGoogleError}
-            cookiePolicy={'single_host_origin'}
-          />
-          </div>
-        </Toolbar>
-      </AppBar>
-      <div className={classes.placeholder} />
-    </div>
-  );
+</div>;
 }
 
 AppAppBar.propTypes = {
