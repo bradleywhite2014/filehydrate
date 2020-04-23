@@ -6,8 +6,6 @@ import {
   randomString
 } from './utils'
 
-import OktaAuth from '@okta/okta-auth-js'
-
 var config = {
   domain: 'https://dev-192910.okta.com',
   issuer: 'https://dev-192910.okta.com/oauth2/ausdvtadl6vMkGVcj356',
@@ -23,22 +21,6 @@ var config = {
 class App extends Component {
   constructor() {
     super()
-    // this.state = {
-    //   authed: false
-    // }
-    // this.authClient = new OktaAuth({
-    //   url: config.domain,
-    //   clientId: config.clientId,
-    //   redirectUri: config.redirectUri,
-    //   issuer: config.issuer,
-    //   responseType: ['id_token', 'token'],
-    //   scopes: ['openid', 'profile']
-
-    // })
-
-    // this.makeOidcUrl = this.makeOidcUrl.bind(this);
-    // this.attemptSSO = this.attemptSSO.bind(this);
-    // this.attemptSSO();
   }
 
   makeOidcUrl() {
