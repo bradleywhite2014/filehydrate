@@ -3,7 +3,6 @@ import clsx from 'clsx';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import MuiTextField from '@material-ui/core/TextField';
-import { capitalize } from '@material-ui/core/utils';
 
 const styles = theme => ({
   root: {
@@ -81,7 +80,7 @@ function TextField(props) {
           root: classes.root,
           input: clsx(
             classes.input,
-            classes[`inputSize${capitalize(size)}`],
+            classes[`inputSize${size}`],
             {
               [classes.inputBorder]: !noBorder,
             },

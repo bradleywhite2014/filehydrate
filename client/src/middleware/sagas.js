@@ -134,7 +134,7 @@ export function* performLogin({payload}) {
 
     window.location.href = oauth2RedirectEndpoint; 
 
-    yield put(actions.loginPending)
+    yield put(actions.loginPending())
 
    
 
@@ -147,7 +147,15 @@ export function* performLogout({payload}) {
   try {
 
     // Google's OAuth 2.0 endpoint for requesting an access token
-    var oauth2Endpoint = 'https://accounts.google.com/o/oauth2/v2/auth';
+    var oauth2Endpoint = 'https://oauth2.googleapis.com/revoke?token=' + sessionStorage.getItem('accessToken');
+    console.log(oauth2Endpoint);
+    const resp = yield call(get, oauth2Endpoint)
+
+    if(resp.error){
+      yield put(actions.putErrorMessage(resp.error.message))
+    }else {
+      yield put(actions.logoutUserSuccess()) 
+    }
 
   }catch(e){
     yield put(actions.putErrorMessage(e))
@@ -166,7 +174,7 @@ function * watcher () {
     yield takeEvery(constants.SEARCH_MIRAKL_ORDERS, performMiraklSearch)
     yield takeEvery(constants.CHECK_AUTH_STATUS, performAuthCheck)
     yield takeEvery(constants.LOGIN_USER, performLogin)
-    yield takeEvery(constants.LOGIN_USER, performLogout)
+    yield takeEvery(constants.LOGOUT_USER, performLogout)
   }
 }
 

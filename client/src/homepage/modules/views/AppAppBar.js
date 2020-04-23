@@ -56,19 +56,7 @@ function AppAppBar(props) {
   const history = useHistory();
   const { classes } = props; 
 
-  const responseGoogleSuccess = (response) => {
-    //console.log('props: ' + JSON.stringify(props));
-    props.setUserInfo(response);
-  }
-
-  const responseGoogleLogout = (response) => {
-    props.logoutUser();
-    history.push("/");
-  }
   
-  const responseGoogleError = (response) => {
-    console.log(response);
-  }
   return <div>
   <AppBar position="fixed">
     <Toolbar className={classes.toolbar}>
@@ -79,7 +67,7 @@ function AppAppBar(props) {
         </Link>
       </Typography>
       <div className={classes.right}>
-      <img src={props.state.userInfo.imageUrl} className={classes.profileIcon}/>
+      {props.state.userPhotoUrl ? <img src={props.state.userPhotoUrl} className={classes.profileIcon}/> : <React.Fragment /> }
       <OIDCLoginButton />
       </div>
     </Toolbar>

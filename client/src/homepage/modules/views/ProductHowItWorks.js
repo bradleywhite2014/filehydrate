@@ -116,9 +116,9 @@ function ProductHowItWorks(props) {
           className={classes.button}
           component="a"
           href="/fileSelect"
-          disabled={!!!props.state.accessToken}
+          disabled={props.state.authState !== 'VALID'}
         >
-          {!!!props.state.accessToken ? 'Please login first...' : 'Get started'}
+          {props.state.authState !== 'VALID' ? 'Please login first...' : 'Get started'}
         </Button>
       </Container>
     </section>

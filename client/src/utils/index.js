@@ -72,4 +72,17 @@ export const parseTokenFromUrl = () => {
   const idToken = getParameterByName('id_token');
   sessionStorage.setItem('accessToken', accessToken);
   sessionStorage.setItem('idToken', idToken);
+
+  return {
+    accessToken,
+    idToken
+  }
 }
+
+export const parseJwt = (token) => {
+  try {
+    return JSON.parse(atob(token.split('.')[1]));
+  } catch (e) {
+    return null;
+  }
+};

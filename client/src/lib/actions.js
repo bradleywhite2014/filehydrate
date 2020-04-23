@@ -23,6 +23,7 @@ export const isAuthed = (payload) => ({type: constants.CHECK_AUTH_STATUS, payloa
 export const parseTokens =(payload) => ({type: constants.PARSE_TOKENS_FROM_URL, payload});
 export const loginPending = (payload) => ({type: constants.LOGIN_PENDING, payload});
 export const logoutUser = (payload) => ({type: constants.LOGOUT_USER, payload});
+export const logoutUserSuccess = (payload) => ({type: constants.LOGOUT_USER_SUCCESS, payload});
 export const loginUser = (payload) => ({type: constants.LOGIN_USER, payload});
 
 //error

@@ -15,12 +15,13 @@ import {
     UPDATE_MIRAKL_URL,
     SEARCH_MIRAKL_ORDERS_SUCCESS,
     LOGIN_PENDING,
-    PARSE_TOKENS_FROM_URL
+    PARSE_TOKENS_FROM_URL,
+    LOGOUT_USER_SUCCESS
   } from '../utils/constants'
 
 import _ from 'underscore';
 
-import {convertMergeFieldsToFormFields, convertGoogleFileResponseToAutocompleteFields, genMsgId, parseTokenFromUrl} from '../utils/index'
+import {convertMergeFieldsToFormFields, convertGoogleFileResponseToAutocompleteFields, genMsgId, parseTokenFromUrl, parseJwt} from '../utils/index'
 
   const initializeState = () => {
     return {
@@ -39,7 +40,8 @@ import {convertMergeFieldsToFormFields, convertGoogleFileResponseToAutocompleteF
         miraklApiToken: "",
         miraklUrlHost: "",
         miraklOrders: [],
-        authState: 'PENDING'
+        authState: 'PENDING',
+        userPhotoUrl: ''
     }
     
 };
@@ -156,10 +158,12 @@ const reducer = (state = initialState, action) => {
       }
 
       case PARSE_TOKENS_FROM_URL: {
-        parseTokenFromUrl();
+        const {accessToken, idToken } = parseTokenFromUrl();
+        const jwt = parseJwt(idToken)
         window.location.href = window.origin // lets go to root, we got this token in our sessionstorage
         return Object.assign({}, state, {
-            authState: 'VALID'
+            authState: 'VALID',
+            userPhotoUrl: jwt ? jwt.picture : ''
         })
         
       }
@@ -186,9 +190,10 @@ const reducer = (state = initialState, action) => {
             messages: currentMessages
         })
       }
-      case LOGOUT_USER: {
+      case LOGOUT_USER_SUCCESS: {
         // Remove any old data from sessionStorage
         sessionStorage.removeItem('accessToken');
+        sessionStorage.removeItem('idToken');
         localStorage.removeItem('documerge_state');
 
         return Object.assign({}, state, initializeState());
