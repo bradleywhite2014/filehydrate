@@ -118,7 +118,7 @@ class FileSelect extends Component {
     }
 
     onSearchOrders(event) {
-      this.props.searchMiraklOrders({url: this.props.state.miraklApiUrl, token: this.props.state.miraklApiToken});
+      this.props.searchMiraklOrders({url: this.props.state.miraklUrlHost, token: this.props.state.miraklApiToken});
     }
 
     render() {
