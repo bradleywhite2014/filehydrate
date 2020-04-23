@@ -3,7 +3,6 @@ import { render } from 'react-dom';
 import { BrowserRouter , Route, Switch } from 'react-router-dom';
 import { Provider } from 'react-redux'
 import './assets/styles/index.css';
-import App from './App';
 import { createStore, applyMiddleware } from 'redux'
 import reducer from './reducers';
 import rootSagas from './middleware/sagas';
@@ -44,7 +43,6 @@ render((
             <Switch>
                 <Route path='/' exact={true} render={(props) => <Home/> } />
                 <Route path='/implicit/callback' component={LoginCallback}/>
-            
                 <Route path='/merge' exact={true} render={(props) => <Home mainSection={'merge'} /> } />
                 <Route path='/fileSelect' exact={true} render={(props) => <Home mainSection={'fileSelect'} /> } />
             </Switch>
