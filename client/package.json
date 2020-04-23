@@ -8,7 +8,6 @@
     "@material-ui/icons": "^4.5.1",
     "@material-ui/lab": "^4.0.0-alpha.48",
     "@material/button": "^4.0.0",
-    "@okta/okta-react": "^3.0.1",
     "googleapis": "^43.0.0",
     "material-ui": "^0.20.2",
     "react": "^16.8.5",
