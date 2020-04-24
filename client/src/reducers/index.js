@@ -195,7 +195,7 @@ const reducer = (state = initialState, action) => {
         sessionStorage.removeItem('accessToken');
         sessionStorage.removeItem('idToken');
         localStorage.removeItem('documerge_state');
-
+        
         return Object.assign({}, state, initializeState());
       }
       default:  

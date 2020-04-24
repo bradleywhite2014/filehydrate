@@ -149,7 +149,7 @@ export function* performLogout({payload}) {
     // Google's OAuth 2.0 endpoint for requesting an access token
     var oauth2Endpoint = 'https://oauth2.googleapis.com/revoke?token=' + sessionStorage.getItem('accessToken');
     console.log(oauth2Endpoint);
-    const resp = yield call(get, oauth2Endpoint)
+    const resp = yield call(post, oauth2Endpoint)
 
     if(resp.error){
       yield put(actions.putErrorMessage(resp.error.message))
