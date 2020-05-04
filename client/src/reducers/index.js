@@ -4,6 +4,8 @@ import {
     FETCH_MERGE_FIELDS_SUCCESS,
     UPDATE_MERGE_FIELD,
     SUBMIT_MERGE_FIELDS_SUCCESS,
+    SUBMIT_MIRAKL_DETAILS_SUCCESS,
+    GET_MIRAKL_TOKEN_STATUS_SUCCESS,
     SET_FILE_ID,
     PERFORM_FILE_SEARCH_SUCCESS,
     PERFORM_FILE_SEARCH_ERROR,
@@ -41,7 +43,8 @@ import {convertMergeFieldsToFormFields, convertGoogleFileResponseToAutocompleteF
         miraklUrlHost: "",
         miraklOrders: [],
         authState: 'PENDING',
-        userPhotoUrl: ''
+        userPhotoUrl: '',
+        storedMiraklTokens: false
     }
     
 };
@@ -104,12 +107,28 @@ const reducer = (state = initialState, action) => {
             formFields: updatedFormFields
         })
       }
+      case GET_MIRAKL_TOKEN_STATUS_SUCCESS: {
+        return Object.assign({}, state, {
+            storedMiraklTokens: action.payload.status
+        })
+      }
       case SUBMIT_MERGE_FIELDS_SUCCESS: {
         let currentMessages = state.messages;
         currentMessages.push({
             id: genMsgId(),
             type: 'success',
             message: 'Merge completed successfully!'
+        })
+        return Object.assign({}, state, {
+            messages: currentMessages
+        })
+      }
+      case SUBMIT_MIRAKL_DETAILS_SUCCESS: {
+        let currentMessages = state.messages;
+        currentMessages.push({
+            id: genMsgId(),
+            type: 'success',
+            message: 'Successfully stored token information!'
         })
         return Object.assign({}, state, {
             messages: currentMessages

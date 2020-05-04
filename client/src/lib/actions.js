@@ -15,6 +15,12 @@ export const removeMessage = (payload) => ({type: constants.REMOVE_MESSAGE, payl
 export const changeMergeStyle = (payload) => ({type: constants.CHANGE_MERGE_STYLE, payload});
 export const updateMiraklToken = (payload) => ({type: constants.UPDATE_MIRAKL_TOKEN, payload});
 export const updateMiraklUrl = (payload) => ({type: constants.UPDATE_MIRAKL_URL, payload});
+
+
+export const getMiraklTokenStatus = (payload) => ({type: constants.GET_MIRAKL_TOKEN_STATUS, payload});
+export const getMiraklTokenStatusSuccess = (payload) => ({type: constants.GET_MIRAKL_TOKEN_STATUS_SUCCESS, payload});
+export const submitMiraklHostAndToken = (payload) => ({type: constants.SUBMIT_MIRAKL_DETAILS, payload});
+export const submitMiraklHostAndTokenSuccess = (payload) => ({type: constants.SUBMIT_MIRAKL_DETAILS_SUCCESS, payload});
 export const searchMiraklOrders = (payload) => ({type: constants.SEARCH_MIRAKL_ORDERS, payload});
 export const searchMiraklOrdersSuccess = (payload) => ({type: constants.SEARCH_MIRAKL_ORDERS_SUCCESS, payload});
 
