@@ -121,7 +121,7 @@ export function* performMiraklSearch({payload}) {
   try{
     var orders = [];
 
-    orders = yield call(get, payload.url + '/api/orders', payload.token, false)
+    orders = yield call(get,'https://6m5cadt7n1.execute-api.us-east-2.amazonaws.com/main')
     
     console.log(orders)
     if(orders.error){

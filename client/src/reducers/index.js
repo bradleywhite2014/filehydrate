@@ -109,7 +109,7 @@ const reducer = (state = initialState, action) => {
       }
       case GET_MIRAKL_TOKEN_STATUS_SUCCESS: {
         return Object.assign({}, state, {
-            storedMiraklTokens: action.payload.status
+            storedMiraklTokens: action.payload
         })
       }
       case SUBMIT_MERGE_FIELDS_SUCCESS: {

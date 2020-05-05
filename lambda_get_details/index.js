@@ -9,18 +9,31 @@ exports.handler = (event, context, callback) => {
     const userId = event.requestContext.authorizer['principalId'];
 
 
-    getMiraklDetails(userId).then((err, data) => {
+    getMiraklDetails(userId).then(res => {
+        if(!res.Item){
+            callback(null, {
+                statusCode: 200,
+                body: JSON.stringify({
+                    status: 'not_found'
+                }),
+                headers: {
+                    'Access-Control-Allow-Origin': '*',
+                },
+            });
+        }else{
+            //we found it, we just need to let the frontend know its there with a 200
 
-    //we found it, we just need to let the frontend know its there with a 200
-        callback(null, {
-            statusCode: 200,
-            body: JSON.stringify({
-                status: 'found'
-            }),
-            headers: {
-                'Access-Control-Allow-Origin': '*',
-            },
-        });
+            console.log(res.Item)
+            callback(null, {
+                statusCode: 200,
+                body: JSON.stringify({
+                    status: 'found'
+                }),
+                headers: {
+                    'Access-Control-Allow-Origin': '*',
+                },
+            });
+        } 
     }).catch((err) => {
         console.error(err);
         errorResponse(err.message, context.awsRequestId, callback)
@@ -34,13 +47,6 @@ function getMiraklDetails(uid, token, hostUrl) {
             "UserId": uid
         },
     }).promise();
-}
-
-function toUrlString(buffer) {
-    return buffer.toString('base64')
-        .replace(/\+/g, '-')
-        .replace(/\//g, '_')
-        .replace(/=/g, '');
 }
 
 function errorResponse(errorMessage, awsRequestId, callback) {

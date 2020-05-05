@@ -2,35 +2,66 @@ const AWS = require('aws-sdk');
 
 AWS.config.update({region: 'us-east-1'});
 
-const ddb = new AWS.DynamoDB.DocumentClient();
+const upsert = function(item, userId, callback) {
+    var docClient = new AWS.DynamoDB.DocumentClient();
+    var now = new Date();
+    var params = {
+        TableName:"UserDetails",
+        Key:{
+            "UserId": userId
+        },
+        UpdateExpression: "set mirakl_host = :mirakl_host, mirakl_token = :mirakl_token",
+        ConditionExpression: "attribute_not_exists(mirakl_host) OR mirakl_host = :mirakl_host",
+        ExpressionAttributeValues:{
+            ':mirakl_host':item.mirakl_host,
+            ':mirakl_token':item.mirakl_token
+        },
+        ReturnValues:"UPDATED_NEW"
+    };
+ 
+    console.log("Adding a new item...");
+    console.log(JSON.stringify(item, null, 2));
+    docClient.update(params, function(err, data) {
+        if (err) {
+            console.log("Unable to add item. Error JSON:", JSON.stringify(err, null, 2));
+        } else {
+            //cant log a real token, too risky - console.log("Added item:", JSON.stringify(data, null, 2));
+        }
+        callback(err, data);
+    });
+};
 
 
 exports.handler = (event, context, callback) => {
-    // if (!event.requestContext.authorizer) {
-    //   errorResponse('Authorization not configured', context.awsRequestId, callback);
-    //   return;
-    // }
-
     // TODO: Decode jwt token for uid
-    console.log('event');
-    console.log(event);
-    console.log('context');
-    console.log(context);
     const userId = event.requestContext.authorizer['principalId'];
 
     // parse token and url
-    const requestBody = event.body
+    const requestBody = JSON.parse(event.body);
 
     const token = requestBody.token;
-    const urlHost = requestBody.host
+    const urlHost = requestBody.url;
 
-    saveMiraklDetails(userId, token, urlHost).then(() => {
-        // You can use the callback function to provide a return value from your Node.js
-        // Lambda functions. The first parameter is used for failed invocations. The
-        // second parameter specifies the result data of the invocation.
+    const newItem = {
+        mirakl_host: urlHost,
+        mirakl_token: token
+    }
 
-        // Because this Lambda function is called by an API Gateway proxy integration
-        // the result object must use the following structure.
+    console.log('is it there????' + JSON.stringify(newItem))
+
+    upsert(newItem, userId, (err, data) => {
+        if(err){
+            callback(null, {
+                statusCode: 500,
+                body: JSON.stringify({
+                    status: 'error',
+                    message: "Did not upsert successfully."
+                }),
+                headers: {
+                    'Access-Control-Allow-Origin': '*',
+                },
+            });
+        }
         callback(null, {
             statusCode: 201,
             body: JSON.stringify({
@@ -40,34 +71,10 @@ exports.handler = (event, context, callback) => {
                 'Access-Control-Allow-Origin': '*',
             },
         });
-    }).catch((err) => {
-        console.error(err);
-
-        // If there is an error during processing, catch it and return
-        // from the Lambda function successfully. Specify a 500 HTTP status
-        // code and provide an error message in the body. This will provide a
-        // more meaningful error response to the end client.
-        errorResponse(err.message, context.awsRequestId, callback)
     });
+        
 };
 
-function saveMiraklDetails(uid, token, hostUrl) {
-    return ddb.put({
-        TableName: 'UserDetails',
-        Item: {
-            UserId: uid,
-            MiraklToken: token,
-            MiraklHostUrl: hostUrl,
-        },
-    }).promise();
-}
-
-function toUrlString(buffer) {
-    return buffer.toString('base64')
-        .replace(/\+/g, '-')
-        .replace(/\//g, '_')
-        .replace(/=/g, '');
-}
 
 function errorResponse(errorMessage, awsRequestId, callback) {
   callback(null, {
