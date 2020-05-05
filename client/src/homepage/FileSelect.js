@@ -201,39 +201,35 @@ class FileSelect extends Component {
             </Grid>
           </Grid>
         </div>
-        : this.props.state.docId && this.props.state.mergeStyle === 'mirakl' && !this.props.state.storedMiraklTokens ?
+        : this.props.state.docId && this.props.state.mergeStyle === 'mirakl' ?
           <div>
             <TextField key={123} onChange={(event) => this.updateMiraklUrl(event)} style={{width: '-webkit-fill-available' , marginTop: 8, marginBottom: 8}} label={"Mirakl Host URL"} variant="outlined" />
-            <TextField key={123} onChange={(event) => this.updateMiraklToken(event)} style={{width: '-webkit-fill-available' , marginTop: 8, marginBottom: 8}} label={"Mirakl API Token"} variant="outlined" />
-          {
-            this.props.state.miraklApiToken && this.props.state.miraklUrlHost ? 
+            <TextField key={123} onChange={(event) => this.updateMiraklToken(event)} style={{width: '-webkit-fill-available' , marginTop: 8, marginBottom: 8}} label={"Mirakl API Token"} variant="outlined" />  
             <Button
               color="secondary"
               size="large"
               variant="contained"
-              style={{marginBottom: 15}} 
+              style={{marginBottom: 15, marginRight: 15}} 
               onClick={this.onSaveInfo}
             >
               {'Save'}
-            </Button>     
-            : <React.Fragment />
-          }
-          {
-              this.props.state.miraklOrders && this.props.state.miraklOrders.length > 0 ? 
-              <SearchDataTable /> :
-              <React.Fragment />
-            }
-          </div>
-        : this.props.state.docId && this.props.state.mergeStyle === 'mirakl' && this.props.state.storedMiraklTokens ?
-          <Button
+            </Button>   
+            <Button
             color="secondary"
             size="large"
             variant="contained"
             style={{marginBottom: 15}} 
+            disabled={!this.props.state.storedMiraklTokens}
             onClick={this.onSearchMirakl}
           >
             {'Search'}
-          </Button>   
+          </Button>  
+          {
+            this.props.state.miraklOrders && this.props.state.miraklOrders.length > 0 ? 
+            <SearchDataTable /> :
+            <React.Fragment />
+          }  
+          </div>
         :
         <div style={{marginTop: "36px", marginBottom: "8px"}}>
         <Typography style={{marginTop: "8px"}} variant="h5" marked="center" component="h2">

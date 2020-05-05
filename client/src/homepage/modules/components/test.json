@@ -1,0 +1,198 @@
+{
+    "acceptance_decision_date": "2019-11-08T21:21:06Z",
+    "can_cancel": false,
+    "channel": {
+        "code": "jcrew",
+        "label": "JCrew"
+    },
+    "commercial_id": "1162994075-1301117814",
+    "created_date": "2019-11-08T16:02:32Z",
+    "currency_iso_code": "USD",
+    "customer": {
+        "billing_address": {
+            "city": "DENVER",
+            "company": null,
+            "country": "US",
+            "country_iso_code": "USA",
+            "firstname": "Margaret",
+            "lastname": "Davidson",
+            "state": "CO",
+            "street_1": "230 E FLORIDA AVE",
+            "street_2": "",
+            "zip_code": "80210-2614"
+        },
+        "civility": null,
+        "customer_id": "15280712",
+        "firstname": "Margaret",
+        "lastname": "Davidson",
+        "locale": "en_US",
+        "shipping_address": {
+            "additional_info": "",
+            "city": "DENVER",
+            "company": null,
+            "country": "US",
+            "country_iso_code": "USA",
+            "firstname": "Margaret",
+            "lastname": "Davidson",
+            "phone": "9177484711",
+            "state": "CO",
+            "street_1": "230 E FLORIDA AVE",
+            "street_2": "",
+            "zip_code": "80210-2614"
+        }
+    },
+    "customer_debited_date": "2019-11-10T08:26:25.413Z",
+    "fulfillment": {
+        "center": {
+            "code": "DEFAULT"
+        }
+    },
+    "has_customer_message": false,
+    "has_incident": false,
+    "has_invoice": false,
+    "last_updated_date": "2020-03-10T12:00:07Z",
+    "leadtime_to_ship": 5,
+    "order_additional_fields": [],
+    "order_id": "1162994075-1301117814-A",
+    "order_lines": [
+        {
+            "can_refund": false,
+            "cancelations": [],
+            "category_code": "LL3D4I3I3",
+            "category_label": "BABY ACC OTHER",
+            "commission_fee": 6,
+            "commission_rate_vat": 0,
+            "commission_taxes": [
+                {
+                    "amount": 0,
+                    "code": "TAXDEFAULT",
+                    "rate": 0
+                }
+            ],
+            "commission_vat": 0,
+            "created_date": "2019-11-08T16:02:32Z",
+            "debited_date": "2019-11-10T08:26:25Z",
+            "description": null,
+            "last_updated_date": "2020-03-10T12:00:07Z",
+            "offer_id": 16719,
+            "offer_sku": "850012403142",
+            "offer_state_code": "11",
+            "order_line_additional_fields": [
+                {
+                    "code": "delivery-promise-date",
+                    "type": "DATE",
+                    "value": "2019-11-19T02:59:00Z"
+                },
+                {
+                    "code": "tax-rate",
+                    "type": "STRING",
+                    "value": "0.0831"
+                }
+            ],
+            "order_line_id": "1162994075-1301117814-A-1",
+            "order_line_index": 1,
+            "order_line_state": "CLOSED",
+            "order_line_state_reason_code": "AUTO_CLOSED",
+            "order_line_state_reason_label": "Closed automatically",
+            "price": 20,
+            "price_additional_info": null,
+            "price_amount_breakdown": {
+                "parts": [
+                    {
+                        "amount": 20,
+                        "commissionable": true,
+                        "debitable_from_customer": true,
+                        "payable_to_shop": true
+                    }
+                ]
+            },
+            "price_unit": 20,
+            "product_medias": [
+                {
+                    "media_url": "/media/product/image/99f291a7-d3b0-4e31-b1be-535a5c5a5af4",
+                    "mime_type": null,
+                    "type": "ORIGINAL"
+                }
+            ],
+            "product_sku": "99105863086",
+            "product_title": "Bamboo Knotted Hat",
+            "promotions": [],
+            "quantity": 1,
+            "received_date": "2019-12-01T09:15:01Z",
+            "refunds": [],
+            "shipped_date": "2019-11-10T08:17:10Z",
+            "shipping_price": 0,
+            "shipping_price_additional_unit": null,
+            "shipping_price_amount_breakdown": {
+                "parts": [
+                    {
+                        "amount": 0,
+                        "commissionable": true,
+                        "debitable_from_customer": true,
+                        "payable_to_shop": true
+                    }
+                ]
+            },
+            "shipping_price_unit": null,
+            "shipping_taxes": [
+                {
+                    "amount": 0,
+                    "amount_breakdown": {
+                        "parts": [
+                            {
+                                "amount": 0,
+                                "commissionable": false,
+                                "debitable_from_customer": true,
+                                "payable_to_shop": false
+                            }
+                        ]
+                    },
+                    "code": "tax-amount"
+                }
+            ],
+            "taxes": [
+                {
+                    "amount": 1.66,
+                    "amount_breakdown": {
+                        "parts": [
+                            {
+                                "amount": 1.66,
+                                "commissionable": false,
+                                "debitable_from_customer": true,
+                                "payable_to_shop": false
+                            }
+                        ]
+                    },
+                    "code": "tax-amount"
+                }
+            ],
+            "total_commission": 6,
+            "total_price": 20
+        }
+    ],
+    "order_state": "CLOSED",
+    "order_state_reason_code": "AUTO_CLOSED",
+    "order_state_reason_label": "Closed automatically",
+    "paymentType": "Others",
+    "payment_type": "Others",
+    "payment_workflow": "PAY_ON_DELIVERY",
+    "price": 20,
+    "promotions": {
+        "applied_promotions": [],
+        "total_deduced_amount": 0
+    },
+    "quote_id": null,
+    "shipping_carrier_code": "usps",
+    "shipping_company": "USPS",
+    "shipping_deadline": "2019-11-13T16:02:32.571Z",
+    "shipping_price": 0,
+    "shipping_tracking": "9400109205568541920604",
+    "shipping_tracking_url": "https://tools.usps.com/go/TrackConfirmAction.action?tLabels=9400109205568541920604",
+    "shipping_type_code": "GRND",
+    "shipping_type_label": "UPS Ground",
+    "shipping_zone_code": "US",
+    "shipping_zone_label": "US Continental",
+    "total_commission": 6,
+    "total_price": 20,
+    "transaction_number": "1301117814"
+}
