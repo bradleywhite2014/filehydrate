@@ -20,7 +20,7 @@ export const genMsgId = () => {
 }
 
 export const convertMergeFieldsToFormFields = (mergeFields) => {
-  if(mergeFields) {
+  if(mergeFields && Array.isArray(mergeFields)) {
     const temp = {}
     mergeFields.forEach((field) => {
       temp[field] = '';
@@ -86,3 +86,45 @@ export const parseJwt = (token) => {
     return null;
   }
 };
+
+export const mapMiraklOrders = (orders) => {
+  if(orders.length > 0) {
+    orders = orders.filter((order) => !!order.customer.billing_address)
+    return orders.map((order) => {
+      if(order.customer.billing_address){
+        return {
+          'Order ID': order.order_id,
+          'Order Status': order.order_state,
+          'Created Date': order.created_date,
+          'Billing Address City': order.customer.billing_address.city,
+          'Billing Address Country': order.customer.billing_address.country,
+          'Billing Address Country_iso_code': order.customer.billing_address.country_iso_code,
+          'Billing Address Firstname': order.customer.billing_address.firstname,
+          'Billing Address Lastname': order.customer.billing_address.lastname,
+          'Billing Address State': order.customer.billing_address.state,
+          'Billing Address Street1': order.customer.billing_address.street_1,
+          'Billing Address Street2': order.customer.billing_address.street_2,
+          'Billing Address Zip Code': order.customer.billing_address.zip_code,
+          'Shipping Address City': order.customer.shipping_address.city,
+          'Shipping Address Country': order.customer.shipping_address.country,
+          'Shipping Address Country Code': order.customer.shipping_address.country_iso_code,
+          'Shipping Address First Name': order.customer.shipping_address.firstname,
+          'Shipping Address Last Name': order.customer.shipping_address.lastname,
+          'Shipping Address State': order.customer.shipping_address.state,
+          'Shipping Address Street1': order.customer.shipping_address.street_1,
+          'Shipping Address Street2': order.customer.shipping_address.street_2,
+          'Shipping Address Zip Code': order.customer.shipping_address.zip_code, 
+          'Shipping Tracking Number': order.shipping_tracking,
+          'Shipping Tracking URL': order.shipping_tracking_url,
+          'Product Title': order.order_lines[0].product_title,
+          // 'order_lines:[0]:quantity': order.order_lines[0].quantity
+    
+        }
+      }
+      
+    })
+  }else{
+    return []
+  }
+  
+}

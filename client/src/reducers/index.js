@@ -23,7 +23,7 @@ import {
 
 import _ from 'underscore';
 
-import {convertMergeFieldsToFormFields, convertGoogleFileResponseToAutocompleteFields, genMsgId, parseTokenFromUrl, parseJwt} from '../utils/index'
+import {convertMergeFieldsToFormFields, convertGoogleFileResponseToAutocompleteFields, genMsgId, parseTokenFromUrl, parseJwt, mapMiraklOrders} from '../utils/index'
 
   const initializeState = () => {
     return {
@@ -167,7 +167,7 @@ const reducer = (state = initialState, action) => {
           console.log(action.payload)
         const resp = action.payload
         return Object.assign({}, state, {
-            miraklOrders: resp
+            miraklOrders: mapMiraklOrders(resp)
         })
       }
       case LOGIN_PENDING: {
