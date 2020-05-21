@@ -12,6 +12,7 @@ import AppAppBar from './modules/views/AppAppBar';
 import Merge from './Merge'
 import FileSelect from './FileSelect'
 import ToastMessage from '../components/ToastMessage'
+import GlobalModal from '../components/GlobalModal'
 
 function Index(props) {
   switch(props.mainSection){
@@ -21,6 +22,7 @@ function Index(props) {
           <AppAppBar />
           <Merge />
           <ToastMessage />
+          <GlobalModal/>
         </div>
           <AppFooter />
         </React.Fragment>
@@ -31,6 +33,7 @@ function Index(props) {
           <AppAppBar />
           <FileSelect />
           <ToastMessage />
+          <GlobalModal/>
           </div>
           <AppFooter />
         </React.Fragment>
@@ -42,6 +45,7 @@ function Index(props) {
         <ProductHero />
         <ProductHowItWorks />
         <ToastMessage />
+        <GlobalModal/>
         <AppFooter />
         </div>
       </React.Fragment>

@@ -10,6 +10,9 @@ import Home from './homepage/Home';
 import createSagaMiddleware from 'redux-saga'
 import LoginCallback from './homepage/LoginCallback';
 
+// Importing the Bootstrap CSS
+import 'bootstrap/dist/css/bootstrap.min.css'
+
 const sagaMiddleware = createSagaMiddleware();
 
 

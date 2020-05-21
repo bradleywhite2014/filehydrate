@@ -35,3 +35,9 @@ export const loginUser = (payload) => ({type: constants.LOGIN_USER, payload});
 //error
 export const putErrorMessage = (payload) => ({type: constants.PUT_ERROR_MESSAGE, payload});
 
+//modal
+export const showModal = (payload)  => ({type: constants.SHOW_GLOBAL_MODAL, payload});
+export const hideModal = (payload)  => ({type: constants.HIDE_GLOBAL_MODAL, payload});
+export const setModalInfo = (payload)  => ({type: constants.SET_GLOBAL_MODAL_INFO, payload});
+export const clearModalInfo = (payload)  => ({type: constants.CLEAR_GLOBAL_MODAL_INFO, payload});
+

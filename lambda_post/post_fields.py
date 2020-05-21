@@ -137,12 +137,14 @@ def go(event, context, merge_items):
 
 def lambda_handler(event, context):
     # TODO lambda handler
+    created_ids = []
     merge_items = json.loads(event['body'])
-    new_doc_id_list = go(event, context, merge_items)
+    for merge_obj in merge_items:        # Second Example
+        created_ids.append(go(event, context, merge_obj))
     #return event['queryStringParameters']['docId']
     return {
         'statusCode': 200,
-        'body': json.dumps(new_doc_id_list),
+        'body': json.dumps(created_ids),
         'headers': {
             'Content-Type': 'application/json',
             'Access-Control-Allow-Origin': '*'

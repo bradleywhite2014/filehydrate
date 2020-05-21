@@ -147,6 +147,7 @@ const EnhancedTableToolbar = (props) => {
   const { allOrders, docId, selected, submitMergeFields, numSelected } = props;
 
   const onClickMerge = (docId, allOrders, selected) => {
+    if(selected.length < 11){
     const ordersToMerge = allOrders.filter((order) => {
       return selected.indexOf(order['Order ID']) !== -1
     })
@@ -166,11 +167,13 @@ const EnhancedTableToolbar = (props) => {
         '{{TO_NAME}}': order['Billing Address Firstname'] + ' ' + order['Billing Address Lastname'] 
       }
     }
-
+    let mappedVals = []
     ordersToMerge.forEach((order) => {
-      submitMergeFields({docId, formFields: convertOrderToMergeFields(order)})
+      mappedVals.push(convertOrderToMergeFields(order))   
     })
+    submitMergeFields({docId, formFields: mappedVals});
   }
+}
 
   return (
     <Toolbar

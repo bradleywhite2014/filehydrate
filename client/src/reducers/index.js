@@ -18,7 +18,11 @@ import {
     SEARCH_MIRAKL_ORDERS_SUCCESS,
     LOGIN_PENDING,
     PARSE_TOKENS_FROM_URL,
-    LOGOUT_USER_SUCCESS
+    LOGOUT_USER_SUCCESS,
+    SHOW_GLOBAL_MODAL,
+    HIDE_GLOBAL_MODAL,
+    SET_GLOBAL_MODAL_INFO,
+    CLEAR_GLOBAL_MODAL_INFO
   } from '../utils/constants'
 
 import _ from 'underscore';
@@ -44,7 +48,13 @@ import {convertMergeFieldsToFormFields, convertGoogleFileResponseToAutocompleteF
         miraklOrders: [],
         authState: 'PENDING',
         userPhotoUrl: '',
-        storedMiraklTokens: false
+        storedMiraklTokens: false,
+        showGlobalModal: false,
+        globalModal: {
+            header: '',
+            title: '',
+            content: ''
+        }
     }
     
 };
@@ -84,6 +94,31 @@ const reducer = (state = initialState, action) => {
             accessToken: action.payload.tokenId
         })
         
+      }
+      case SHOW_GLOBAL_MODAL: {
+        return Object.assign({}, state, {
+            showGlobalModal: true
+        })
+      }
+      case HIDE_GLOBAL_MODAL: {
+        return Object.assign({}, state, {
+            showGlobalModal: false
+        })
+      }
+      case SET_GLOBAL_MODAL_INFO: {
+        const globalModalInfo = action.payload
+        return Object.assign({}, state, {
+            globalModal: globalModalInfo
+        })
+      }
+      case CLEAR_GLOBAL_MODAL_INFO: {
+        return Object.assign({}, state, {
+            globalModal: {
+                header: '',
+                title: '',
+                content: ''
+            }
+        })
       }
       case FETCH_MERGE_FIELDS: {
         return Object.assign({}, state, {
