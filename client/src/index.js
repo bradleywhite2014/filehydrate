@@ -6,12 +6,20 @@ import './assets/styles/index.css';
 import { createStore, applyMiddleware } from 'redux'
 import reducer from './reducers';
 import rootSagas from './middleware/sagas';
-import Home from './homepage/Home';
+import Home from './screens/Home';
 import createSagaMiddleware from 'redux-saga'
-import LoginCallback from './homepage/LoginCallback';
+import LoginCallback from './screens/LoginCallback';
 
 // Importing the Bootstrap CSS
 import 'bootstrap/dist/css/bootstrap.min.css'
+import "regenerator-runtime/runtime";
+
+import ReactGA from 'react-ga';
+
+function initializeReactGA() {
+  ReactGA.initialize('UA-163141688-1');
+  ReactGA.pageview('/');
+}
 
 const sagaMiddleware = createSagaMiddleware();
 
@@ -38,6 +46,8 @@ store.subscribe(() => {
 }); 
 
 sagaMiddleware.run(rootSagas);
+
+initializeReactGA();
 
 // render the application
 render((

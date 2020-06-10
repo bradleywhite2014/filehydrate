@@ -4,8 +4,8 @@ import clsx from 'clsx';
 import { withStyles } from '@material-ui/core/styles';
 import Link from '@material-ui/core/Link';
 import TextField from '@material-ui/core/TextField';
-import Typography from './modules/components/Typography';
-import Toolbar, { styles as toolbarStyles } from './modules/components/Toolbar';
+import Typography from '../components/Typography';
+import Toolbar, { styles as toolbarStyles } from '../components/Toolbar';
 import { connect } from 'react-redux'
 import { setFileId, performFileSearch, fetchMergeFields , changeMergeStyle, updateMiraklToken, updateMiraklUrl, submitMiraklHostAndToken, getMiraklTokenStatus, searchMiraklOrders, submitMergeFields,setModalInfo,showModal} from './../lib/actions'
 import ProductHeroLayout from './modules/views/ProductHeroLayout';
@@ -14,13 +14,14 @@ import Container from '@material-ui/core/Container';
 import AutoComplete from '@material-ui/lab/Autocomplete';
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
-import Button from './modules/components/Button';
-import SearchDataTable from './modules/components/SearchDataTable'
+import Button from '../components/Button';
+import SearchDataTable from '../components/SearchDataTable'
 import Skeleton from '@material-ui/lab/Skeleton';
 import ToggleButton from '@material-ui/lab/ToggleButton';
 import ToggleButtonGroup from '@material-ui/lab/ToggleButtonGroup';
 import Merge from './Merge'
 import _ from 'underscore'
+import ReactGA from 'react-ga';
 
 const styles = theme => ({
   root: {
@@ -82,6 +83,8 @@ class FileSelect extends Component {
       this.updateMiraklUrl = this.updateMiraklUrl.bind(this);
       this.onSaveInfo = this.onSaveInfo.bind(this);
       this.onSearchMirakl = this.onSearchMirakl.bind(this);
+
+      ReactGA.initialize('UA-163141688-1');
     }
 
     // Fetch the list on first mount
@@ -89,6 +92,10 @@ class FileSelect extends Component {
       //this.props.fetchMergeFields()
       //this.props.performFileSearch();
       this.props.getMiraklTokenStatus();
+      ReactGA.event({
+        category: 'User',
+        action: 'Entered File Select Page'
+      });
     }
 
     updateFileId = (event, value) => {
@@ -100,6 +107,11 @@ class FileSelect extends Component {
       if(reason === 'select-option') {
         this.props.setFileId(inputValue.value);
         this.props.fetchMergeFields(inputValue.value);
+
+        ReactGA.event({
+          category: 'User',
+          action: 'File Selected'
+        });
       }
     }
 

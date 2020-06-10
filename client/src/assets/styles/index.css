@@ -22,7 +22,11 @@ code {
 
 /* visited link */
 a:visited {
-  color: blueviolet;
+  color: white;
+}
+
+a:hover {
+  color: initial;
 }
 
 

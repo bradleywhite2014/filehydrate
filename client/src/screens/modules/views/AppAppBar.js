@@ -3,13 +3,13 @@ import PropTypes from 'prop-types';
 import clsx from 'clsx';
 import { withStyles } from '@material-ui/core/styles';
 import Link from '@material-ui/core/Link';
-import AppBar from '../components/AppBar';
-import Typography from '../components/Typography';
-import Toolbar, { styles as toolbarStyles } from '../components/Toolbar';
+import AppBar from '../../../components/AppBar';
+import Typography from '../../../components/Typography';
+import Toolbar, { styles as toolbarStyles } from '../../../components/Toolbar';
 import { connect } from 'react-redux'
 import { setUserInfo , logoutUser} from '../../../lib/actions'
 import { useHistory } from "react-router-dom";
-import OIDCLoginButton from '../components/OIDCLoginButton';
+import OIDCLoginButton from '../../../components/OIDCLoginButton';
 //1E5Us1TfM8QojOqgfe0-pdmSaw3VOFBK-jTIl6dziPcY
 
 const googleScopes = 'https://www.googleapis.com/auth/documents https://www.googleapis.com/auth/drive email profile'

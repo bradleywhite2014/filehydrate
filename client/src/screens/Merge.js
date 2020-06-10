@@ -4,14 +4,14 @@ import clsx from 'clsx';
 import { withStyles } from '@material-ui/core/styles';
 import Link from '@material-ui/core/Link';
 import TextField from '@material-ui/core/TextField';
-import Typography from './modules/components/Typography';
-import Toolbar, { styles as toolbarStyles } from './modules/components/Toolbar';
+import Typography from '../components/Typography';
+import Toolbar, { styles as toolbarStyles } from '../components/Toolbar';
 import { connect } from 'react-redux'
 import { fetchMergeFields, updateMergeField, submitMergeFields } from './../lib/actions'
 import ProductHeroLayout from './modules/views/ProductHeroLayout';
 import Grid from '@material-ui/core/Grid';
 import Container from '@material-ui/core/Container';
-import Button from './modules/components/Button';
+import Button from '../components/Button';
 import _ from 'underscore'
 import {randomString} from '../utils/index'
 import Skeleton from '@material-ui/lab/Skeleton';

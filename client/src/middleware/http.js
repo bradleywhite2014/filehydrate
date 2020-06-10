@@ -1,5 +1,7 @@
 import {appConfig} from '../config'
 
+import "regenerator-runtime/runtime";
+
 export const post = async (path, body) => {
     const response = await fetch(path, {
         method: 'POST',

@@ -3,8 +3,8 @@ import PropTypes from 'prop-types';
 import clsx from 'clsx';
 import { withStyles } from '@material-ui/core/styles';
 import { connect } from 'react-redux'
-import { isAuthed, loginUser, logoutUser} from '../../../lib/actions';
-import Button from '../../modules/components/Button';
+import { isAuthed, loginUser, logoutUser} from '../lib/actions';
+import Button from '../components/Button';
 import _ from 'underscore'
 import GoogleIcon from './GoogleIcon'
 

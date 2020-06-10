@@ -3,8 +3,8 @@ import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
 import Container from '@material-ui/core/Container';
-import Button from '../components/Button';
-import Typography from '../components/Typography';
+import Button from '../../../components/Button';
+import Typography from '../../../components/Typography';
 import { connect } from 'react-redux'
 
 const styles = theme => ({
@@ -113,8 +113,7 @@ function ProductHowItWorks(props) {
           color="secondary"
           size="large"
           variant="contained"
-          className={classes.button}
-          component="a"
+          style={{marginBottom: 15}} 
           href="/fileSelect"
           disabled={props.state.authState !== 'VALID'}
         >
