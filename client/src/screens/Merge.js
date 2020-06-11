@@ -4,17 +4,18 @@ import clsx from 'clsx';
 import { withStyles } from '@material-ui/core/styles';
 import Link from '@material-ui/core/Link';
 import TextField from '@material-ui/core/TextField';
-import Typography from './modules/components/Typography';
-import Toolbar, { styles as toolbarStyles } from './modules/components/Toolbar';
+import Typography from '../components/Typography';
+import Toolbar, { styles as toolbarStyles } from '../components/Toolbar';
 import { connect } from 'react-redux'
 import { fetchMergeFields, updateMergeField, submitMergeFields } from './../lib/actions'
 import ProductHeroLayout from './modules/views/ProductHeroLayout';
 import Grid from '@material-ui/core/Grid';
 import Container from '@material-ui/core/Container';
-import Button from './modules/components/Button';
+import Button from '../components/Button';
 import _ from 'underscore'
 import {randomString} from '../utils/index'
 import Skeleton from '@material-ui/lab/Skeleton';
+import ReactGA from 'react-ga';
 
 const styles = theme => ({
   root: {
@@ -68,11 +69,16 @@ class Merge extends Component {
       super(props)
       this.onSubmit = this.onSubmit.bind(this);
       this.updateField = this.updateField.bind(this);
+      ReactGA.initialize('UA-163141688-1');
     }
 
     // Fetch the list on first mount
     componentDidMount() {
       //this.props.fetchMergeFields(this.props.docId)
+      ReactGA.event({
+        category: 'User',
+        action: 'Entered Merge Page.'
+      });
     }
 
     updateField = (event, field) => {
@@ -86,7 +92,7 @@ class Merge extends Component {
     onSubmit = () => {
       //console.log(this.props.state.formFields)
       //https://lipyjnw0f8.execute-api.us-east-2.amazonaws.com/main
-      this.props.submitMergeFields({docId: this.props.state.docId, formFields: this.props.state.formFields})
+      this.props.submitMergeFields({docId: this.props.state.docId, formFields: [this.props.state.formFields]})
     }
 
     render() {

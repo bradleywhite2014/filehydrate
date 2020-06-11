@@ -4,23 +4,24 @@ import clsx from 'clsx';
 import { withStyles } from '@material-ui/core/styles';
 import Link from '@material-ui/core/Link';
 import TextField from '@material-ui/core/TextField';
-import Typography from './modules/components/Typography';
-import Toolbar, { styles as toolbarStyles } from './modules/components/Toolbar';
+import Typography from '../components/Typography';
+import Toolbar, { styles as toolbarStyles } from '../components/Toolbar';
 import { connect } from 'react-redux'
-import { setFileId, performFileSearch, fetchMergeFields , changeMergeStyle, updateMiraklToken} from './../lib/actions'
+import { setFileId, performFileSearch, fetchMergeFields , changeMergeStyle, updateMiraklToken, updateMiraklUrl, submitMiraklHostAndToken, getMiraklTokenStatus, searchMiraklOrders, submitMergeFields,setModalInfo,showModal} from './../lib/actions'
 import ProductHeroLayout from './modules/views/ProductHeroLayout';
 import Grid from '@material-ui/core/Grid';
 import Container from '@material-ui/core/Container';
 import AutoComplete from '@material-ui/lab/Autocomplete';
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
-import Button from './modules/components/Button';
-import SearchDataTable from './modules/components/SearchDataTable'
+import Button from '../components/Button';
+import SearchDataTable from '../components/SearchDataTable'
 import Skeleton from '@material-ui/lab/Skeleton';
 import ToggleButton from '@material-ui/lab/ToggleButton';
 import ToggleButtonGroup from '@material-ui/lab/ToggleButtonGroup';
 import Merge from './Merge'
 import _ from 'underscore'
+import ReactGA from 'react-ga';
 
 const styles = theme => ({
   root: {
@@ -79,12 +80,22 @@ class FileSelect extends Component {
       this.selectFile = this.selectFile.bind(this);
       this.changeMergeStyle = this.changeMergeStyle.bind(this);
       this.updateMiraklToken = this.updateMiraklToken.bind(this);
+      this.updateMiraklUrl = this.updateMiraklUrl.bind(this);
+      this.onSaveInfo = this.onSaveInfo.bind(this);
+      this.onSearchMirakl = this.onSearchMirakl.bind(this);
+
+      ReactGA.initialize('UA-163141688-1');
     }
 
     // Fetch the list on first mount
     componentDidMount() {
       //this.props.fetchMergeFields()
       //this.props.performFileSearch();
+      this.props.getMiraklTokenStatus();
+      ReactGA.event({
+        category: 'User',
+        action: 'Entered File Select Page'
+      });
     }
 
     updateFileId = (event, value) => {
@@ -96,6 +107,11 @@ class FileSelect extends Component {
       if(reason === 'select-option') {
         this.props.setFileId(inputValue.value);
         this.props.fetchMergeFields(inputValue.value);
+
+        ReactGA.event({
+          category: 'User',
+          action: 'File Selected'
+        });
       }
     }
 
@@ -104,11 +120,26 @@ class FileSelect extends Component {
     }
 
     changeMergeStyle(event) {
+      if(event.currentTarget.value === 'mirakl'){
+        this.props.getMiraklTokenStatus();
+      }
       this.props.changeMergeStyle(event.currentTarget.value);
     }
 
     updateMiraklToken(event) {
       this.props.updateMiraklToken(event.currentTarget.value);
+    }
+
+    updateMiraklUrl(event) {
+      this.props.updateMiraklUrl(event.currentTarget.value);
+    }
+
+    onSaveInfo(event) {
+      this.props.submitMiraklHostAndToken({userDetails: {url: this.props.state.miraklUrlHost, token: this.props.state.miraklApiToken}});
+    }
+
+    onSearchMirakl(event) {
+      this.props.searchMiraklOrders()
     }
 
     render() {
@@ -184,14 +215,34 @@ class FileSelect extends Component {
         </div>
         : this.props.state.docId && this.props.state.mergeStyle === 'mirakl' ?
           <div>
-            <TextField key={123} onChange={(event) => this.updateMiraklToken(event)} style={{width: '-webkit-fill-available' , marginTop: 8, marginBottom: 8}} label={"Mirakl API Token"} variant="outlined" />
+            <TextField key={123} onChange={(event) => this.updateMiraklUrl(event)} style={{width: '-webkit-fill-available' , marginTop: 8, marginBottom: 8}} label={"Mirakl Host URL"} variant="outlined" />
+            <TextField key={123} onChange={(event) => this.updateMiraklToken(event)} style={{width: '-webkit-fill-available' , marginTop: 8, marginBottom: 8}} label={"Mirakl API Token"} variant="outlined" />  
+            <Button
+              color="secondary"
+              size="large"
+              variant="contained"
+              style={{marginBottom: 15, marginRight: 15}} 
+              onClick={this.onSaveInfo}
+            >
+              {'Save'}
+            </Button>   
+            <Button
+            color="secondary"
+            size="large"
+            variant="contained"
+            style={{marginBottom: 15}} 
+            disabled={!this.props.state.storedMiraklTokens}
+            onClick={this.onSearchMirakl}
+          >
+            {'Search'}
+          </Button>  
           {
-            this.props.state.miraklApiToken ? 
-            <SearchDataTable /> 
-            : <React.Fragment />
-          }
+            this.props.state.miraklOrders && this.props.state.miraklOrders.length > 0 ? 
+            <SearchDataTable docId={this.props.state.docId} submitMergeFields={this.props.submitMergeFields} orders={this.props.state.miraklOrders} /> :
+            <React.Fragment />
+          }  
           </div>
-        : 
+        :
         <div style={{marginTop: "36px", marginBottom: "8px"}}>
         <Typography style={{marginTop: "8px"}} variant="h5" marked="center" component="h2">
             Please select a document...
@@ -213,6 +264,6 @@ export default connect((state) => (
     state: state
   }
 ),
-  { setFileId , performFileSearch, fetchMergeFields, changeMergeStyle, updateMiraklToken}
+  { setFileId , performFileSearch, fetchMergeFields, changeMergeStyle, updateMiraklToken, updateMiraklUrl, submitMiraklHostAndToken, getMiraklTokenStatus, searchMiraklOrders, submitMergeFields,setModalInfo,showModal}
 )
 (withStyles(styles)(FileSelect));

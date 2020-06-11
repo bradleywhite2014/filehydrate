@@ -8,17 +8,21 @@
     "@material-ui/icons": "^4.5.1",
     "@material-ui/lab": "^4.0.0-alpha.48",
     "@material/button": "^4.0.0",
-    "@okta/okta-auth-js": "^2.5.0",
+    "bootstrap": "^4.4.1",
     "googleapis": "^43.0.0",
     "material-ui": "^0.20.2",
+    "parcel-bundler": "^1.12.4",
     "react": "^16.8.5",
+    "react-bootstrap": "^1.0.1",
     "react-dom": "^16.8.5",
+    "react-ga": "^3.0.0",
     "react-google-login": "^5.0.7",
     "react-redux": "^6.0.1",
     "react-router-dom": "5.1.2",
-    "react-scripts": "3.3.0",
+    "react-scripts": "3.4.1",
     "redux": "^4.0.1",
     "redux-saga": "^1.0.2",
+    "regenerator-runtime": "^0.13.5",
     "underscore": "^1.9.2"
   },
   "devDependencies": {
@@ -28,11 +32,11 @@
     "@babel/preset-react": "^7.0.0"
   },
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
+    "start": "parcel ./src/index.html",
+    "build": "parcel build ./src/index.html",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "deploy": "yarn build && aws s3 sync build/ s3://documerge.me/ --region us-east-2 --delete && aws s3 sync build/ s3://documerge.me/auth/callback --region us-east-2 --delete"
+    "deploy": "yarn build && aws s3 sync dist/ s3://documerge.me/ --region us-east-2 --delete && aws s3 sync dist/ s3://documerge.me/auth/callback --region us-east-2 --delete"
   },
   "eslintConfig": {
     "extends": "react-app"

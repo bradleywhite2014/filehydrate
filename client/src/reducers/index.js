@@ -4,6 +4,8 @@ import {
     FETCH_MERGE_FIELDS_SUCCESS,
     UPDATE_MERGE_FIELD,
     SUBMIT_MERGE_FIELDS_SUCCESS,
+    SUBMIT_MIRAKL_DETAILS_SUCCESS,
+    GET_MIRAKL_TOKEN_STATUS_SUCCESS,
     SET_FILE_ID,
     PERFORM_FILE_SEARCH_SUCCESS,
     PERFORM_FILE_SEARCH_ERROR,
@@ -11,12 +13,21 @@ import {
     PUT_ERROR_MESSAGE,
     LOGOUT_USER,
     CHANGE_MERGE_STYLE,
-    UPDATE_MIRAKL_TOKEN
+    UPDATE_MIRAKL_TOKEN,
+    UPDATE_MIRAKL_URL,
+    SEARCH_MIRAKL_ORDERS_SUCCESS,
+    LOGIN_PENDING,
+    PARSE_TOKENS_FROM_URL,
+    LOGOUT_USER_SUCCESS,
+    SHOW_GLOBAL_MODAL,
+    HIDE_GLOBAL_MODAL,
+    SET_GLOBAL_MODAL_INFO,
+    CLEAR_GLOBAL_MODAL_INFO
   } from '../utils/constants'
 
 import _ from 'underscore';
 
-import {convertMergeFieldsToFormFields, convertGoogleFileResponseToAutocompleteFields, genMsgId} from '../utils/index'
+import {convertMergeFieldsToFormFields, convertGoogleFileResponseToAutocompleteFields, genMsgId, parseTokenFromUrl, parseJwt, mapMiraklOrders} from '../utils/index'
 
   const initializeState = () => {
     return {
@@ -33,6 +44,17 @@ import {convertMergeFieldsToFormFields, convertGoogleFileResponseToAutocompleteF
         loadingFields: false,
         mergeStyle: "manual",
         miraklApiToken: "",
+        miraklUrlHost: "",
+        miraklOrders: [],
+        authState: 'PENDING',
+        userPhotoUrl: '',
+        storedMiraklTokens: false,
+        showGlobalModal: false,
+        globalModal: {
+            header: '',
+            title: '',
+            content: ''
+        }
     }
     
 };
@@ -73,6 +95,31 @@ const reducer = (state = initialState, action) => {
         })
         
       }
+      case SHOW_GLOBAL_MODAL: {
+        return Object.assign({}, state, {
+            showGlobalModal: true
+        })
+      }
+      case HIDE_GLOBAL_MODAL: {
+        return Object.assign({}, state, {
+            showGlobalModal: false
+        })
+      }
+      case SET_GLOBAL_MODAL_INFO: {
+        const globalModalInfo = action.payload
+        return Object.assign({}, state, {
+            globalModal: globalModalInfo
+        })
+      }
+      case CLEAR_GLOBAL_MODAL_INFO: {
+        return Object.assign({}, state, {
+            globalModal: {
+                header: '',
+                title: '',
+                content: ''
+            }
+        })
+      }
       case FETCH_MERGE_FIELDS: {
         return Object.assign({}, state, {
             loadingFields: true
@@ -95,12 +142,28 @@ const reducer = (state = initialState, action) => {
             formFields: updatedFormFields
         })
       }
+      case GET_MIRAKL_TOKEN_STATUS_SUCCESS: {
+        return Object.assign({}, state, {
+            storedMiraklTokens: action.payload
+        })
+      }
       case SUBMIT_MERGE_FIELDS_SUCCESS: {
         let currentMessages = state.messages;
         currentMessages.push({
             id: genMsgId(),
             type: 'success',
             message: 'Merge completed successfully!'
+        })
+        return Object.assign({}, state, {
+            messages: currentMessages
+        })
+      }
+      case SUBMIT_MIRAKL_DETAILS_SUCCESS: {
+        let currentMessages = state.messages;
+        currentMessages.push({
+            id: genMsgId(),
+            type: 'success',
+            message: 'Successfully stored token information!'
         })
         return Object.assign({}, state, {
             messages: currentMessages
@@ -129,6 +192,36 @@ const reducer = (state = initialState, action) => {
             miraklApiToken: newApiTokenValue
         })
       }
+      case UPDATE_MIRAKL_URL: {
+        const newUrlValue = action.payload
+        return Object.assign({}, state, {
+            miraklUrlHost: newUrlValue
+        })
+      }
+      case SEARCH_MIRAKL_ORDERS_SUCCESS: {
+          console.log(action.payload)
+        const resp = action.payload
+        return Object.assign({}, state, {
+            miraklOrders: mapMiraklOrders(resp)
+        })
+      }
+      case LOGIN_PENDING: {
+        return Object.assign({}, state, {
+            authState: 'PENDING'
+        })
+      }
+
+      case PARSE_TOKENS_FROM_URL: {
+        const {accessToken, idToken } = parseTokenFromUrl();
+        const jwt = parseJwt(idToken)
+        window.location.href = window.origin // lets go to root, we got this token in our sessionstorage
+        return Object.assign({}, state, {
+            authState: 'VALID',
+            userPhotoUrl: jwt ? jwt.picture : ''
+        })
+        
+      }
+
       case REMOVE_MESSAGE: {
         const removeId = action.payload
         let tempMessages = state.messages
@@ -151,11 +244,12 @@ const reducer = (state = initialState, action) => {
             messages: currentMessages
         })
       }
-      case LOGOUT_USER: {
+      case LOGOUT_USER_SUCCESS: {
         // Remove any old data from sessionStorage
         sessionStorage.removeItem('accessToken');
+        sessionStorage.removeItem('idToken');
         localStorage.removeItem('documerge_state');
-
+        
         return Object.assign({}, state, initializeState());
       }
       default:  

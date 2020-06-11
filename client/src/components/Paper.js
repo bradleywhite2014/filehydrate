@@ -2,7 +2,6 @@ import React from 'react';
 import clsx from 'clsx';
 import PropTypes from 'prop-types';
 import MuiPaper from '@material-ui/core/Paper';
-import { capitalize } from '@material-ui/core/utils';
 import { withStyles } from '@material-ui/core/styles';
 
 const styles = theme => ({
@@ -27,7 +26,7 @@ function Paper(props) {
       elevation={0}
       square
       className={clsx(
-        classes[`background${capitalize(background)}`],
+        classes[`background${background}`],
         {
           [classes.padding]: padding,
         },

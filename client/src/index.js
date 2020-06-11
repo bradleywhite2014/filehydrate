@@ -3,12 +3,23 @@ import { render } from 'react-dom';
 import { BrowserRouter , Route, Switch } from 'react-router-dom';
 import { Provider } from 'react-redux'
 import './assets/styles/index.css';
-import App from './App';
 import { createStore, applyMiddleware } from 'redux'
 import reducer from './reducers';
 import rootSagas from './middleware/sagas';
-import Home from './homepage/Home';
+import Home from './screens/Home';
 import createSagaMiddleware from 'redux-saga'
+import LoginCallback from './screens/LoginCallback';
+
+// Importing the Bootstrap CSS
+import 'bootstrap/dist/css/bootstrap.min.css'
+import "regenerator-runtime/runtime";
+
+import ReactGA from 'react-ga';
+
+function initializeReactGA() {
+  ReactGA.initialize('UA-163141688-1');
+  ReactGA.pageview('/');
+}
 
 const sagaMiddleware = createSagaMiddleware();
 
@@ -36,13 +47,15 @@ store.subscribe(() => {
 
 sagaMiddleware.run(rootSagas);
 
-// render the application
+initializeReactGA();
 
+// render the application
 render((
     <Provider store={store}>
         <BrowserRouter>
             <Switch>
                 <Route path='/' exact={true} render={(props) => <Home/> } />
+                <Route path='/implicit/callback' component={LoginCallback}/>
                 <Route path='/merge' exact={true} render={(props) => <Home mainSection={'merge'} /> } />
                 <Route path='/fileSelect' exact={true} render={(props) => <Home mainSection={'fileSelect'} /> } />
             </Switch>

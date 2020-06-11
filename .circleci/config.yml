@@ -3,7 +3,7 @@ jobs:
   build:
     docker:
       # specify the version you desire here
-      - image: circleci/node:8
+      - image: circleci/node:10
     working_directory: ~/dm
     environment: 
       CI: false
@@ -17,5 +17,3 @@ jobs:
       - run: pwd
       - run: ls -al
       - run: cd client && yarn run deploy
-      - run: cd ..
-      - run: cd server && yarn run deploy

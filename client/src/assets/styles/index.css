@@ -25,6 +25,10 @@ a:visited {
   color: white;
 }
 
+a:hover {
+  color: initial;
+}
+
 
 .disabled {
   color: red;
