@@ -15,6 +15,7 @@ import Button from '../components/Button';
 import _ from 'underscore'
 import {randomString} from '../utils/index'
 import Skeleton from '@material-ui/lab/Skeleton';
+import ReactGA from 'react-ga';
 
 const styles = theme => ({
   root: {
@@ -68,11 +69,16 @@ class Merge extends Component {
       super(props)
       this.onSubmit = this.onSubmit.bind(this);
       this.updateField = this.updateField.bind(this);
+      ReactGA.initialize('UA-163141688-1');
     }
 
     // Fetch the list on first mount
     componentDidMount() {
       //this.props.fetchMergeFields(this.props.docId)
+      ReactGA.event({
+        category: 'User',
+        action: 'Entered Merge Page.'
+      });
     }
 
     updateField = (event, field) => {
