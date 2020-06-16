@@ -9,8 +9,6 @@ import {appConfig} from '../config'
 
 import {get, post, httpPut} from './http'
 
-import "regenerator-runtime/runtime";
-
   
 export function* fetchMergeFields({payload}) {
   try{
