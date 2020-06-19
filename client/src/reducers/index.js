@@ -210,7 +210,7 @@ const reducer = (state = initialState, action) => {
       case ON_TAG_CLICK: {
         const field = action.payload
         let temp = state.mappingFields
-        temp[field].open_tag = true
+        temp[field].open_tag = !temp[field].open_tag
         return Object.assign({}, state, {
             mappingFields: temp
         })

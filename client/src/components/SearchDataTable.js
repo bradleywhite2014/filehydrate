@@ -53,7 +53,7 @@ function stableSort(array, comparator) {
 
 
 function EnhancedTableHead(props) {
-  const headCells = _.keys(props.orders[0]).map((key) => {
+  const headCells = _.keys(props.mappingFields).map((key) => {
     return {id: key, numeric: false, disablePadding: false, label: key}
   })
 
@@ -98,7 +98,11 @@ function EnhancedTableHead(props) {
             padding={headCell.disablePadding ? 'none' : 'default'}
             sortDirection={orderBy === headCell.id ? order : false}
           >
-            <LabelTwoToneIcon onClick={headerTagClick(headCell.id)} style={{transform: `translate(${-22}px`, cursor: 'pointer' }}/>
+            {props.mappingFields[headCell.id].open_tag ? (
+              <LabelTwoToneIcon onClick={headerTagClick(headCell.id)} style={{color: 'green', transform: `translate(${-22}px`, cursor: 'pointer' }}/>
+            ) : 
+              <LabelTwoToneIcon onClick={headerTagClick(headCell.id)} style={{transform: `translate(${-22}px`, cursor: 'pointer' }}/>
+            }
             <TableSortLabel
               active={orderBy === headCell.id}
               direction={orderBy === headCell.id ? order : 'asc'}
@@ -330,6 +334,7 @@ export default function SearchDataTable(props) {
               onRequestSort={handleRequestSort}
               onTagClick={handleTagClick}
               rowCount={props.orders.length}
+              mappingFields={props.mappingFields}
               orders={props.orders}
             />
             <TableBody>
