@@ -71,10 +71,14 @@ function EnhancedTableHead(props) {
 
   moveIdToTop(headCells, 'Order ID')
 
-  const { classes, onSelectAllClick, order, orderBy, numSelected, rowCount, onRequestSort } = props;
+  const { classes, onSelectAllClick, order, orderBy, numSelected, rowCount, onRequestSort, onTagClick } = props;
   const createSortHandler = (property) => (event) => {
     onRequestSort(event, property);
   };
+
+  const headerTagClick = (property) => (event) => {
+    onTagClick(event, property);
+  }
 
   return (
     <TableHead>
@@ -94,7 +98,7 @@ function EnhancedTableHead(props) {
             padding={headCell.disablePadding ? 'none' : 'default'}
             sortDirection={orderBy === headCell.id ? order : false}
           >
-            <LabelTwoToneIcon style={{transform: `translate(${-22}px`, cursor: 'pointer' }}/>
+            <LabelTwoToneIcon onClick={headerTagClick(headCell.id)} style={{transform: `translate(${-22}px`, cursor: 'pointer' }}/>
             <TableSortLabel
               active={orderBy === headCell.id}
               direction={orderBy === headCell.id ? order : 'asc'}
@@ -256,6 +260,10 @@ export default function SearchDataTable(props) {
     setOrderBy(property);
   };
 
+  const handleTagClick = (event, property) => {
+    props.onTagClick(property);
+  }
+
   const handleSelectAllClick = (event) => {
     if (event.target.checked) {
       const newSelecteds = props.orders.map((n) => n['Order ID']);
@@ -320,6 +328,7 @@ export default function SearchDataTable(props) {
               orderBy={orderBy}
               onSelectAllClick={handleSelectAllClick}
               onRequestSort={handleRequestSort}
+              onTagClick={handleTagClick}
               rowCount={props.orders.length}
               orders={props.orders}
             />

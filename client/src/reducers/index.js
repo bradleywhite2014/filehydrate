@@ -22,12 +22,13 @@ import {
     SHOW_GLOBAL_MODAL,
     HIDE_GLOBAL_MODAL,
     SET_GLOBAL_MODAL_INFO,
-    CLEAR_GLOBAL_MODAL_INFO
+    CLEAR_GLOBAL_MODAL_INFO,
+    ON_TAG_CLICK
   } from '../utils/constants'
 
 import _ from 'underscore';
 
-import {convertMergeFieldsToFormFields, convertGoogleFileResponseToAutocompleteFields, genMsgId, parseTokenFromUrl, parseJwt, mapMiraklOrders} from '../utils/index'
+import {convertMergeFieldsToFormFields, convertGoogleFileResponseToAutocompleteFields, genMsgId, parseTokenFromUrl, parseJwt, mapMiraklOrders, convertResultsToMappingFields} from '../utils/index'
 
   const initializeState = () => {
     return {
@@ -36,7 +37,7 @@ import {convertMergeFieldsToFormFields, convertGoogleFileResponseToAutocompleteF
             imageUrl: ''
         },
         accessToken: '',
-        mergeFields: [],
+        mappingFields: [],
         formFields: {},
         docId: '',
         fileList: [],
@@ -199,11 +200,21 @@ const reducer = (state = initialState, action) => {
         })
       }
       case SEARCH_MIRAKL_ORDERS_SUCCESS: {
-          console.log(action.payload)
         const resp = action.payload
+        const orderList = mapMiraklOrders(resp);
         return Object.assign({}, state, {
-            miraklOrders: mapMiraklOrders(resp)
+            miraklOrders: orderList,
+            mappingFields: convertResultsToMappingFields(orderList)
         })
+      }
+      case ON_TAG_CLICK: {
+        const field = action.payload
+        let temp = state.mappingFields
+        temp[field].open_tag = true
+        return Object.assign({}, state, {
+            mappingFields: temp
+        })
+       
       }
       case LOGIN_PENDING: {
         return Object.assign({}, state, {

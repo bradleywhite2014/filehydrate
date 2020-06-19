@@ -128,3 +128,20 @@ export const mapMiraklOrders = (orders) => {
   }
   
 }
+
+export const convertResultsToMappingFields = (results) => {
+  if(results && Array.isArray(results)) {
+    let firstResult = results[0]
+    const temp = {}
+    Object.keys(firstResult).forEach((field) => {
+      temp[field] = {
+        open_tag: false,
+        column_mapping: ''
+      }
+    })
+    return temp;
+  } else {
+    return {}
+  }
+  
+}

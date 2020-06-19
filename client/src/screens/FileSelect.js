@@ -7,7 +7,7 @@ import TextField from '@material-ui/core/TextField';
 import Typography from '../components/Typography';
 import Toolbar, { styles as toolbarStyles } from '../components/Toolbar';
 import { connect } from 'react-redux'
-import { setFileId, performFileSearch, fetchMergeFields , changeMergeStyle, updateMiraklToken, updateMiraklUrl, submitMiraklHostAndToken, getMiraklTokenStatus, searchMiraklOrders, submitMergeFields,setModalInfo,showModal} from './../lib/actions'
+import { setFileId, performFileSearch, fetchMergeFields , changeMergeStyle, updateMiraklToken, updateMiraklUrl, submitMiraklHostAndToken, getMiraklTokenStatus, searchMiraklOrders, submitMergeFields,setModalInfo,showModal, onTagClick} from './../lib/actions'
 import ProductHeroLayout from './modules/views/ProductHeroLayout';
 import Grid from '@material-ui/core/Grid';
 import Container from '@material-ui/core/Container';
@@ -238,7 +238,7 @@ class FileSelect extends Component {
           </Button>  
           {
             this.props.state.miraklOrders && this.props.state.miraklOrders.length > 0 ? 
-            <SearchDataTable docId={this.props.state.docId} submitMergeFields={this.props.submitMergeFields} orders={this.props.state.miraklOrders} /> :
+            <SearchDataTable onTagClick={this.props.onTagClick} mappingFields={this.props.state.mappingFields} docId={this.props.state.docId} submitMergeFields={this.props.submitMergeFields} orders={this.props.state.miraklOrders} /> :
             <React.Fragment />
           }  
           </div>
@@ -264,6 +264,6 @@ export default connect((state) => (
     state: state
   }
 ),
-  { setFileId , performFileSearch, fetchMergeFields, changeMergeStyle, updateMiraklToken, updateMiraklUrl, submitMiraklHostAndToken, getMiraklTokenStatus, searchMiraklOrders, submitMergeFields,setModalInfo,showModal}
+  { setFileId , performFileSearch, fetchMergeFields, changeMergeStyle, updateMiraklToken, updateMiraklUrl, submitMiraklHostAndToken, getMiraklTokenStatus, searchMiraklOrders, submitMergeFields,setModalInfo,showModal, onTagClick}
 )
 (withStyles(styles)(FileSelect));
