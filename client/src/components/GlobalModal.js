@@ -20,6 +20,7 @@ class GlobalModal extends Component {
   }
 
   render() {
+    console.log(this.props.state.globalModal.content)
     return this.props.state.showGlobalModal ? (
         <Modal
           size="lg"

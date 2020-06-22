@@ -29,6 +29,22 @@ import {
 import _ from 'underscore';
 
 import {convertMergeFieldsToFormFields, convertGoogleFileResponseToAutocompleteFields, genMsgId, parseTokenFromUrl, parseJwt, mapMiraklOrders, convertResultsToMappingFields} from '../utils/index'
+import FormControlLabel from '@material-ui/core/FormControlLabel';
+import FormGroup from '@material-ui/core/FormGroup';
+import Checkbox from '@material-ui/core/Checkbox';
+import { withStyles } from '@material-ui/core/styles';
+import { green } from '@material-ui/core/colors';
+import React from 'react';
+
+const GreenCheckbox = withStyles({
+    root: {
+      color: green[400],
+      '&$checked': {
+        color: green[600],
+      },
+    },
+    checked: {},
+  })((props) => <Checkbox color="default" {...props} />);
 
   const initializeState = () => {
     return {
@@ -211,8 +227,23 @@ const reducer = (state = initialState, action) => {
         const field = action.payload
         let temp = state.mappingFields
         temp[field].open_tag = !temp[field].open_tag
+        let tempArray = Object.keys(state.formFields)
         return Object.assign({}, state, {
-            mappingFields: temp
+            mappingFields: temp,
+            showGlobalModal: !state.showGlobalModal,
+            globalModal: {
+                header: 'Select ' + field + ' Mapping',
+                title: 'Fields',
+            content: <FormGroup>{
+                    tempArray.map((fieldLabel) => {
+                        return <FormControlLabel
+                        control={<GreenCheckbox name="checkedG" />}
+                        label={fieldLabel}
+                    />
+                    })
+                    
+                } </FormGroup>
+            }
         })
        
       }
