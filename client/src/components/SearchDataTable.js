@@ -23,6 +23,7 @@ import FilterListIcon from '@material-ui/icons/FilterList';
 import LabelTwoToneIcon from '@material-ui/icons/LabelTwoTone';
 import Button from './Button';
 import _ from 'underscore'
+import TagModal from './TagModal';
 
 
 function descendingComparator(a, b, orderBy) {
@@ -99,7 +100,10 @@ function EnhancedTableHead(props) {
             sortDirection={orderBy === headCell.id ? order : false}
           >
             {props.mappingFields[headCell.id].open_tag ? (
-              <LabelTwoToneIcon onClick={headerTagClick(headCell.id)} style={{color: 'green', transform: `translate(${-22}px`, cursor: 'pointer' }}/>
+              <React.Fragment>
+                <TagModal header={headCell.id} mappingFields={props.mappingFields}/>
+                <LabelTwoToneIcon onClick={headerTagClick(headCell.id)} style={{color: 'green', transform: `translate(${-22}px`, cursor: 'pointer' }}/>
+              </React.Fragment>
             ) : 
               <LabelTwoToneIcon onClick={headerTagClick(headCell.id)} style={{transform: `translate(${-22}px`, cursor: 'pointer' }}/>
             }
