@@ -98,6 +98,7 @@ function EnhancedTableHead(props) {
             align={headCell.numeric ? 'right' : 'left'}
             padding={headCell.disablePadding ? 'none' : 'default'}
             sortDirection={orderBy === headCell.id ? order : false}
+            style={props.mappingFields[headCell.id].column_mapping ? {color: 'green', backgroundColor: '#00ff002b', borderTopLeftRadius: '25px', borderTopRightRadius: '25px'} : {}}
           >
             {props.mappingFields[headCell.id].open_tag ? (
               <React.Fragment>
@@ -111,8 +112,7 @@ function EnhancedTableHead(props) {
               active={orderBy === headCell.id}
               direction={orderBy === headCell.id ? order : 'asc'}
               onClick={createSortHandler(headCell.id)}
-            >
-              
+            > 
               {headCell.label}
               {orderBy === headCell.id ? (
                 <span className={classes.visuallyHidden}>
@@ -159,32 +159,36 @@ const useToolbarStyles = makeStyles((theme) => ({
 
 const EnhancedTableToolbar = (props) => {
   const classes = useToolbarStyles();
-  const { allOrders, docId, selected, submitMergeFields, numSelected } = props;
+  const { allOrders, docId, selected, submitMergeFields, numSelected, formFields, mappingFields } = props;
 
-  const onClickMerge = (docId, allOrders, selected) => {
+  const onClickMerge = (docId, allOrders, selected, formFields, mappingFields) => {
     if(selected.length < 11){
     const ordersToMerge = allOrders.filter((order) => {
       return selected.indexOf(order['Order ID']) !== -1
     })
+    //TODO: clean this mess up
+    const findMappingValue = (order, mappingKey, mappingFields) => {
+      let temp = ''
+      Object.keys(mappingFields).forEach((field) => {
+        if(mappingFields[field].column_mapping === mappingKey){
+          //if match, grab value for this row
+          temp = order[field]
+        }
+      })
+      return temp
+    }
 
-    const convertOrderToMergeFields = (order) => {
-      return {
-        '{{BILLING_CITY}}': order['Billing Address City'],
-        '{{BILLING_STATE_INITIALS}}': order['Billing Address State'],
-        '{{BILLING_STREET_1}}': order['Billing Address Street1'],
-        '{{BILLING_ZIP_CODE}}': order['Billing Address Zip Code'],
-        '{{ORDER_NUM}}': order['Order ID'],
-        '{{PRODUCT_TITLE}}': order['Product Title'],
-        '{{SHIPPING_CITY}}': order['Shipping Address City'],
-        '{{SHIPPING_STATE_INITIALS}}': order['Shipping Address State'],
-        '{{SHIPPING_STREET_1}}': order['Shipping Address Street1'],
-        '{{SHIPPING_ZIP_CODE}}': order['Shipping Address Zip Code'],
-        '{{TO_NAME}}': order['Billing Address Firstname'] + ' ' + order['Billing Address Lastname'] 
-      }
+    const convertOrderToMergeFields = (order, formFields, mappingFields) => {
+      let temp = {}
+      Object.keys(formFields).forEach((field) => {
+        // for each field, use the mapping fields to get its value
+        temp[field] = findMappingValue(order, field, mappingFields)
+      })
+      return temp
     }
     let mappedVals = []
     ordersToMerge.forEach((order) => {
-      mappedVals.push(convertOrderToMergeFields(order))   
+      mappedVals.push(convertOrderToMergeFields(order,formFields,mappingFields))   
     })
     submitMergeFields({docId, formFields: mappedVals});
   }
@@ -206,7 +210,7 @@ const EnhancedTableToolbar = (props) => {
          size="large"
          variant="contained"
          style={{marginBottom: 15,marginTop: 15,marginRight: 15}} 
-         onClick={() => onClickMerge(docId, allOrders, selected)}
+         onClick={() => onClickMerge(docId, allOrders, selected,formFields,mappingFields)}
        >
          {'Merge'}
        </Button>  
@@ -321,7 +325,7 @@ export default function SearchDataTable(props) {
   return (
     <div className={classes.root}>
       <Paper className={classes.paper}>
-        <EnhancedTableToolbar docId={props.docId} submitMergeFields={props.submitMergeFields} allOrders={props.orders} selected={selected} numSelected={selected.length} />
+        <EnhancedTableToolbar mappingFields={props.mappingFields} formFields={props.formFields} docId={props.docId} submitMergeFields={props.submitMergeFields} allOrders={props.orders} selected={selected} numSelected={selected.length} />
         <TableContainer>
           <Table
             className={classes.table}
@@ -364,15 +368,10 @@ export default function SearchDataTable(props) {
                           inputProps={{ 'aria-labelledby': labelId }}
                         />
                       </TableCell>
-                      <TableCell component="th" id={labelId} scope="row" padding="none">
-                        {row['Order ID']}
-                      </TableCell>
                       {
-                        Object.keys(row).map((key) => {
-                        if(key !== 'Order ID') {
-                          //return the tablecell
-                          return <TableCell align="center">{row[key]}</TableCell>
-                        }
+                        Object.keys(row).map((key,index) => {
+                        //return the tablecell
+                        return <TableCell key={'cell-'+ index.toString()} align="center" style={props.mappingFields[key].column_mapping ? {color: 'green', backgroundColor: '#00ff002b'} : {}}>{row[key]}</TableCell>
                       })
                       }
                     </TableRow>

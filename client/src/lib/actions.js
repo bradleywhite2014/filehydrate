@@ -16,6 +16,7 @@ export const changeMergeStyle = (payload) => ({type: constants.CHANGE_MERGE_STYL
 export const updateMiraklToken = (payload) => ({type: constants.UPDATE_MIRAKL_TOKEN, payload});
 export const updateMiraklUrl = (payload) => ({type: constants.UPDATE_MIRAKL_URL, payload});
 export const onTagClick = (payload) => ({type: constants.ON_TAG_CLICK, payload});
+export const onCheckClick = (payload) => ({type: constants.ON_TAG_CHECK_CLICK, payload});
 
 
 export const getMiraklTokenStatus = (payload) => ({type: constants.GET_MIRAKL_TOKEN_STATUS, payload});

@@ -23,7 +23,8 @@ import {
     HIDE_GLOBAL_MODAL,
     SET_GLOBAL_MODAL_INFO,
     CLEAR_GLOBAL_MODAL_INFO,
-    ON_TAG_CLICK
+    ON_TAG_CLICK,
+    ON_TAG_CHECK_CLICK
   } from '../utils/constants'
 
 import _ from 'underscore';
@@ -211,11 +212,19 @@ const reducer = (state = initialState, action) => {
         const field = action.payload
         let temp = state.mappingFields
         temp[field].open_tag = !temp[field].open_tag
-        let tempArray = Object.keys(state.formFields)
         return Object.assign({}, state, {
             mappingFields: temp
-        })
-       
+        }) 
+      }
+      case ON_TAG_CHECK_CLICK: {
+        const tagKey = action.payload.key
+        const columnHeader = action.payload.columnHeader
+        const selected = action.payload.selected
+        let temp = state.mappingFields
+        temp[columnHeader].column_mapping = selected ? tagKey : ''
+        return Object.assign({}, state, {
+            mappingFields: temp
+        }) 
       }
       case LOGIN_PENDING: {
         return Object.assign({}, state, {

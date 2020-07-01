@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import Modal from 'react-bootstrap/Modal';
 import Button from 'react-bootstrap/Button';
 import { connect } from 'react-redux';
-import {hideModal,onTagClick} from '../lib/actions';
+import {onTagClick, onCheckClick} from '../lib/actions';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import FormGroup from '@material-ui/core/FormGroup';
 import Checkbox from '@material-ui/core/Checkbox';
@@ -23,15 +23,6 @@ const GreenCheckbox = withStyles({
 class GlobalModal extends Component {
   constructor(props) {
     super(props)
-    this.onHide = this.onHide.bind(this);
-  }
-
-  onHide = (event) => {
-    this.props.hideModal()
-  }
-
-  buildLink = (id) => {
-    return 'https://docs.google.com/document/d/' + id
   }
 
   render() {
@@ -49,11 +40,15 @@ class GlobalModal extends Component {
           </Modal.Header>
           <Modal.Body>
             <h4>Fields</h4>
-              { <FormControlLabel
-                        control={<GreenCheckbox name="checkedG" />}
-                        label={'test'}
-                    />
-                    }
+              <div style={{display: 'flex', flexDirection: 'column', maxHeight: '250px', overflowY: 'scroll'}}>
+                {Object.keys(this.props.state.formFields).map( key => {
+                  return <FormControlLabel
+                      control={<GreenCheckbox onClick={(event) => this.props.onCheckClick({key, columnHeader: this.props.header, selected: event.target.checked})} checked={this.props.state.mappingFields[this.props.header].column_mapping === key} name="checkedG" />}
+                      label={key}
+                  />
+                })
+              }
+            </div>
           </Modal.Body>
           <Modal.Footer>
             <Button onClick={(event) => this.props.onTagClick(this.props.header)}>Close</Button>
@@ -69,6 +64,6 @@ export default connect((state) => (
     state: state
   }
 ),
-  { hideModal, onTagClick }
+  { onTagClick, onCheckClick }
 )
 ((GlobalModal));

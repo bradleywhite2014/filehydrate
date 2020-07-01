@@ -215,8 +215,8 @@ class FileSelect extends Component {
         </div>
         : this.props.state.docId && this.props.state.mergeStyle === 'mirakl' ?
           <div>
-            <TextField key={123} onChange={(event) => this.updateMiraklUrl(event)} style={{width: '-webkit-fill-available' , marginTop: 8, marginBottom: 8}} label={"Mirakl Host URL"} variant="outlined" />
-            <TextField key={123} onChange={(event) => this.updateMiraklToken(event)} style={{width: '-webkit-fill-available' , marginTop: 8, marginBottom: 8}} label={"Mirakl API Token"} variant="outlined" />  
+            <TextField key={'miraklUrl'} onChange={(event) => this.updateMiraklUrl(event)} style={{width: '-webkit-fill-available' , marginTop: 8, marginBottom: 8}} label={"Mirakl Host URL"} variant="outlined" />
+            <TextField key={'miraklTok'} onChange={(event) => this.updateMiraklToken(event)} style={{width: '-webkit-fill-available' , marginTop: 8, marginBottom: 8}} label={"Mirakl API Token"} variant="outlined" />  
             <Button
               color="secondary"
               size="large"
@@ -238,7 +238,7 @@ class FileSelect extends Component {
           </Button>  
           {
             this.props.state.miraklOrders && this.props.state.miraklOrders.length > 0 ? 
-            <SearchDataTable onTagClick={this.props.onTagClick} mappingFields={this.props.state.mappingFields} docId={this.props.state.docId} submitMergeFields={this.props.submitMergeFields} orders={this.props.state.miraklOrders} /> :
+            <SearchDataTable onTagClick={this.props.onTagClick} formFields={this.props.state.formFields} mappingFields={this.props.state.mappingFields} docId={this.props.state.docId} submitMergeFields={this.props.submitMergeFields} orders={this.props.state.miraklOrders} /> :
             <React.Fragment />
           }  
           </div>
