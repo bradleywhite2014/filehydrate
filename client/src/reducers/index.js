@@ -22,12 +22,14 @@ import {
     SHOW_GLOBAL_MODAL,
     HIDE_GLOBAL_MODAL,
     SET_GLOBAL_MODAL_INFO,
-    CLEAR_GLOBAL_MODAL_INFO
+    CLEAR_GLOBAL_MODAL_INFO,
+    ON_TAG_CLICK,
+    ON_TAG_CHECK_CLICK
   } from '../utils/constants'
 
 import _ from 'underscore';
 
-import {convertMergeFieldsToFormFields, convertGoogleFileResponseToAutocompleteFields, genMsgId, parseTokenFromUrl, parseJwt, mapMiraklOrders} from '../utils/index'
+import {convertMergeFieldsToFormFields, convertGoogleFileResponseToAutocompleteFields, genMsgId, parseTokenFromUrl, parseJwt, mapMiraklOrders, convertResultsToMappingFields} from '../utils/index'
 
   const initializeState = () => {
     return {
@@ -36,7 +38,7 @@ import {convertMergeFieldsToFormFields, convertGoogleFileResponseToAutocompleteF
             imageUrl: ''
         },
         accessToken: '',
-        mergeFields: [],
+        mappingFields: [],
         formFields: {},
         docId: '',
         fileList: [],
@@ -199,11 +201,30 @@ const reducer = (state = initialState, action) => {
         })
       }
       case SEARCH_MIRAKL_ORDERS_SUCCESS: {
-          console.log(action.payload)
         const resp = action.payload
+        const orderList = mapMiraklOrders(resp);
         return Object.assign({}, state, {
-            miraklOrders: mapMiraklOrders(resp)
+            miraklOrders: orderList,
+            mappingFields: convertResultsToMappingFields(orderList)
         })
+      }
+      case ON_TAG_CLICK: {
+        const field = action.payload
+        let temp = state.mappingFields
+        temp[field].open_tag = !temp[field].open_tag
+        return Object.assign({}, state, {
+            mappingFields: temp
+        }) 
+      }
+      case ON_TAG_CHECK_CLICK: {
+        const tagKey = action.payload.key
+        const columnHeader = action.payload.columnHeader
+        const selected = action.payload.selected
+        let temp = state.mappingFields
+        temp[columnHeader].column_mapping = selected ? tagKey : ''
+        return Object.assign({}, state, {
+            mappingFields: temp
+        }) 
       }
       case LOGIN_PENDING: {
         return Object.assign({}, state, {
