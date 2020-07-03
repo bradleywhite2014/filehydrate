@@ -82,6 +82,7 @@ class FileSelect extends Component {
       this.updateMiraklToken = this.updateMiraklToken.bind(this);
       this.updateMiraklUrl = this.updateMiraklUrl.bind(this);
       this.onSaveInfo = this.onSaveInfo.bind(this);
+      this.onSaveTemplate = this.onSaveTemplate.bind(this);
       this.onSearchMirakl = this.onSearchMirakl.bind(this);
 
       ReactGA.initialize('UA-163141688-1');
@@ -136,6 +137,10 @@ class FileSelect extends Component {
 
     onSaveInfo(event) {
       this.props.submitMiraklHostAndToken({userDetails: {url: this.props.state.miraklUrlHost, token: this.props.state.miraklApiToken}});
+    }
+
+    onSaveTemplate(event) {
+      this.props.submitUserTemplate({userDetails: {url: this.props.state.docId, mappingFields: this.props.state.mappingFields}});
     }
 
     onSearchMirakl(event) {
@@ -236,6 +241,15 @@ class FileSelect extends Component {
           >
             {'Search'}
           </Button>  
+          <Button
+              color="secondary"
+              size="large"
+              variant="contained"
+              style={{marginBottom: 15, marginRight: 15}} 
+              onClick={this.onSaveTemplate}
+            >
+              {'Save Template'}
+            </Button>
           {
             this.props.state.miraklOrders && this.props.state.miraklOrders.length > 0 ? 
             <SearchDataTable onTagClick={this.props.onTagClick} formFields={this.props.state.formFields} mappingFields={this.props.state.mappingFields} docId={this.props.state.docId} submitMergeFields={this.props.submitMergeFields} orders={this.props.state.miraklOrders} /> :
