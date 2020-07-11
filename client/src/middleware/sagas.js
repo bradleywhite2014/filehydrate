@@ -98,6 +98,26 @@ export function* submitMiraklHostAndToken({payload}) {
   
 }
 
+//submitUserTemplate
+export function* submitUserTemplate({payload}) {
+  try{
+    const results = yield call(post,'https://03i7mcv6l6.execute-api.us-east-2.amazonaws.com/main' , payload.userDetails)
+    
+    if(results.error){
+      if(results.error.code === 401) {
+        //lets go a head and get logged out
+        yield put(actions.logoutUser())
+      }
+      yield put(actions.putErrorMessage(results.error.message))
+    }else {
+      yield put(actions.submitUserTemplateSuccess())
+    }
+  }catch(e){
+    yield put(actions.putErrorMessage(e))
+  }
+  
+}
+
 export function* performFileSearch({payload}) {
   try{
     var files = [];
@@ -229,6 +249,8 @@ function * watcher () {
     //userDetails rest
     yield takeEvery(constants.GET_MIRAKL_TOKEN_STATUS, getMiraklTokenStatus)
     yield takeEvery(constants.SUBMIT_MIRAKL_DETAILS, submitMiraklHostAndToken)
+    yield takeEvery(constants.SUBMIT_USER_TEMPLATE, submitUserTemplate)
+    
   }
 }
 
