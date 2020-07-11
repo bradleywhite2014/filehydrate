@@ -24,7 +24,8 @@ import {
     SET_GLOBAL_MODAL_INFO,
     CLEAR_GLOBAL_MODAL_INFO,
     ON_TAG_CLICK,
-    ON_TAG_CHECK_CLICK
+    ON_TAG_CHECK_CLICK,
+    LOAD_USER_TEMPLATE_FOR_FILE_SUCCESS
   } from '../utils/constants'
 
 import _ from 'underscore';
@@ -206,6 +207,12 @@ const reducer = (state = initialState, action) => {
         return Object.assign({}, state, {
             miraklOrders: orderList,
             mappingFields: convertResultsToMappingFields(orderList)
+        })
+      }
+      case LOAD_USER_TEMPLATE_FOR_FILE_SUCCESS: {
+        const resp = action.payload
+        return Object.assign({}, state, {
+            mappingFields: resp
         })
       }
       case ON_TAG_CLICK: {
