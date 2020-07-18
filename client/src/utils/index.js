@@ -35,7 +35,7 @@ export const convertMergeFieldsToFormFields = (mergeFields) => {
 export const convertGoogleFileResponseToAutocompleteFields = (files) => {
   if(files) {
     const newFileArray = []
-    console.log(files)
+    //console.log(files)
     files.forEach((file) => {
       newFileArray.push({
         label: file.name,
@@ -87,6 +87,18 @@ export const parseJwt = (token) => {
   }
 };
 
+// export const reorderMappingFields = (mappingFields) => {
+//   let orderId = mappingFields.splice(mappingFields.indexOf('Order ID'), 1);
+//   let orderStatus = mappingFields.splice(mappingFields.indexOf('Order Status'), 1);
+//   let createdDate = mappingFields.splice(mappingFields.indexOf('Created Date'), 1);
+//   let productTitle = mappingFields.splice(mappingFields.indexOf('Product Title'), 1);
+
+//   mappingFields.unshift(productTitle);
+//   mappingFields.unshift(createdDate);
+//   mappingFields.unshift(orderStatus);
+//   mappingFields.unshift(orderId);
+// }
+
 export const mapMiraklOrders = (orders) => {
   if(orders.length > 0) {
     orders = orders.filter((order) => !!order.customer.billing_address)
@@ -96,6 +108,7 @@ export const mapMiraklOrders = (orders) => {
           'Order ID': order.order_id,
           'Order Status': order.order_state,
           'Created Date': order.created_date,
+          'Product Title': order.order_lines[0].product_title,
           'Billing Address City': order.customer.billing_address.city,
           'Billing Address Country': order.customer.billing_address.country,
           'Billing Address Country_iso_code': order.customer.billing_address.country_iso_code,
@@ -115,8 +128,7 @@ export const mapMiraklOrders = (orders) => {
           'Shipping Address Street2': order.customer.shipping_address.street_2,
           'Shipping Address Zip Code': order.customer.shipping_address.zip_code, 
           'Shipping Tracking Number': order.shipping_tracking,
-          'Shipping Tracking URL': order.shipping_tracking_url,
-          'Product Title': order.order_lines[0].product_title,
+          'Shipping Tracking URL': order.shipping_tracking_url
           // 'order_lines:[0]:quantity': order.order_lines[0].quantity
     
         }

@@ -168,7 +168,7 @@ export function* performMiraklSearch({payload}) {
 
     orders = yield call(get,'https://6m5cadt7n1.execute-api.us-east-2.amazonaws.com/main')
     
-    console.log(orders)
+    //console.log(orders)
     if(orders.error){
       if(orders.error.code === 401) {
         //lets go a head and get logged out
