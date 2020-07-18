@@ -54,23 +54,9 @@ function stableSort(array, comparator) {
 
 
 function EnhancedTableHead(props) {
-  const headCells = _.keys(props.mappingFields).map((key) => {
-    return {id: key, numeric: false, disablePadding: false, label: key}
+  const headCells = props.miraklHeaders.map((lbl) => {
+    return {id: lbl, numeric: false, disablePadding: false, label: lbl}
   })
-
-
-  function moveIdToTop(jsonarray, id) {
-    for (var i = 0; i < jsonarray.length; ++i) {
-       if (jsonarray[i].id == id) {
-          var temp = jsonarray[i];
-          jsonarray.splice(i, 1);
-          jsonarray.unshift(temp);
-          break;
-       }
-    }
-   }
-
-  moveIdToTop(headCells, 'Order ID')
 
   const { classes, onSelectAllClick, order, orderBy, numSelected, rowCount, onRequestSort, onTagClick } = props;
   const createSortHandler = (property) => (event) => {
@@ -344,6 +330,7 @@ export default function SearchDataTable(props) {
               onTagClick={handleTagClick}
               rowCount={props.orders.length}
               mappingFields={props.mappingFields}
+              miraklHeaders={props.miraklHeaders}
               orders={props.orders}
             />
             <TableBody>

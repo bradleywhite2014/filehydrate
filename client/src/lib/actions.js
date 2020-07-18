@@ -26,6 +26,11 @@ export const submitMiraklHostAndTokenSuccess = (payload) => ({type: constants.SU
 export const searchMiraklOrders = (payload) => ({type: constants.SEARCH_MIRAKL_ORDERS, payload});
 export const searchMiraklOrdersSuccess = (payload) => ({type: constants.SEARCH_MIRAKL_ORDERS_SUCCESS, payload});
 
+export const submitUserTemplate = (payload) => ({type: constants.SUBMIT_USER_TEMPLATE, payload});
+export const submitUserTemplateSuccess = (payload) => ({type: constants.SUBMIT_USER_TEMPLATE_SUCCESS, payload});
+export const loadUserTemplateForFile = (payload) => ({type: constants.LOAD_USER_TEMPLATE_FOR_FILE, payload});
+export const loadUserTemplateForFileSuccess = (payload) => ({type: constants.LOAD_USER_TEMPLATE_FOR_FILE_SUCCESS, payload});
+
 //auth
 export const isAuthed = (payload) => ({type: constants.CHECK_AUTH_STATUS, payload});
 export const parseTokens =(payload) => ({type: constants.PARSE_TOKENS_FROM_URL, payload});

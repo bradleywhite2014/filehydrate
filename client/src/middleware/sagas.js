@@ -35,7 +35,7 @@ export function* submitMergeFields({payload}) {
     const results = yield call(post,'https://lipyjnw0f8.execute-api.us-east-2.amazonaws.com/main'  + '?docId=' + payload.docId + '&access_token=' + sessionStorage.getItem('accessToken'), payload.formFields)
     
     if(results.error){
-      if(results.error.code === 401) {
+      if(results.error.code === 401 || results.error.code === 403) {
         //lets go a head and get logged out
         yield put(actions.logoutUser())
       }
@@ -59,7 +59,7 @@ export function* getMiraklTokenStatus({payload}) {
     const results = yield call(get,'https://fxr009j313.execute-api.us-east-2.amazonaws.com/main')
     
     if(results.error){
-      if(results.error.code === 401) {
+      if(results.error.code === 401 || results.error.code === 403) {
         //lets go a head and get logged out
         yield put(actions.logoutUser())
       }
@@ -84,13 +84,53 @@ export function* submitMiraklHostAndToken({payload}) {
     const results = yield call(post,'https://fxr009j313.execute-api.us-east-2.amazonaws.com/main' , payload.userDetails)
     
     if(results.error){
-      if(results.error.code === 401) {
+      if(results.error.code === 401 || results.error.code === 403) {
         //lets go a head and get logged out
         yield put(actions.logoutUser())
       }
       yield put(actions.putErrorMessage(results.error.message))
     }else {
       yield put(actions.submitMiraklHostAndTokenSuccess())
+    }
+  }catch(e){
+    yield put(actions.putErrorMessage(e))
+  }
+  
+}
+
+//loadUserTemplateForFile
+export function* loadUserTemplateForFile({payload}) {
+  try{
+    const results = yield call(get,'https://03i7mcv6l6.execute-api.us-east-2.amazonaws.com/main' + '?docId=' + payload)
+    
+    if(results.error){
+      if(results.error.code === 401 || results.error.code === 403) {
+        //lets go a head and get logged out
+        yield put(actions.logoutUser())
+      }
+      yield put(actions.putErrorMessage(results.error.message))
+    }else {
+      yield put(actions.loadUserTemplateForFileSuccess(results))
+    }
+  }catch(e){
+    yield put(actions.putErrorMessage(e))
+  }
+  
+}
+
+//submitUserTemplate
+export function* submitUserTemplate({payload}) {
+  try{
+    const results = yield call(post,'https://03i7mcv6l6.execute-api.us-east-2.amazonaws.com/main' , payload.userDetails)
+    
+    if(results.error){
+      if(results.error.code === 401 || results.error.code === 403) {
+        //lets go a head and get logged out
+        yield put(actions.logoutUser())
+      }
+      yield put(actions.putErrorMessage(results.error.message))
+    }else {
+      yield put(actions.submitUserTemplateSuccess())
     }
   }catch(e){
     yield put(actions.putErrorMessage(e))
@@ -128,7 +168,7 @@ export function* performMiraklSearch({payload}) {
 
     orders = yield call(get,'https://6m5cadt7n1.execute-api.us-east-2.amazonaws.com/main')
     
-    console.log(orders)
+    //console.log(orders)
     if(orders.error){
       if(orders.error.code === 401) {
         //lets go a head and get logged out
@@ -229,6 +269,9 @@ function * watcher () {
     //userDetails rest
     yield takeEvery(constants.GET_MIRAKL_TOKEN_STATUS, getMiraklTokenStatus)
     yield takeEvery(constants.SUBMIT_MIRAKL_DETAILS, submitMiraklHostAndToken)
+    yield takeEvery(constants.SUBMIT_USER_TEMPLATE, submitUserTemplate)
+    yield takeEvery(constants.LOAD_USER_TEMPLATE_FOR_FILE, loadUserTemplateForFile)
+    
   }
 }
 

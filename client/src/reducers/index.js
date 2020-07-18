@@ -24,7 +24,8 @@ import {
     SET_GLOBAL_MODAL_INFO,
     CLEAR_GLOBAL_MODAL_INFO,
     ON_TAG_CLICK,
-    ON_TAG_CHECK_CLICK
+    ON_TAG_CHECK_CLICK,
+    LOAD_USER_TEMPLATE_FOR_FILE_SUCCESS
   } from '../utils/constants'
 
 import _ from 'underscore';
@@ -56,7 +57,33 @@ import {convertMergeFieldsToFormFields, convertGoogleFileResponseToAutocompleteF
             header: '',
             title: '',
             content: ''
-        }
+        },
+        miraklHeaders: [
+            'Order ID',
+            'Order Status',
+            'Created Date',
+            'Product Title',
+            'Billing Address City',
+            'Billing Address Country',
+            'Billing Address Country_iso_code',
+            'Billing Address Firstname',
+            'Billing Address Lastname',
+            'Billing Address State',
+            'Billing Address Street1',
+            'Billing Address Street2',
+            'Billing Address Zip Code',
+            'Shipping Address City',
+            'Shipping Address Country',
+            'Shipping Address Country Code',
+            'Shipping Address First Name',
+            'Shipping Address Last Name',
+            'Shipping Address State',
+            'Shipping Address Street1',
+            'Shipping Address Street2',
+            'Shipping Address Zip Code',
+            'Shipping Tracking Number',
+            'Shipping Tracking URL'
+        ]
     }
     
 };
@@ -206,6 +233,12 @@ const reducer = (state = initialState, action) => {
         return Object.assign({}, state, {
             miraklOrders: orderList,
             mappingFields: convertResultsToMappingFields(orderList)
+        })
+      }
+      case LOAD_USER_TEMPLATE_FOR_FILE_SUCCESS: {
+        const resp = action.payload
+        return Object.assign({}, state, {
+            mappingFields: resp[state.docId]
         })
       }
       case ON_TAG_CLICK: {

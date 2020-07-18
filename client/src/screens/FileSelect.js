@@ -7,7 +7,7 @@ import TextField from '@material-ui/core/TextField';
 import Typography from '../components/Typography';
 import Toolbar, { styles as toolbarStyles } from '../components/Toolbar';
 import { connect } from 'react-redux'
-import { setFileId, performFileSearch, fetchMergeFields , changeMergeStyle, updateMiraklToken, updateMiraklUrl, submitMiraklHostAndToken, getMiraklTokenStatus, searchMiraklOrders, submitMergeFields,setModalInfo,showModal, onTagClick} from './../lib/actions'
+import { setFileId, performFileSearch, fetchMergeFields , changeMergeStyle, updateMiraklToken, updateMiraklUrl, submitMiraklHostAndToken, getMiraklTokenStatus, searchMiraklOrders, submitMergeFields,submitUserTemplate, loadUserTemplateForFile, setModalInfo,showModal, onTagClick} from './../lib/actions'
 import ProductHeroLayout from './modules/views/ProductHeroLayout';
 import Grid from '@material-ui/core/Grid';
 import Container from '@material-ui/core/Container';
@@ -82,6 +82,8 @@ class FileSelect extends Component {
       this.updateMiraklToken = this.updateMiraklToken.bind(this);
       this.updateMiraklUrl = this.updateMiraklUrl.bind(this);
       this.onSaveInfo = this.onSaveInfo.bind(this);
+      this.onSaveTemplate = this.onSaveTemplate.bind(this);
+      this.onLoadTemplate = this.onLoadTemplate.bind(this);
       this.onSearchMirakl = this.onSearchMirakl.bind(this);
 
       ReactGA.initialize('UA-163141688-1');
@@ -136,6 +138,14 @@ class FileSelect extends Component {
 
     onSaveInfo(event) {
       this.props.submitMiraklHostAndToken({userDetails: {url: this.props.state.miraklUrlHost, token: this.props.state.miraklApiToken}});
+    }
+
+    onSaveTemplate(event) {
+      this.props.submitUserTemplate({userDetails: {docId: this.props.state.docId, formFields: this.props.state.mappingFields}});
+    }
+
+    onLoadTemplate(event) {
+      this.props.loadUserTemplateForFile(this.props.state.docId);
     }
 
     onSearchMirakl(event) {
@@ -230,15 +240,33 @@ class FileSelect extends Component {
             color="secondary"
             size="large"
             variant="contained"
-            style={{marginBottom: 15}} 
+            style={{marginBottom: 15, marginRight: 15}} 
             disabled={!this.props.state.storedMiraklTokens}
             onClick={this.onSearchMirakl}
           >
             {'Search'}
           </Button>  
+          <Button
+              color="secondary"
+              size="large"
+              variant="contained"
+              style={{marginBottom: 15, marginRight: 15}} 
+              onClick={this.onSaveTemplate}
+            >
+              {'Save Template'}
+            </Button>
+            <Button
+              color="secondary"
+              size="large"
+              variant="contained"
+              style={{marginBottom: 15, marginRight: 15}} 
+              onClick={this.onLoadTemplate}
+            >
+              {'Load Template'}
+            </Button>
           {
             this.props.state.miraklOrders && this.props.state.miraklOrders.length > 0 ? 
-            <SearchDataTable onTagClick={this.props.onTagClick} formFields={this.props.state.formFields} mappingFields={this.props.state.mappingFields} docId={this.props.state.docId} submitMergeFields={this.props.submitMergeFields} orders={this.props.state.miraklOrders} /> :
+            <SearchDataTable miraklHeaders={this.props.state.miraklHeaders} onTagClick={this.props.onTagClick} formFields={this.props.state.formFields} mappingFields={this.props.state.mappingFields} docId={this.props.state.docId} submitMergeFields={this.props.submitMergeFields} orders={this.props.state.miraklOrders} /> :
             <React.Fragment />
           }  
           </div>
@@ -264,6 +292,6 @@ export default connect((state) => (
     state: state
   }
 ),
-  { setFileId , performFileSearch, fetchMergeFields, changeMergeStyle, updateMiraklToken, updateMiraklUrl, submitMiraklHostAndToken, getMiraklTokenStatus, searchMiraklOrders, submitMergeFields,setModalInfo,showModal, onTagClick}
+  { setFileId , performFileSearch, fetchMergeFields, changeMergeStyle, updateMiraklToken, updateMiraklUrl, submitMiraklHostAndToken, getMiraklTokenStatus, searchMiraklOrders, submitMergeFields,submitUserTemplate, loadUserTemplateForFile, setModalInfo,showModal, onTagClick}
 )
 (withStyles(styles)(FileSelect));
