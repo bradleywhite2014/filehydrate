@@ -87,9 +87,43 @@ export const parseJwt = (token) => {
   }
 };
 
+const jsUcfirst = (string) => {
+  return string.charAt(0).toUpperCase() + string.slice(1);
+}
+
+const convertSnakeKeyToLabel = (key) => {
+  let pieces = key.split('_');
+  pieces = pieces.map((piece) => {return jsUcfirst(piece);})
+  return pieces.join(' ');
+}
+
+const convertSnakedObjectToLabels = (snakedObj) => {
+  if(Array.isArray(snakedObj)){
+    snakedObj.map((item) => {
+      return convertSnakedObjectToLabels(item);
+    });
+  } else if(typeof snakedObj === "object"){
+    Object.keys(snakedObj).forEach((key) => {
+      if(snakedObj[key]){
+        let tempVal = snakedObj[key];
+        delete snakedObj[key];
+        snakedObj[convertSnakeKeyToLabel(key)] = tempVal;
+        if(Array.isArray(snakedObj[convertSnakeKeyToLabel(key)]) || typeof snakedObj[convertSnakeKeyToLabel(key)] === "object" ){
+          //if we have a list or obj, keep going
+          convertSnakedObjectToLabels(snakedObj[convertSnakeKeyToLabel(key)]);
+        }
+      }else{
+        delete snakedObj[key];
+      }
+      
+    })
+  }
+}
+
+
 export const mapMiraklOrders = (orders) => {
   if(orders.length > 0) {
-    orders = orders.filter((order) => !!order.customer.billing_address)
+    //orders = orders.filter((order) => !!order.customer.billing_address)
     return orders.map((order) => {
       if(order.customer.billing_address){
         return {
