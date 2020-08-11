@@ -96,7 +96,7 @@ const convertSnakeKeyToLabel = (key) => {
   pieces = pieces.map((piece) => {return jsUcfirst(piece);})
   return pieces.join(' ');
 }
-
+//TODO: use this for the table creation. possibly upgrade table here too... ?
 const convertSnakedObjectToLabels = (snakedObj) => {
   if(Array.isArray(snakedObj)){
     snakedObj.map((item) => {
@@ -123,7 +123,7 @@ const convertSnakedObjectToLabels = (snakedObj) => {
 
 export const mapMiraklOrders = (orders) => {
   if(orders.length > 0) {
-    //orders = orders.filter((order) => !!order.customer.billing_address)
+    orders = orders.filter((order) => !!order.customer.billing_address)
     return orders.map((order) => {
       if(order.customer.billing_address){
         return {
