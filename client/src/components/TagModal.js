@@ -42,10 +42,15 @@ class GlobalModal extends Component {
             <h4>Fields</h4>
               <div style={{display: 'flex', flexDirection: 'column', maxHeight: '250px', overflowY: 'scroll'}}>
                 {Object.keys(this.props.state.formFields).map( key => {
-                  return <FormControlLabel
-                      control={<GreenCheckbox onClick={(event) => this.props.onCheckClick({key, columnHeader: this.props.header, selected: event.target.checked})} checked={this.props.state.mappingFields[this.props.header].column_mapping === key} name="checkedG" />}
+                  return <div style={{display: 'flex'}}> <FormControlLabel
+                      control={<GreenCheckbox onClick={(event) => this.props.onCheckClick({key, columnHeader: this.props.header, selected: event.target.checked})} checked={!!this.props.state.formToMappingFields[key] || this.props.state.mappingFields[this.props.header].column_mapping === key} name="checkedG" />}
                       label={key}
+                      disabled={(!!this.props.state.formToMappingFields[key] && this.props.state.formToMappingFields[key] !== this.props.header)}
                   />
+                  {
+                    !!this.props.state.formToMappingFields[key] ? <label style={{color: 'green'}}>Currently assigned to {this.props.state.formToMappingFields[key]}</label> : <React.Fragment/>
+                  }
+                  </div> 
                 })
               }
             </div>

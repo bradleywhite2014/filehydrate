@@ -87,18 +87,6 @@ export const parseJwt = (token) => {
   }
 };
 
-// export const reorderMappingFields = (mappingFields) => {
-//   let orderId = mappingFields.splice(mappingFields.indexOf('Order ID'), 1);
-//   let orderStatus = mappingFields.splice(mappingFields.indexOf('Order Status'), 1);
-//   let createdDate = mappingFields.splice(mappingFields.indexOf('Created Date'), 1);
-//   let productTitle = mappingFields.splice(mappingFields.indexOf('Product Title'), 1);
-
-//   mappingFields.unshift(productTitle);
-//   mappingFields.unshift(createdDate);
-//   mappingFields.unshift(orderStatus);
-//   mappingFields.unshift(orderId);
-// }
-
 export const mapMiraklOrders = (orders) => {
   if(orders.length > 0) {
     orders = orders.filter((order) => !!order.customer.billing_address)
@@ -156,4 +144,15 @@ export const convertResultsToMappingFields = (results) => {
     return {}
   }
   
+}
+
+export const convertMappingFieldsToForm = (mappingFields) => {
+  let temp = {}
+  Object.keys(mappingFields).forEach((field) => {
+    if(mappingFields[field].column_mapping){
+      //if match, grab value for this row
+      temp[mappingFields[field].column_mapping] = field
+    }
+  })
+  return temp
 }

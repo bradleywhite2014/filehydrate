@@ -30,7 +30,7 @@ import {
 
 import _ from 'underscore';
 
-import {convertMergeFieldsToFormFields, convertGoogleFileResponseToAutocompleteFields, genMsgId, parseTokenFromUrl, parseJwt, mapMiraklOrders, convertResultsToMappingFields} from '../utils/index'
+import {convertMergeFieldsToFormFields, convertGoogleFileResponseToAutocompleteFields, genMsgId, parseTokenFromUrl, parseJwt, mapMiraklOrders, convertResultsToMappingFields, convertMappingFieldsToForm} from '../utils/index'
 
   const initializeState = () => {
     return {
@@ -41,6 +41,7 @@ import {convertMergeFieldsToFormFields, convertGoogleFileResponseToAutocompleteF
         accessToken: '',
         mappingFields: [],
         formFields: {},
+        formToMappingFields: {},
         docId: '',
         fileList: [],
         messages: [],
@@ -238,7 +239,8 @@ const reducer = (state = initialState, action) => {
       case LOAD_USER_TEMPLATE_FOR_FILE_SUCCESS: {
         const resp = action.payload
         return Object.assign({}, state, {
-            mappingFields: resp[state.docId]
+            mappingFields: resp[state.docId],
+            formToMappingFields: convertMappingFieldsToForm(state.mappingFields)
         })
       }
       case ON_TAG_CLICK: {
@@ -246,7 +248,8 @@ const reducer = (state = initialState, action) => {
         let temp = state.mappingFields
         temp[field].open_tag = !temp[field].open_tag
         return Object.assign({}, state, {
-            mappingFields: temp
+            mappingFields: temp,
+            formToMappingFields: convertMappingFieldsToForm(temp)
         }) 
       }
       case ON_TAG_CHECK_CLICK: {
@@ -256,7 +259,8 @@ const reducer = (state = initialState, action) => {
         let temp = state.mappingFields
         temp[columnHeader].column_mapping = selected ? tagKey : ''
         return Object.assign({}, state, {
-            mappingFields: temp
+            mappingFields: temp,
+            formToMappingFields: convertMappingFieldsToForm(temp)
         }) 
       }
       case LOGIN_PENDING: {
