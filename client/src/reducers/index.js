@@ -208,10 +208,14 @@ const reducer = (state = initialState, action) => {
         const resp = action.payload
         const orderList = mapMiraklOrders(resp);
         const tableList = convertSnakedObjectToLabels(resp);
+        let headers = tableList.length > 0 ? Object.keys(tableList[0]) : []
+        headers = headers.filter(item => (item !== "Created Date" && item !== "Order Id"));
+        headers.unshift("Created Date");
+        headers.unshift("Order Id");
         return Object.assign({}, state, {
             miraklOrders: orderList,
             tableList,
-            miraklHeaders: tableList.length > 0 ? Object.keys(tableList[0]) : [],
+            miraklHeaders: headers,
             mappingFields: convertResultsToMappingFields(tableList)
         })
       }

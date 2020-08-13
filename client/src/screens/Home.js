@@ -9,6 +9,7 @@ import Merge from './Merge'
 import FileSelect from './FileSelect'
 import ToastMessage from '../components/ToastMessage'
 import GlobalModal from '../components/GlobalModal'
+import NavHamburger from '../components/NavHamburger'
 
 
 function Index(props) {

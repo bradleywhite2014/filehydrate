@@ -74,7 +74,7 @@ function EnhancedTableHead(props) {
             indeterminate={numSelected > 0 && numSelected < rowCount}
             checked={rowCount > 0 && numSelected === rowCount}
             onChange={onSelectAllClick}
-            inputProps={{ 'aria-label': 'select all desserts' }}
+            inputProps={{ 'aria-label': 'select all rows' }}
           />
         </TableCell>
         {headCells.map((headCell) => (
@@ -224,7 +224,7 @@ const useStyles = makeStyles((theme) => ({
   },
   paper: {
     width: '100%',
-    marginBottom: theme.spacing(2),
+    marginBottom: theme.spacing(2)
   },
   table: {
     minWidth: 750,
@@ -336,13 +336,13 @@ export default function SearchDataTable(props) {
               {stableSort(props.orders, getComparator(order, orderBy))
                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                 .map((row, index) => {
-                  const isItemSelected = isSelected(row['Order ID']);
+                  const isItemSelected = isSelected(row['Order Id']);
                   const labelId = `enhanced-table-checkbox-${index}`;
 
                   return (
                     <TableRow
                       hover
-                      onClick={(event) => handleClick(event, row['Order ID'])}
+                      onClick={(event) => handleClick(event, row['Order Id'])}
                       role="checkbox"
                       aria-checked={isItemSelected}
                       tabIndex={-1}

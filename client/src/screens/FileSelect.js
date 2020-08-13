@@ -225,8 +225,8 @@ class FileSelect extends Component {
         </div>
         : this.props.state.docId && this.props.state.mergeStyle === 'mirakl' ?
           <div>
-            <TextField key={'miraklUrl'} onChange={(event) => this.updateMiraklUrl(event)} style={{width: '-webkit-fill-available' , marginTop: 8, marginBottom: 8}} label={"Mirakl Host URL"} variant="outlined" />
-            <TextField key={'miraklTok'} onChange={(event) => this.updateMiraklToken(event)} style={{width: '-webkit-fill-available' , marginTop: 8, marginBottom: 8}} label={"Mirakl API Token"} variant="outlined" />  
+            <TextField key={'miraklUrl'} onChange={(event) => this.updateMiraklUrl(event)} style={{width: '-webkit-fill-available' , marginTop: 8, marginBottom: 8, background: 'white'}} label={"Mirakl Host URL"} variant="outlined" />
+            <TextField key={'miraklTok'} onChange={(event) => this.updateMiraklToken(event)} style={{width: '-webkit-fill-available' , marginTop: 8, marginBottom: 8, background: 'white'}} label={"Mirakl API Token"} variant="outlined" />  
             <Button
               color="secondary"
               size="large"
@@ -244,7 +244,7 @@ class FileSelect extends Component {
             disabled={!this.props.state.storedMiraklTokens}
             onClick={this.onSearchMirakl}
           >
-            {'Search'}
+            {'Refresh'}
           </Button>  
           <Button
               color="secondary"
