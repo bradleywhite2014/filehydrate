@@ -12,8 +12,8 @@ import { green } from '@material-ui/core/colors';
 const GreenCheckbox = withStyles({
   root: {
     color: green[400],
-    '&$checked': {
-      color: green[600],
+    '&$disabled': {
+      color: 'grey',
     },
   },
   checked: {},

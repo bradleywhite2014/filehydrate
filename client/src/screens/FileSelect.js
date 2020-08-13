@@ -265,8 +265,8 @@ class FileSelect extends Component {
               {'Load Template'}
             </Button>
           {
-            this.props.state.miraklOrders && this.props.state.miraklOrders.length > 0 ? 
-            <SearchDataTable miraklHeaders={this.props.state.miraklHeaders} onTagClick={this.props.onTagClick} formFields={this.props.state.formFields} mappingFields={this.props.state.mappingFields} docId={this.props.state.docId} submitMergeFields={this.props.submitMergeFields} orders={this.props.state.miraklOrders} /> :
+            this.props.state.tableList && this.props.state.tableList.length > 0 ? 
+            <SearchDataTable miraklHeaders={this.props.state.miraklHeaders} onTagClick={this.props.onTagClick} formFields={this.props.state.formFields} mappingFields={this.props.state.mappingFields} docId={this.props.state.docId} submitMergeFields={this.props.submitMergeFields} orders={this.props.state.tableList} /> :
             <React.Fragment />
           }  
           </div>

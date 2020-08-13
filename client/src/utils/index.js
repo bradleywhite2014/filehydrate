@@ -91,13 +91,40 @@ const jsUcfirst = (string) => {
   return string.charAt(0).toUpperCase() + string.slice(1);
 }
 
-const convertSnakeKeyToLabel = (key) => {
+const convertSnakeKeyToLabel = (key,prevKey) => {
   let pieces = key.split('_');
   pieces = pieces.map((piece) => {return jsUcfirst(piece);})
   return pieces.join(' ');
 }
+
+
+const flattenAndRemoveKeys = (jsonStruct) => {
+  let temp = {}
+
+  const recurseRemove = (jsonStruct) => {
+    Object.keys(jsonStruct).forEach((key) => {
+      if(Array.isArray(jsonStruct[key])){
+        //if array
+        temp[key] = jsonStruct[key]
+        // jsonStruct[key].map((item) => {
+        //   return recurseRemove(item);
+        // })
+      }
+      else if(typeof jsonStruct[key] === 'object'){
+        //we have a subjson, lets move these keys to the top level
+        recurseRemove(jsonStruct[key])
+      }else{
+        //end of a json
+        temp[key] = jsonStruct[key]
+      }
+    });
+  }
+  
+  recurseRemove(jsonStruct)
+  return temp;
+}
 //TODO: use this for the table creation. possibly upgrade table here too... ?
-const convertSnakedObjectToLabels = (snakedObj) => {
+export const convertSnakedObjectToLabels = (snakedObj, prevKey) => {
   if(Array.isArray(snakedObj)){
     snakedObj.map((item) => {
       return convertSnakedObjectToLabels(item);
@@ -105,18 +132,41 @@ const convertSnakedObjectToLabels = (snakedObj) => {
   } else if(typeof snakedObj === "object"){
     Object.keys(snakedObj).forEach((key) => {
       if(snakedObj[key]){
-        let tempVal = snakedObj[key];
-        delete snakedObj[key];
-        snakedObj[convertSnakeKeyToLabel(key)] = tempVal;
-        if(Array.isArray(snakedObj[convertSnakeKeyToLabel(key)]) || typeof snakedObj[convertSnakeKeyToLabel(key)] === "object" ){
+        if(typeof snakedObj[key] === "object"){
+          //need to concat the json key names instead of setting it right away
+          if(prevKey){
+            convertSnakedObjectToLabels(snakedObj[key], prevKey + ' ' + convertSnakeKeyToLabel(key));
+          }else{
+            convertSnakedObjectToLabels(snakedObj[key], convertSnakeKeyToLabel(key));
+          }
+          
+        }else if(Array.isArray(snakedObj[convertSnakeKeyToLabel(key)])){
           //if we have a list or obj, keep going
           convertSnakedObjectToLabels(snakedObj[convertSnakeKeyToLabel(key)]);
+        }else{
+          if(prevKey){
+            let tempVal = snakedObj[key];
+            delete snakedObj[key];
+            snakedObj[prevKey +' ' + convertSnakeKeyToLabel(key)] = tempVal;
+          }else{
+            let tempVal = snakedObj[key];
+            delete snakedObj[key];
+            snakedObj[convertSnakeKeyToLabel(key)] = tempVal;
+          }
         }
       }else{
         delete snakedObj[key];
       }
       
     })
+  }
+  if(Array.isArray(snakedObj)){
+    //need to loop
+    return snakedObj.map((obj) => {
+      return flattenAndRemoveKeys(obj);
+    })
+  }else{
+    return flattenAndRemoveKeys(snakedObj);
   }
 }
 

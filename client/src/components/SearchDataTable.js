@@ -14,13 +14,12 @@ import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import Paper from '@material-ui/core/Paper';
 import Checkbox from '@material-ui/core/Checkbox';
-import IconButton from '@material-ui/core/IconButton';
-import Tooltip from '@material-ui/core/Tooltip';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Switch from '@material-ui/core/Switch';
 import DeleteIcon from '@material-ui/icons/Delete';
 import FilterListIcon from '@material-ui/icons/FilterList';
 import LabelTwoToneIcon from '@material-ui/icons/LabelTwoTone';
+import ListAltTwoToneIcon from '@material-ui/icons/ListAltTwoTone';
 import Button from './Button';
 import _ from 'underscore'
 import TagModal from './TagModal';
@@ -347,7 +346,7 @@ export default function SearchDataTable(props) {
                       role="checkbox"
                       aria-checked={isItemSelected}
                       tabIndex={-1}
-                      key={row['Order ID']}
+                      key={'row-'+index.toString()}
                       selected={isItemSelected}
                     >
                       <TableCell padding="checkbox">
@@ -357,10 +356,9 @@ export default function SearchDataTable(props) {
                         />
                       </TableCell>
                       {
-                        Object.keys(row).map((key,index) => {
-                        //return the tablecell
-                        return <TableCell key={'cell-'+ index.toString()} align="center" style={props.mappingFields[key].column_mapping ? {color: 'green', backgroundColor: '#00ff002b'} : {}}>{row[key]}</TableCell>
-                      })
+                        props.miraklHeaders.map((header,index) => {
+                          return <TableCell key={'cell-'+ index.toString()} align="center" style={props.mappingFields[header] ? props.mappingFields[header].column_mapping ? {color: 'green', backgroundColor: '#00ff002b'} : {} : {}}>{!!row[header] ? (typeof row[header] === 'object' ? 'Click for details...'  : row[header]) : ''}</TableCell>
+                        })
                       }
                     </TableRow>
                   );

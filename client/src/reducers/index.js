@@ -30,7 +30,7 @@ import {
 
 import _ from 'underscore';
 
-import {convertMergeFieldsToFormFields, convertGoogleFileResponseToAutocompleteFields, genMsgId, parseTokenFromUrl, parseJwt, mapMiraklOrders, convertResultsToMappingFields, convertMappingFieldsToForm} from '../utils/index'
+import {convertMergeFieldsToFormFields, convertGoogleFileResponseToAutocompleteFields, genMsgId, parseTokenFromUrl, parseJwt, mapMiraklOrders, convertResultsToMappingFields, convertMappingFieldsToForm, convertSnakedObjectToLabels} from '../utils/index'
 
   const initializeState = () => {
     return {
@@ -50,6 +50,7 @@ import {convertMergeFieldsToFormFields, convertGoogleFileResponseToAutocompleteF
         miraklApiToken: "",
         miraklUrlHost: "",
         miraklOrders: [],
+        tableList: [],
         authState: 'PENDING',
         userPhotoUrl: '',
         storedMiraklTokens: false,
@@ -59,32 +60,7 @@ import {convertMergeFieldsToFormFields, convertGoogleFileResponseToAutocompleteF
             title: '',
             content: ''
         },
-        miraklHeaders: [
-            'Order ID',
-            'Order Status',
-            'Created Date',
-            'Product Title',
-            'Billing Address City',
-            'Billing Address Country',
-            'Billing Address Country_iso_code',
-            'Billing Address Firstname',
-            'Billing Address Lastname',
-            'Billing Address State',
-            'Billing Address Street1',
-            'Billing Address Street2',
-            'Billing Address Zip Code',
-            'Shipping Address City',
-            'Shipping Address Country',
-            'Shipping Address Country Code',
-            'Shipping Address First Name',
-            'Shipping Address Last Name',
-            'Shipping Address State',
-            'Shipping Address Street1',
-            'Shipping Address Street2',
-            'Shipping Address Zip Code',
-            'Shipping Tracking Number',
-            'Shipping Tracking URL'
-        ]
+        miraklHeaders: []
     }
     
 };
@@ -231,9 +207,12 @@ const reducer = (state = initialState, action) => {
       case SEARCH_MIRAKL_ORDERS_SUCCESS: {
         const resp = action.payload
         const orderList = mapMiraklOrders(resp);
+        const tableList = convertSnakedObjectToLabels(resp);
         return Object.assign({}, state, {
             miraklOrders: orderList,
-            mappingFields: convertResultsToMappingFields(orderList)
+            tableList,
+            miraklHeaders: tableList.length > 0 ? Object.keys(tableList[0]) : [],
+            mappingFields: convertResultsToMappingFields(tableList)
         })
       }
       case LOAD_USER_TEMPLATE_FOR_FILE_SUCCESS: {
