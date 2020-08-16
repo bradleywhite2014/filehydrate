@@ -3,6 +3,7 @@ import { useRef } from "react";
 import { motion, useCycle } from "framer-motion";
 import { MenuToggle } from "./MenuToggle";
 import { Navigation } from "./Navigation";
+import { useDimensions } from "./use-dimentions";
 
 const sidebar = {
   open: (height = 1000) => ({
@@ -35,6 +36,8 @@ export const NavHamburger = () => {
       animate={isOpen ? "open" : "closed"}
       custom={height}
       ref={containerRef}
+      className={'navbutton'}
+      style={{zIndex: '15' , position: 'fixed'}}
     >
       <motion.div className="background" variants={sidebar} />
       <Navigation />

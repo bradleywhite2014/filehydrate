@@ -150,7 +150,7 @@ const EnhancedTableToolbar = (props) => {
   const onClickMerge = (docId, allOrders, selected, formFields, mappingFields) => {
     if(selected.length < 11){
     const ordersToMerge = allOrders.filter((order) => {
-      return selected.indexOf(order['Order ID']) !== -1
+      return selected.indexOf(order['Order Id']) !== -1
     })
     //TODO: clean this mess up
     const findMappingValue = (order, mappingKey, mappingFields) => {
@@ -172,6 +172,7 @@ const EnhancedTableToolbar = (props) => {
       })
       return temp
     }
+
     let mappedVals = []
     ordersToMerge.forEach((order) => {
       mappedVals.push(convertOrderToMergeFields(order,formFields,mappingFields))   

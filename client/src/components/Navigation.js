@@ -13,10 +13,10 @@ const variants = {
 
 export const Navigation = () => (
   <motion.ul variants={variants}>
-    {itemIds.map(i => (
-      <MenuItem i={i} key={i} />
-    ))}
+    <MenuItem text={'Admin'} key={'admin-mnu'} />
+    <MenuItem text={'Admin'} key={'profile'} />
+    <MenuItem text={'Admin'} key={'api-settings'} />
+    <MenuItem text={'Admin'} key={'help'} />
+    
   </motion.ul>
 );
-
-const itemIds = [0, 1, 2, 3, 4];

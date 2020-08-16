@@ -10,6 +10,7 @@ import { connect } from 'react-redux'
 import { setUserInfo , logoutUser} from '../../../lib/actions'
 import { useHistory } from "react-router-dom";
 import OIDCLoginButton from '../../../components/OIDCLoginButton';
+import {NavHamburger} from '../../../components/NavHamburger';
 //1E5Us1TfM8QojOqgfe0-pdmSaw3VOFBK-jTIl6dziPcY
 
 const googleScopes = 'https://www.googleapis.com/auth/documents https://www.googleapis.com/auth/drive email profile'
@@ -58,7 +59,8 @@ function AppAppBar(props) {
 
   
   return <div>
-  <AppBar position="fixed">
+    <NavHamburger/>
+  <AppBar position="fixed" style={{zIndex: '10'}}>
     <Toolbar className={classes.toolbar}>
       <div className={classes.left} />
       <Typography align="center" variant="body2" className={classes.h4}>
