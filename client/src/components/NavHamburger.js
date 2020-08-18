@@ -29,7 +29,7 @@ export const NavHamburger = () => {
   const [isOpen, toggleOpen] = useCycle(false, true);
   const containerRef = useRef(null);
   const { height } = useDimensions(containerRef);
-
+  const navVisibility = isOpen ? {display: 'flex'} : {display: 'none'}
   return (
     <motion.nav
       initial={false}
@@ -37,7 +37,7 @@ export const NavHamburger = () => {
       custom={height}
       ref={containerRef}
       className={'navbutton'}
-      style={{zIndex: '15' , position: 'fixed'}}
+      style={{ zIndex: '15' , position: 'fixed', }}
     >
       <motion.div className="background" variants={sidebar} />
       <Navigation />
