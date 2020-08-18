@@ -59,7 +59,7 @@ function AppAppBar(props) {
 
   
   return <div>
-    <NavHamburger/>
+    <NavHamburger history={history}/>
   <AppBar position="fixed" style={{zIndex: '10'}}>
     <Toolbar className={classes.toolbar}>
       <div className={classes.left} />

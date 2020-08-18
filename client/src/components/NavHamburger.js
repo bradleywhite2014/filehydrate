@@ -40,7 +40,7 @@ export const NavHamburger = () => {
       style={{ zIndex: '15' , position: 'fixed', }}
     >
       <motion.div className="background" variants={sidebar} />
-      <Navigation />
+      <Navigation toggle={() => toggleOpen()} />
       <MenuToggle toggle={() => toggleOpen()} />
     </motion.nav>
   );

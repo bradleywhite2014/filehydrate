@@ -57,7 +57,9 @@ render((
                 <Route path='/' exact={true} render={(props) => <Home/> } />
                 <Route path='/implicit/callback' component={LoginCallback}/>
                 <Route path='/merge' exact={true} render={(props) => <Home mainSection={'merge'} /> } />
-                <Route path='/fileSelect' exact={true} render={(props) => <Home mainSection={'fileSelect'} /> } />
+                <Route path='/fileMerge' exact={true} render={(props) => <Home mainSection={'fileMerge'} /> } />
+                <Route path='/apiconfiguration' exact={true} render={(props) => <Home mainSection={'apiconfiguration'} /> } />
+                <Route path='/*' exact={true} render={(props) => <Home mainSection={'404'} /> } />
             </Switch>
         </BrowserRouter>
     </Provider>

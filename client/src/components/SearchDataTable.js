@@ -23,6 +23,7 @@ import ListAltTwoToneIcon from '@material-ui/icons/ListAltTwoTone';
 import Button from './Button';
 import _ from 'underscore'
 import TagModal from './TagModal';
+import Skeleton from '@material-ui/lab/Skeleton';
 
 
 function descendingComparator(a, b, orderBy) {
@@ -312,75 +313,87 @@ export default function SearchDataTable(props) {
   return (
     <div className={classes.root}>
       <Paper className={classes.paper}>
-        <EnhancedTableToolbar mappingFields={props.mappingFields} formFields={props.formFields} docId={props.docId} submitMergeFields={props.submitMergeFields} allOrders={props.orders} selected={selected} numSelected={selected.length} />
-        <TableContainer>
-          <Table
-            className={classes.table}
-            aria-labelledby="tableTitle"
-            size={'small'}
-            aria-label="enhanced table"
-          >
-            <EnhancedTableHead
-              classes={classes}
-              numSelected={selected.length}
-              order={order}
-              orderBy={orderBy}
-              onSelectAllClick={handleSelectAllClick}
-              onRequestSort={handleRequestSort}
-              onTagClick={handleTagClick}
-              rowCount={props.orders.length}
-              mappingFields={props.mappingFields}
-              miraklHeaders={props.miraklHeaders}
-              orders={props.orders}
-            />
-            <TableBody>
-              {stableSort(props.orders, getComparator(order, orderBy))
-                .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                .map((row, index) => {
-                  const isItemSelected = isSelected(row['Order Id']);
-                  const labelId = `enhanced-table-checkbox-${index}`;
+      {
+        props.loadingOrders ? (
+          <React.Fragment>
+            <Skeleton animation="wave" height={60} />
+            <Skeleton animation="wave" height={600} />
+          </React.Fragment>
+        ) : (
+          <React.Fragment>
+            <EnhancedTableToolbar mappingFields={props.mappingFields} formFields={props.formFields} docId={props.docId} submitMergeFields={props.submitMergeFields} allOrders={props.orders} selected={selected} numSelected={selected.length} />
+            <TableContainer>
+              <Table
+                className={classes.table}
+                aria-labelledby="tableTitle"
+                size={'small'}
+                aria-label="enhanced table"
+              >
+                <EnhancedTableHead
+                  classes={classes}
+                  numSelected={selected.length}
+                  order={order}
+                  orderBy={orderBy}
+                  onSelectAllClick={handleSelectAllClick}
+                  onRequestSort={handleRequestSort}
+                  onTagClick={handleTagClick}
+                  rowCount={props.orders.length}
+                  mappingFields={props.mappingFields}
+                  miraklHeaders={props.miraklHeaders}
+                  orders={props.orders}
+                />
+                <TableBody>
+                  {stableSort(props.orders, getComparator(order, orderBy))
+                    .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                    .map((row, index) => {
+                      const isItemSelected = isSelected(row['Order Id']);
+                      const labelId = `enhanced-table-checkbox-${index}`;
 
-                  return (
-                    <TableRow
-                      hover
-                      onClick={(event) => handleClick(event, row['Order Id'])}
-                      role="checkbox"
-                      aria-checked={isItemSelected}
-                      tabIndex={-1}
-                      key={'row-'+index.toString()}
-                      selected={isItemSelected}
-                    >
-                      <TableCell padding="checkbox">
-                        <Checkbox
-                          checked={isItemSelected}
-                          inputProps={{ 'aria-labelledby': labelId }}
-                        />
-                      </TableCell>
-                      {
-                        props.miraklHeaders.map((header,index) => {
-                          return <TableCell key={'cell-'+ index.toString()} align="center" style={props.mappingFields[header] ? props.mappingFields[header].column_mapping ? {color: 'green', backgroundColor: '#00ff002b'} : {} : {}}>{!!row[header] ? (typeof row[header] === 'object' ? 'Click for details...'  : row[header]) : ''}</TableCell>
-                        })
-                      }
+                      return (
+                        <TableRow
+                          hover
+                          onClick={(event) => handleClick(event, row['Order Id'])}
+                          role="checkbox"
+                          aria-checked={isItemSelected}
+                          tabIndex={-1}
+                          key={'row-'+index.toString()}
+                          selected={isItemSelected}
+                        >
+                          <TableCell padding="checkbox">
+                            <Checkbox
+                              checked={isItemSelected}
+                              inputProps={{ 'aria-labelledby': labelId }}
+                            />
+                          </TableCell>
+                          {
+                            props.miraklHeaders.map((header,index) => {
+                              return <TableCell key={'cell-'+ index.toString()} align="center" style={props.mappingFields[header] ? props.mappingFields[header].column_mapping ? {color: 'green', backgroundColor: '#00ff002b'} : {} : {}}>{!!row[header] ? (typeof row[header] === 'object' ? 'Click for details...'  : row[header]) : ''}</TableCell>
+                            })
+                          }
+                        </TableRow>
+                      );
+                    })}
+                  {emptyRows > 0 && (
+                    <TableRow style={{ height: (dense ? 33 : 53) * emptyRows }}>
+                      <TableCell colSpan={6} />
                     </TableRow>
-                  );
-                })}
-              {emptyRows > 0 && (
-                <TableRow style={{ height: (dense ? 33 : 53) * emptyRows }}>
-                  <TableCell colSpan={6} />
-                </TableRow>
-              )}
-            </TableBody>
-          </Table>
-        </TableContainer>
-        <TablePagination
-          rowsPerPageOptions={[5, 10, 25,100,500]}
-          component="div"
-          count={props.orders.length}
-          rowsPerPage={rowsPerPage}
-          page={page}
-          onChangePage={handleChangePage}
-          onChangeRowsPerPage={handleChangeRowsPerPage}
-        />
+                  )}
+                </TableBody>
+              </Table>
+            </TableContainer>
+          <TablePagination
+            rowsPerPageOptions={[5, 10, 25,100,500]}
+            component="div"
+            count={props.orders.length}
+            rowsPerPage={rowsPerPage}
+            page={page}
+            onChangePage={handleChangePage}
+            onChangeRowsPerPage={handleChangeRowsPerPage}
+          />
+        </React.Fragment>
+        )
+      }
+        
       </Paper>
     </div>
   );

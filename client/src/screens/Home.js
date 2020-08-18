@@ -10,6 +10,9 @@ import FileSelect from './FileSelect'
 import ToastMessage from '../components/ToastMessage'
 import GlobalModal from '../components/GlobalModal'
 import NavHamburger from '../components/NavHamburger'
+import TextField from '@material-ui/core/TextField';
+import Button from '../components/Button';
+import ApiManagement from './ApiManagement';
 
 
 function Index(props) {
@@ -25,7 +28,7 @@ function Index(props) {
           <AppFooter />
         </React.Fragment>
       );
-    case 'fileSelect': 
+    case 'fileMerge': 
       return ( <React.Fragment>
         <div style={{minHeight: '100%'}}>
           <AppAppBar />
@@ -36,6 +39,28 @@ function Index(props) {
           <AppFooter />
         </React.Fragment>
       );
+    case 'apiconfiguration': 
+      return ( <React.Fragment>
+        <div style={{minHeight: '100%'}}>
+          <AppAppBar />
+          <ApiManagement/>
+          <ToastMessage />
+          <GlobalModal/>
+          </div>
+          <AppFooter />
+        </React.Fragment>
+      );
+    case '404':
+    return ( <React.Fragment>
+      <div style={{minHeight: '100%'}}>
+        <AppAppBar />
+        {'404 Not Found'}
+        <ToastMessage />
+        <GlobalModal/>
+        </div>
+        <AppFooter />
+      </React.Fragment>
+    );
     default: 
       return (<React.Fragment>
         <div style={{minHeight: '100%'}}>

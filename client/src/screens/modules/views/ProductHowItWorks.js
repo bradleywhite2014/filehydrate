@@ -114,7 +114,7 @@ function ProductHowItWorks(props) {
           size="large"
           variant="contained"
           style={{marginBottom: 15}} 
-          href="/fileSelect"
+          href="/fileMerge"
           disabled={props.state.authState !== 'VALID'}
         >
           {props.state.authState !== 'VALID' ? 'Please login first...' : 'Get started'}

@@ -15,6 +15,7 @@ import {
     CHANGE_MERGE_STYLE,
     UPDATE_MIRAKL_TOKEN,
     UPDATE_MIRAKL_URL,
+    SEARCH_MIRAKL_ORDERS,
     SEARCH_MIRAKL_ORDERS_SUCCESS,
     LOGIN_PENDING,
     PARSE_TOKENS_FROM_URL,
@@ -46,6 +47,7 @@ import {convertMergeFieldsToFormFields, convertGoogleFileResponseToAutocompleteF
         fileList: [],
         messages: [],
         loadingFields: false,
+        loadingOrders: false,
         mergeStyle: "manual",
         miraklApiToken: "",
         miraklUrlHost: "",
@@ -204,6 +206,11 @@ const reducer = (state = initialState, action) => {
             miraklUrlHost: newUrlValue
         })
       }
+      case SEARCH_MIRAKL_ORDERS: {
+        return Object.assign({}, state, {
+            loadingOrders: true
+        })
+      }
       case SEARCH_MIRAKL_ORDERS_SUCCESS: {
         const resp = action.payload
         const orderList = mapMiraklOrders(resp);
@@ -216,7 +223,8 @@ const reducer = (state = initialState, action) => {
             miraklOrders: orderList,
             tableList,
             miraklHeaders: headers,
-            mappingFields: convertResultsToMappingFields(tableList)
+            mappingFields: convertResultsToMappingFields(tableList),
+            loadingOrders: false
         })
       }
       case LOAD_USER_TEMPLATE_FOR_FILE_SUCCESS: {
