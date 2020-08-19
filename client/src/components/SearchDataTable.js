@@ -20,6 +20,11 @@ import DeleteIcon from '@material-ui/icons/Delete';
 import FilterListIcon from '@material-ui/icons/FilterList';
 import LabelTwoToneIcon from '@material-ui/icons/LabelTwoTone';
 import ListAltTwoToneIcon from '@material-ui/icons/ListAltTwoTone';
+import RefreshIcon from '@material-ui/icons/Refresh';
+import SaveIcon from '@material-ui/icons/Save';
+import SystemUpdateAltIcon from '@material-ui/icons/SystemUpdateAlt';
+import Tooltip from '@material-ui/core/Tooltip';
+import CircularProgress from '@material-ui/core/CircularProgress';
 import Button from './Button';
 import _ from 'underscore'
 import TagModal from './TagModal';
@@ -146,7 +151,7 @@ const useToolbarStyles = makeStyles((theme) => ({
 
 const EnhancedTableToolbar = (props) => {
   const classes = useToolbarStyles();
-  const { allOrders, docId, selected, submitMergeFields, numSelected, formFields, mappingFields } = props;
+  const { allOrders, docId, selected, submitMergeFields, numSelected, formFields, mappingFields, triggerRefresh, triggerLoadTemplate, triggerSaveTemplate , isLoadingTemplate} = props;
 
   const onClickMerge = (docId, allOrders, selected, formFields, mappingFields) => {
     if(selected.length < 11){
@@ -204,13 +209,23 @@ const EnhancedTableToolbar = (props) => {
        </Button>  
      </React.Fragment>
       ) : (
-        
-        <Typography className={classes.title} variant="h6" id="tableTitle" component="div">
-          Files
-        </Typography>
-       
-       
-      
+        isLoadingTemplate ?
+        <CircularProgress />
+       :
+       <>
+       <Typography className={classes.title} variant="h6" id="tableTitle" component="div">
+         Files
+       </Typography>
+       <Tooltip title={'Refresh'}>
+         <RefreshIcon style={{cursor: 'pointer', marginRight: '8px'}} onClick={triggerRefresh}/>
+       </Tooltip>
+       <Tooltip title={'Save Mappings'}>
+         <SaveIcon style={{cursor: 'pointer', marginRight: '8px'}} onClick={triggerSaveTemplate}/>
+       </Tooltip>
+       <Tooltip title={'Load Mappings'}>
+         <SystemUpdateAltIcon style={{cursor: 'pointer', marginRight: '8px'}} onClick={triggerLoadTemplate}/>
+       </Tooltip>
+      </>
       )}
     </Toolbar>
   );
@@ -313,15 +328,8 @@ export default function SearchDataTable(props) {
   return (
     <div className={classes.root}>
       <Paper className={classes.paper}>
-      {
-        props.loadingOrders ? (
           <React.Fragment>
-            <Skeleton animation="wave" height={60} />
-            <Skeleton animation="wave" height={600} />
-          </React.Fragment>
-        ) : (
-          <React.Fragment>
-            <EnhancedTableToolbar mappingFields={props.mappingFields} formFields={props.formFields} docId={props.docId} submitMergeFields={props.submitMergeFields} allOrders={props.orders} selected={selected} numSelected={selected.length} />
+            <EnhancedTableToolbar isLoadingTemplate={props.isLoadingTemplate} triggerLoadTemplate={props.triggerLoadTemplate} triggerSaveTemplate={props.triggerSaveTemplate} triggerRefresh={props.triggerRefresh} mappingFields={props.mappingFields} formFields={props.formFields} docId={props.docId} submitMergeFields={props.submitMergeFields} allOrders={props.orders} selected={selected} numSelected={selected.length} />
             <TableContainer>
               <Table
                 className={classes.table}
@@ -390,10 +398,7 @@ export default function SearchDataTable(props) {
             onChangePage={handleChangePage}
             onChangeRowsPerPage={handleChangeRowsPerPage}
           />
-        </React.Fragment>
-        )
-      }
-        
+        </React.Fragment>        
       </Paper>
     </div>
   );

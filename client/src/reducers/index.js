@@ -26,7 +26,10 @@ import {
     CLEAR_GLOBAL_MODAL_INFO,
     ON_TAG_CLICK,
     ON_TAG_CHECK_CLICK,
-    LOAD_USER_TEMPLATE_FOR_FILE_SUCCESS
+    LOAD_USER_TEMPLATE_FOR_FILE_SUCCESS,
+    LOAD_USER_TEMPLATE_FOR_FILE,
+    SUBMIT_USER_TEMPLATE,
+    SUBMIT_USER_TEMPLATE_SUCCESS
   } from '../utils/constants'
 
 import _ from 'underscore';
@@ -48,6 +51,7 @@ import {convertMergeFieldsToFormFields, convertGoogleFileResponseToAutocompleteF
         messages: [],
         loadingFields: false,
         loadingOrders: false,
+        loadingTemplate: false,
         mergeStyle: "manual",
         miraklApiToken: "",
         miraklUrlHost: "",
@@ -227,11 +231,28 @@ const reducer = (state = initialState, action) => {
             loadingOrders: false
         })
       }
+      case LOAD_USER_TEMPLATE_FOR_FILE: {
+        return Object.assign({}, state, {
+            loadingTemplate: true
+        })
+      }
       case LOAD_USER_TEMPLATE_FOR_FILE_SUCCESS: {
         const resp = action.payload
         return Object.assign({}, state, {
             mappingFields: resp[state.docId],
-            formToMappingFields: convertMappingFieldsToForm(state.mappingFields)
+            formToMappingFields: convertMappingFieldsToForm(state.mappingFields),
+            loadingTemplate: false
+        })
+      }
+      case SUBMIT_USER_TEMPLATE: {
+        return Object.assign({}, state, {
+            loadingTemplate: true
+        })
+      }
+      case SUBMIT_USER_TEMPLATE_SUCCESS: {
+        const resp = action.payload
+        return Object.assign({}, state, {
+            loadingTemplate: false
         })
       }
       case ON_TAG_CLICK: {

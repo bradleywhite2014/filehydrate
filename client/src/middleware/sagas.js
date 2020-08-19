@@ -15,7 +15,7 @@ export function* fetchMergeFields({payload}) {
     const mergeFields = yield call(get, 'https://lipyjnw0f8.execute-api.us-east-2.amazonaws.com/main' + '?docId=' + payload + '&access_token=' + sessionStorage.getItem('accessToken'))
     
     if(mergeFields.error){
-      if(mergeFields.error.code === 401) {
+      if(mergeFields.error.code === 401 || mergeFields.error.code === 403) {
         //lets go a head and get logged out
         yield put(actions.logoutUser())
       }
@@ -57,7 +57,10 @@ export function* submitMergeFields({payload}) {
 export function* getMiraklTokenStatus({payload}) {
   try{
     const results = yield call(get,'https://fxr009j313.execute-api.us-east-2.amazonaws.com/main')
-    
+    if(results.Message){
+      //lambda error, not authorized
+      yield put(actions.logoutUser())
+    }
     if(results.error){
       if(results.error.code === 401 || results.error.code === 403) {
         //lets go a head and get logged out
@@ -147,7 +150,7 @@ export function* performFileSearch({payload}) {
       files = yield call(get, 'https://www.googleapis.com/drive/v3/files', sessionStorage.getItem('accessToken'))
     }
     if(files.error){
-      if(files.error.code === 401) {
+      if(files.error.code === 401 || results.error.code === 403) {
         //lets go a head and get logged out
         yield put(actions.logoutUser())
       }
@@ -165,12 +168,10 @@ export function* performFileSearch({payload}) {
 export function* performMiraklSearch({payload}) {
   try{
     var orders = [];
-
     orders = yield call(get,'https://6m5cadt7n1.execute-api.us-east-2.amazonaws.com/main')
     
-    //console.log(orders)
     if(orders.error){
-      if(orders.error.code === 401) {
+      if(orders.error.code === 401 || results.error.code === 403) {
         //lets go a head and get logged out
         yield put(actions.logoutUser())
       }

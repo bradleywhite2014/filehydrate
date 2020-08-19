@@ -124,7 +124,7 @@ class FileSelect extends Component {
     changeMergeStyle(event) {
       if(event.currentTarget.value === 'mirakl'){
         this.props.getMiraklTokenStatus();
-        if(this.props.state.storedMiraklTokens && this.props.state.docId && this.props.state.mergeStyle === 'mirakl'){
+        if(this.props.state.storedMiraklTokens && this.props.state.docId){
           this.props.searchMiraklOrders();
         }
       }
@@ -216,37 +216,16 @@ class FileSelect extends Component {
         </div>
         : this.props.state.docId && this.props.state.mergeStyle === 'mirakl' ?
           <div>
-            <Button
-            color="secondary"
-            size="large"
-            variant="contained"
-            style={{marginBottom: 15, marginRight: 15}} 
-            disabled={!this.props.state.storedMiraklTokens}
-            onClick={this.onSearchMirakl}
-          >
-            {'Refresh'}
-          </Button>  
-          <Button
-              color="secondary"
-              size="large"
-              variant="contained"
-              style={{marginBottom: 15, marginRight: 15}} 
-              onClick={this.onSaveTemplate}
-            >
-              {'Save Template'}
-            </Button>
-            <Button
-              color="secondary"
-              size="large"
-              variant="contained"
-              style={{marginBottom: 15, marginRight: 15}} 
-              onClick={this.onLoadTemplate}
-            >
-              {'Load Template'}
-            </Button>
+            {this.props.state.loadingOrders ? 
+              <React.Fragment>
+              <Skeleton animation="wave" height={60} />
+              <Skeleton animation="wave" height={600} />
+            </React.Fragment> : <React.Fragment/>
+            }
           {
             this.props.state.tableList && this.props.state.tableList.length > 0 ? 
-            <SearchDataTable loadingOrders={this.props.state.loadingOrders} miraklHeaders={this.props.state.miraklHeaders} onTagClick={this.props.onTagClick} formFields={this.props.state.formFields} mappingFields={this.props.state.mappingFields} docId={this.props.state.docId} submitMergeFields={this.props.submitMergeFields} orders={this.props.state.tableList} /> :
+            <SearchDataTable isLoadingTemplate={this.props.state.loadingTemplate} triggerLoadTemplate={() => this.props.loadUserTemplateForFile(this.props.state.docId)} triggerSaveTemplate={() => this.props.submitUserTemplate({userDetails: {docId: this.props.state.docId, formFields: this.props.state.mappingFields}})} triggerRefresh={this.props.searchMiraklOrders} loadingOrders={this.props.state.loadingOrders} miraklHeaders={this.props.state.miraklHeaders} onTagClick={this.props.onTagClick} formFields={this.props.state.formFields} mappingFields={this.props.state.mappingFields} docId={this.props.state.docId} submitMergeFields={this.props.submitMergeFields} orders={this.props.state.tableList} />
+            :
             <React.Fragment />
           }  
           </div>
