@@ -108,6 +108,9 @@ class FileSelect extends Component {
     selectFile(event, inputValue, reason) {
       if(reason === 'select-option') {
         this.props.setFileId(inputValue.value);
+        if(this.props.state.storedMiraklTokens){
+          this.props.searchMiraklOrders(inputValue.value);
+        }
         this.props.fetchMergeFields(inputValue.value);
 
         ReactGA.event({
