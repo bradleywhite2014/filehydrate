@@ -63,13 +63,17 @@ function EnhancedTableHead(props) {
     return {id: lbl, numeric: false, disablePadding: false, label: lbl}
   })
 
-  const { classes, onSelectAllClick, order, orderBy, numSelected, rowCount, onRequestSort, onTagClick } = props;
+  const { classes, onSelectAllClick, order, orders, orderBy, numSelected, rowCount, onRequestSort, onTagClick } = props;
   const createSortHandler = (property) => (event) => {
     onRequestSort(event, property);
   };
 
   const headerTagClick = (property) => (event) => {
     onTagClick(event, property);
+  }
+
+  const renderColumnIcon = (mappingFields, headCell, orders) => {
+
   }
 
   return (
@@ -90,7 +94,7 @@ function EnhancedTableHead(props) {
             padding={headCell.disablePadding ? 'none' : 'default'}
             sortDirection={orderBy === headCell.id ? order : false}
             style={props.mappingFields[headCell.id].column_mapping ? {color: 'green', backgroundColor: '#00ff002b', borderTopLeftRadius: '25px', borderTopRightRadius: '25px'} : {}}
-          >
+          > 
             {props.mappingFields[headCell.id].open_tag ? (
               <React.Fragment>
                 <TagModal header={headCell.id} mappingFields={props.mappingFields}/>
@@ -375,7 +379,7 @@ export default function SearchDataTable(props) {
                           </TableCell>
                           {
                             props.miraklHeaders.map((header,index) => {
-                              return <TableCell key={'cell-'+ index.toString()} align="center" style={props.mappingFields[header] ? props.mappingFields[header].column_mapping ? {color: 'green', backgroundColor: '#00ff002b'} : {} : {}}>{!!row[header] ? (typeof row[header] === 'object' ? 'Click for details...'  : row[header]) : ''}</TableCell>
+                              return <TableCell key={'cell-'+ index.toString()} align="center" style={props.mappingFields[header] ? props.mappingFields[header].column_mapping ? {color: 'green', backgroundColor: '#00ff002b'} : {} : {}}>{!!row[header] ? (Array.isArray(row[header]) ? row[header] : (typeof row[header] === 'object' ? 'Click header details...'  : row[header])) : ''}</TableCell>
                             })
                           }
                         </TableRow>
