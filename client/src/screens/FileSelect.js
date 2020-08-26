@@ -7,7 +7,7 @@ import TextField from '@material-ui/core/TextField';
 import Typography from '../components/Typography';
 import Toolbar, { styles as toolbarStyles } from '../components/Toolbar';
 import { connect } from 'react-redux'
-import { setFileId, performFileSearch, fetchMergeFields , changeMergeStyle, getMiraklTokenStatus, searchMiraklOrders, submitMergeFields,submitUserTemplate, loadUserTemplateForFile, setModalInfo,showModal, onTagClick} from './../lib/actions'
+import { setFileId, performFileSearch, fetchMergeFields , changeMergeStyle, getMiraklTokenStatus, searchMiraklOrders, submitMergeFields,submitUserTemplate, loadUserTemplateForFile, setModalInfo,showModal, onTagClick, onTableClick} from './../lib/actions'
 import ProductHeroLayout from './modules/views/ProductHeroLayout';
 import Grid from '@material-ui/core/Grid';
 import Container from '@material-ui/core/Container';
@@ -227,7 +227,7 @@ class FileSelect extends Component {
             }
           {
             this.props.state.tableList && this.props.state.tableList.length > 0 ? 
-            <SearchDataTable isLoadingTemplate={this.props.state.loadingTemplate} triggerLoadTemplate={() => this.props.loadUserTemplateForFile(this.props.state.docId)} triggerSaveTemplate={() => this.props.submitUserTemplate({userDetails: {docId: this.props.state.docId, formFields: this.props.state.mappingFields}})} triggerRefresh={this.props.searchMiraklOrders} loadingOrders={this.props.state.loadingOrders} miraklHeaders={this.props.state.miraklHeaders} onTagClick={this.props.onTagClick} formFields={this.props.state.formFields} mappingFields={this.props.state.mappingFields} docId={this.props.state.docId} submitMergeFields={this.props.submitMergeFields} orders={this.props.state.tableList} />
+            <SearchDataTable isLoadingTemplate={this.props.state.loadingTemplate} triggerLoadTemplate={() => this.props.loadUserTemplateForFile(this.props.state.docId)} triggerSaveTemplate={() => this.props.submitUserTemplate({userDetails: {docId: this.props.state.docId, formFields: this.props.state.mappingFields}})} triggerRefresh={this.props.searchMiraklOrders} loadingOrders={this.props.state.loadingOrders} miraklHeaders={this.props.state.miraklHeaders} onTagClick={this.props.onTagClick} onTableClick={this.props.onTableClick} formFields={this.props.state.formFields} mappingFields={this.props.state.mappingFields} docId={this.props.state.docId} submitMergeFields={this.props.submitMergeFields} tableList={this.props.state.tableList} />
             :
             <React.Fragment />
           }  
@@ -254,6 +254,18 @@ export default connect((state) => (
     state: state
   }
 ),
-  { setFileId , performFileSearch, fetchMergeFields, changeMergeStyle, getMiraklTokenStatus, searchMiraklOrders, submitMergeFields,submitUserTemplate, loadUserTemplateForFile, setModalInfo,showModal, onTagClick}
+  { setFileId,
+    performFileSearch,
+    fetchMergeFields,
+    changeMergeStyle,
+    getMiraklTokenStatus,
+    searchMiraklOrders,
+    submitMergeFields,submitUserTemplate,
+    loadUserTemplateForFile,
+    setModalInfo,
+    showModal,
+    onTagClick,
+    onTableClick
+  }
 )
 (withStyles(styles)(FileSelect));

@@ -13,6 +13,7 @@ import NavHamburger from '../components/NavHamburger'
 import TextField from '@material-ui/core/TextField';
 import Button from '../components/Button';
 import ApiManagement from './ApiManagement';
+import DataTableModal from '../components/DataTableModal';
 
 
 function Index(props) {
@@ -24,6 +25,7 @@ function Index(props) {
           <Merge />
           <ToastMessage />
           <GlobalModal/>
+          <DataTableModal/>
         </div>
           <AppFooter />
         </React.Fragment>
@@ -35,6 +37,7 @@ function Index(props) {
           <FileSelect />
           <ToastMessage />
           <GlobalModal/>
+          <DataTableModal/>
           </div>
           <AppFooter />
         </React.Fragment>
@@ -69,6 +72,7 @@ function Index(props) {
         <ProductHowItWorks />
         <ToastMessage />
         <GlobalModal/>
+        <DataTableModal/>
         <AppFooter />
         </div>
       </React.Fragment>

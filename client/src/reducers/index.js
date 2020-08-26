@@ -26,12 +26,15 @@ import {
     CLEAR_GLOBAL_MODAL_INFO,
     ON_TAG_CLICK,
     ON_TAG_CHECK_CLICK,
+    ON_TABLE_CLICK,
     LOAD_USER_TEMPLATE_FOR_FILE_SUCCESS,
     LOAD_USER_TEMPLATE_FOR_FILE,
     SUBMIT_USER_TEMPLATE,
-    SUBMIT_USER_TEMPLATE_SUCCESS
+    SUBMIT_USER_TEMPLATE_SUCCESS,
+    HIDE_DATA_MODAL
   } from '../utils/constants'
 
+  import SearchDataTable from '../components/SearchDataTable'
 import _ from 'underscore';
 
 import {convertMergeFieldsToFormFields, convertGoogleFileResponseToAutocompleteFields, genMsgId, parseTokenFromUrl, parseJwt, convertResultsToMappingFields, convertMappingFieldsToForm, convertSnakedObjectToLabels} from '../utils/index'
@@ -57,6 +60,9 @@ import {convertMergeFieldsToFormFields, convertGoogleFileResponseToAutocompleteF
         miraklUrlHost: "",
         miraklOrders: [],
         tableList: [],
+        modalTableListKey: '',
+        modalTableHeaders: [],
+        modalTableList: [],
         authState: 'PENDING',
         userPhotoUrl: '',
         storedMiraklTokens: false,
@@ -130,6 +136,23 @@ const reducer = (state = initialState, action) => {
                 title: '',
                 content: ''
             }
+        })
+      }
+      case ON_TABLE_CLICK: {
+        const field = action.payload
+        let modalTableList = state.tableList.map((tableItem) => {
+            return tableItem[field]
+        })
+        let headers = modalTableList.length > 0 ? Object.keys(modalTableList[0]) : []
+        return Object.assign({}, state, {
+            modalTableListKey: field,
+            modalTableHeaders: headers,
+            modalTableList: modalTableList
+        })
+      }
+      case HIDE_DATA_MODAL: {
+        return Object.assign({}, state, {
+            modalTableListKey: ''
         })
       }
       case FETCH_MERGE_FIELDS: {

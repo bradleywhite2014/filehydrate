@@ -20,6 +20,8 @@ import DeleteIcon from '@material-ui/icons/Delete';
 import FilterListIcon from '@material-ui/icons/FilterList';
 import LabelTwoToneIcon from '@material-ui/icons/LabelTwoTone';
 import ListAltTwoToneIcon from '@material-ui/icons/ListAltTwoTone';
+import EventNoteIcon from '@material-ui/icons/EventNote';
+import ZoomInIcon from '@material-ui/icons/ZoomIn';
 import RefreshIcon from '@material-ui/icons/Refresh';
 import SaveIcon from '@material-ui/icons/Save';
 import SystemUpdateAltIcon from '@material-ui/icons/SystemUpdateAlt';
@@ -63,7 +65,7 @@ function EnhancedTableHead(props) {
     return {id: lbl, numeric: false, disablePadding: false, label: lbl}
   })
 
-  const { classes, onSelectAllClick, order, orders, orderBy, numSelected, rowCount, onRequestSort, onTagClick } = props;
+  const { classes, onSelectAllClick, order, tableList, orderBy, numSelected, rowCount, onRequestSort, onTagClick, onTableClick } = props;
   const createSortHandler = (property) => (event) => {
     onRequestSort(event, property);
   };
@@ -72,8 +74,25 @@ function EnhancedTableHead(props) {
     onTagClick(event, property);
   }
 
-  const renderColumnIcon = (mappingFields, headCell, orders) => {
+  const headerTableClick = (property) => (event) => {
+    onTableClick(event,property);
+  }
 
+  const renderColumnIcon = (mappingFields, headCell, tableList) => {
+    if(tableList.length > 0){
+      if(Array.isArray(tableList[0][headCell.id]) && tableList[0][headCell.id].length > 0 && (!Array.isArray(tableList[0][headCell.id][0]) && typeof tableList[0][headCell.id][0] === 'object')){
+        //if this column holds lists of objects, then we can display it as a table.. show table icon
+        return <EventNoteIcon onClick={headerTableClick(headCell.id)} style={{transform: `translate(${-22}px`, cursor: 'pointer' }}/>
+      }
+    }
+    //if we dont catch early with the table check, just check if its green or not
+    return mappingFields[headCell.id].open_tag ? (
+      <React.Fragment>
+        <TagModal header={headCell.id} mappingFields={mappingFields}/>
+        <LabelTwoToneIcon onClick={headerTagClick(headCell.id)} style={{color: 'green', transform: `translate(${-22}px`, cursor: 'pointer' }}/>
+      </React.Fragment>
+    ) : 
+      <LabelTwoToneIcon onClick={headerTagClick(headCell.id)} style={{transform: `translate(${-22}px`, cursor: 'pointer' }}/>
   }
 
   return (
@@ -95,13 +114,8 @@ function EnhancedTableHead(props) {
             sortDirection={orderBy === headCell.id ? order : false}
             style={props.mappingFields[headCell.id].column_mapping ? {color: 'green', backgroundColor: '#00ff002b', borderTopLeftRadius: '25px', borderTopRightRadius: '25px'} : {}}
           > 
-            {props.mappingFields[headCell.id].open_tag ? (
-              <React.Fragment>
-                <TagModal header={headCell.id} mappingFields={props.mappingFields}/>
-                <LabelTwoToneIcon onClick={headerTagClick(headCell.id)} style={{color: 'green', transform: `translate(${-22}px`, cursor: 'pointer' }}/>
-              </React.Fragment>
-            ) : 
-              <LabelTwoToneIcon onClick={headerTagClick(headCell.id)} style={{transform: `translate(${-22}px`, cursor: 'pointer' }}/>
+            {
+              renderColumnIcon(props.mappingFields,headCell,props.tableList)
             }
             <TableSortLabel
               active={orderBy === headCell.id}
@@ -155,11 +169,11 @@ const useToolbarStyles = makeStyles((theme) => ({
 
 const EnhancedTableToolbar = (props) => {
   const classes = useToolbarStyles();
-  const { allOrders, docId, selected, submitMergeFields, numSelected, formFields, mappingFields, triggerRefresh, triggerLoadTemplate, triggerSaveTemplate , isLoadingTemplate} = props;
+  const { tableList, docId, selected, submitMergeFields, numSelected, formFields, mappingFields, triggerRefresh, triggerLoadTemplate, triggerSaveTemplate , isLoadingTemplate} = props;
 
-  const onClickMerge = (docId, allOrders, selected, formFields, mappingFields) => {
+  const onClickMerge = (docId, tableList, selected, formFields, mappingFields) => {
     if(selected.length < 11){
-    const ordersToMerge = allOrders.filter((order) => {
+    const ordersToMerge = tableList.filter((order) => {
       return selected.indexOf(order['Order Id']) !== -1
     })
     //TODO: clean this mess up
@@ -207,7 +221,7 @@ const EnhancedTableToolbar = (props) => {
          size="large"
          variant="contained"
          style={{marginBottom: 15,marginTop: 15,marginRight: 15}} 
-         onClick={() => onClickMerge(docId, allOrders, selected,formFields,mappingFields)}
+         onClick={() => onClickMerge(docId, tableList, selected,formFields,mappingFields)}
        >
          {'Merge'}
        </Button>  
@@ -283,9 +297,13 @@ export default function SearchDataTable(props) {
     props.onTagClick(property);
   }
 
+  const handleTableClick = (event, property) => {
+    props.onTableClick(property);
+  }
+
   const handleSelectAllClick = (event) => {
     if (event.target.checked) {
-      const newSelecteds = props.orders.map((n) => n['Order ID']);
+      const newSelecteds = props.tableList.map((n) => n['Order ID']);
       setSelected(newSelecteds);
       return;
     }
@@ -327,13 +345,13 @@ export default function SearchDataTable(props) {
 
   const isSelected = (name) => selected.indexOf(name) !== -1;
 
-  const emptyRows = rowsPerPage - Math.min(rowsPerPage, props.orders.length - page * rowsPerPage);
+  const emptyRows = rowsPerPage - Math.min(rowsPerPage, props.tableList.length - page * rowsPerPage);
 
   return (
     <div className={classes.root}>
       <Paper className={classes.paper}>
           <React.Fragment>
-            <EnhancedTableToolbar isLoadingTemplate={props.isLoadingTemplate} triggerLoadTemplate={props.triggerLoadTemplate} triggerSaveTemplate={props.triggerSaveTemplate} triggerRefresh={props.triggerRefresh} mappingFields={props.mappingFields} formFields={props.formFields} docId={props.docId} submitMergeFields={props.submitMergeFields} allOrders={props.orders} selected={selected} numSelected={selected.length} />
+            <EnhancedTableToolbar isLoadingTemplate={props.isLoadingTemplate} triggerLoadTemplate={props.triggerLoadTemplate} triggerSaveTemplate={props.triggerSaveTemplate} triggerRefresh={props.triggerRefresh} mappingFields={props.mappingFields} formFields={props.formFields} docId={props.docId} submitMergeFields={props.submitMergeFields} tableList={props.tableList} selected={selected} numSelected={selected.length} />
             <TableContainer>
               <Table
                 className={classes.table}
@@ -349,13 +367,14 @@ export default function SearchDataTable(props) {
                   onSelectAllClick={handleSelectAllClick}
                   onRequestSort={handleRequestSort}
                   onTagClick={handleTagClick}
-                  rowCount={props.orders.length}
+                  onTableClick={handleTableClick}
+                  rowCount={props.tableList.length}
                   mappingFields={props.mappingFields}
                   miraklHeaders={props.miraklHeaders}
-                  orders={props.orders}
+                  tableList={props.tableList}
                 />
                 <TableBody>
-                  {stableSort(props.orders, getComparator(order, orderBy))
+                  {stableSort(props.tableList, getComparator(order, orderBy))
                     .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                     .map((row, index) => {
                       const isItemSelected = isSelected(row['Order Id']);
@@ -379,7 +398,17 @@ export default function SearchDataTable(props) {
                           </TableCell>
                           {
                             props.miraklHeaders.map((header,index) => {
-                              return <TableCell key={'cell-'+ index.toString()} align="center" style={props.mappingFields[header] ? props.mappingFields[header].column_mapping ? {color: 'green', backgroundColor: '#00ff002b'} : {} : {}}>{!!row[header] ? (typeof row[header] === 'object' ? 'Click for details...'  : row[header]) : ''}</TableCell>
+                              return <TableCell 
+                                key={'cell-'+ index.toString()}
+                                align="center"
+                                style={
+                                  props.mappingFields[header] ? 
+                                    (props.mappingFields[header].column_mapping 
+                                      ? {color: 'green', backgroundColor: '#00ff002b'} : {}) : {}}
+                                      >
+                                {!!row[header] ? 
+                                  ((Array.isArray(row[header]) && typeof row[header][0] !== 'object') ? row[header].toString() : (typeof row[header] === 'object' ? <div style={{display: 'flex', cursor: 'pointer'}}><ZoomInIcon/>Expand</div>: row[header])) : ''}
+                              </TableCell>
                             })
                           }
                         </TableRow>
@@ -396,7 +425,7 @@ export default function SearchDataTable(props) {
           <TablePagination
             rowsPerPageOptions={[5, 10, 25,100,500]}
             component="div"
-            count={props.orders.length}
+            count={props.tableList.length}
             rowsPerPage={rowsPerPage}
             page={page}
             onChangePage={handleChangePage}

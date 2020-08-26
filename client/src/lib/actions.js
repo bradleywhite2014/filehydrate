@@ -16,6 +16,7 @@ export const changeMergeStyle = (payload) => ({type: constants.CHANGE_MERGE_STYL
 export const updateMiraklToken = (payload) => ({type: constants.UPDATE_MIRAKL_TOKEN, payload});
 export const updateMiraklUrl = (payload) => ({type: constants.UPDATE_MIRAKL_URL, payload});
 export const onTagClick = (payload) => ({type: constants.ON_TAG_CLICK, payload});
+export const onTableClick = (payload) => ({type: constants.ON_TABLE_CLICK, payload});
 export const onCheckClick = (payload) => ({type: constants.ON_TAG_CHECK_CLICK, payload});
 
 
@@ -47,4 +48,7 @@ export const showModal = (payload)  => ({type: constants.SHOW_GLOBAL_MODAL, payl
 export const hideModal = (payload)  => ({type: constants.HIDE_GLOBAL_MODAL, payload});
 export const setModalInfo = (payload)  => ({type: constants.SET_GLOBAL_MODAL_INFO, payload});
 export const clearModalInfo = (payload)  => ({type: constants.CLEAR_GLOBAL_MODAL_INFO, payload});
+
+//data modal
+export const hideDataModal = (payload) => ({type: constants.HIDE_DATA_MODAL, payload});
 
