@@ -135,7 +135,6 @@ export const convertSnakedObjectToLabels = (snakedObj, prevKey) => {
         // array must come before obj, because an array is an obj in js
         if(Array.isArray(snakedObj[key])){
           //if we have a list or obj, keep going
-          console.log('do we hit this')
           let tempVal = snakedObj[key];
           delete snakedObj[key];
           snakedObj[convertSnakeKeyToLabel(key)] = convertSnakedObjectToLabels(tempVal);

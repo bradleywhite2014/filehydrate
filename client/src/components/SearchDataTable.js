@@ -379,7 +379,7 @@ export default function SearchDataTable(props) {
                           </TableCell>
                           {
                             props.miraklHeaders.map((header,index) => {
-                              return <TableCell key={'cell-'+ index.toString()} align="center" style={props.mappingFields[header] ? props.mappingFields[header].column_mapping ? {color: 'green', backgroundColor: '#00ff002b'} : {} : {}}>{!!row[header] ? (Array.isArray(row[header]) ? row[header] : (typeof row[header] === 'object' ? 'Click header details...'  : row[header])) : ''}</TableCell>
+                              return <TableCell key={'cell-'+ index.toString()} align="center" style={props.mappingFields[header] ? props.mappingFields[header].column_mapping ? {color: 'green', backgroundColor: '#00ff002b'} : {} : {}}>{!!row[header] ? (typeof row[header] === 'object' ? 'Click for details...'  : row[header]) : ''}</TableCell>
                             })
                           }
                         </TableRow>
