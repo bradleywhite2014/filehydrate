@@ -75,7 +75,7 @@ function EnhancedTableHead(props) {
   }
 
   const headerTableClick = (property) => (event) => {
-    onTableClick(event,property);
+    onTableClick(property, null);
   }
 
   const renderColumnIcon = (mappingFields, headCell, tableList, modalTableListKey) => {
@@ -86,7 +86,7 @@ function EnhancedTableHead(props) {
       }
     }
     //if we dont catch early with the table check, just check if its green or not
-    if(modalTableListKey){
+    if(modalTableListKey && mappingFields[modalTableListKey] && mappingFields[modalTableListKey][headCell.id]){
       return mappingFields[modalTableListKey][headCell.id].open_tag ? (
         <React.Fragment>
           <TagModal header={headCell.id} mappingFields={mappingFields}/>
@@ -94,7 +94,7 @@ function EnhancedTableHead(props) {
         </React.Fragment>
       ) : 
         <LabelTwoToneIcon onClick={headerTagClick(headCell.id)} style={{transform: `translate(${-22}px`, cursor: 'pointer' }}/>
-    }else{
+    }else if(mappingFields[headCell.id]){
       return mappingFields[headCell.id].open_tag ? (
         <React.Fragment>
           <TagModal header={headCell.id} mappingFields={mappingFields}/>
@@ -102,6 +102,8 @@ function EnhancedTableHead(props) {
         </React.Fragment>
       ) : 
         <LabelTwoToneIcon onClick={headerTagClick(headCell.id)} style={{transform: `translate(${-22}px`, cursor: 'pointer' }}/>
+    }else{
+      <LabelTwoToneIcon onClick={headerTagClick(headCell.id)} style={{transform: `translate(${-22}px`, cursor: 'pointer' }}/>
     }
     
   }
@@ -318,8 +320,8 @@ export default function SearchDataTable(props) {
     props.onTagClick(property);
   }
 
-  const handleTableClick = (event, property) => {
-    props.onTableClick(property);
+  const handleTableClick = (property, index) => {
+    props.onTableClick({property, index});
   }
 
   const handleSelectAllClick = (event) => {
@@ -429,13 +431,13 @@ export default function SearchDataTable(props) {
                             />
                           </TableCell>
                           {
-                            props.miraklHeaders.map((header,index) => {
+                            props.miraklHeaders.map((header,headerIndex) => {
                               return <TableCell 
-                                key={'cell-'+ index.toString()}
+                                key={'cell-'+ headerIndex.toString()}
                                 align="center"
                                 style={renderIconStyle(header, props.mappingFields, props.modalTableListKey)}>
                                 {!!row[header] ? 
-                                  ((Array.isArray(row[header]) && typeof row[header][0] !== 'object') ? row[header].toString() : (typeof row[header] === 'object' ? <div style={{display: 'flex', cursor: 'pointer'}}><ZoomInIcon/>Expand</div>: row[header])) : ''}
+                                  ((Array.isArray(row[header]) && typeof row[header][0] !== 'object') ? row[header].toString() : (typeof row[header] === 'object' ? <div style={{display: 'flex', cursor: 'pointer'}}><ZoomInIcon onClick={() => handleTableClick(header, index)}/>Expand</div>: row[header])) : ''}
                               </TableCell>
                             })
                           }

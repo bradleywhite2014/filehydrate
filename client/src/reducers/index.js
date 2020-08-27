@@ -139,13 +139,11 @@ const reducer = (state = initialState, action) => {
         })
       }
       case ON_TABLE_CLICK: {
-        const field = action.payload
-        let modalTableList = state.tableList.map((tableItem) => {
-            return tableItem[field][0] // have to do this for it to render
-        })
-        let headers = modalTableList.length > 0 ? Object.keys(modalTableList[0]) : []
+        const {property, index} = action.payload
+        let modalTableList = state.tableList[index][property]
+        let headers = (modalTableList && modalTableList.length > 0) ? Object.keys(modalTableList[0]) : []
         return Object.assign({}, state, {
-            modalTableListKey: field,
+            modalTableListKey: property,
             modalTableHeaders: headers,
             modalTableList: modalTableList
         })
