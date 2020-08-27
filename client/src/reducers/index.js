@@ -140,6 +140,8 @@ const reducer = (state = initialState, action) => {
       }
       case ON_TABLE_CLICK: {
         const {property, index} = action.payload
+        //TODO: Instead of property always being a value off of the main tablelist,
+        //need to be able to click even further inside lists
         let modalTableList = state.tableList[index][property]
         let headers = (modalTableList && modalTableList.length > 0) ? Object.keys(modalTableList[0]) : []
         return Object.assign({}, state, {

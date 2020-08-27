@@ -30,7 +30,6 @@ import CircularProgress from '@material-ui/core/CircularProgress';
 import Button from './Button';
 import _ from 'underscore'
 import TagModal from './TagModal';
-import Skeleton from '@material-ui/lab/Skeleton';
 
 
 function descendingComparator(a, b, orderBy) {
