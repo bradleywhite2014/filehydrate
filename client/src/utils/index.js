@@ -181,8 +181,9 @@ export const convertResultsToMappingFields = (results) => {
     //TODO: FIX MAPPING FIELDS AND MODAL TABLE LIST - HAS A SUBARRAY?
     Object.keys(firstResult).forEach((field) => {
       if((Array.isArray(firstResult[field])) && typeof firstResult[field][0] === 'object'){
+        temp[field] = {}
         Object.keys(firstResult[field][0]).forEach((subField) => {
-          temp[field] = {
+          temp[field][subField] = {
             open_tag: false,
             column_mapping: ''
           }

@@ -226,8 +226,8 @@ class FileSelect extends Component {
             </React.Fragment> : <React.Fragment/>
             }
           {
-            this.props.state.tableList && this.props.state.tableList.length > 0 ? 
-            <SearchDataTable isLoadingTemplate={this.props.state.loadingTemplate} triggerLoadTemplate={() => this.props.loadUserTemplateForFile(this.props.state.docId)} triggerSaveTemplate={() => this.props.submitUserTemplate({userDetails: {docId: this.props.state.docId, formFields: this.props.state.mappingFields}})} triggerRefresh={this.props.searchMiraklOrders} loadingOrders={this.props.state.loadingOrders} miraklHeaders={this.props.state.miraklHeaders} onTagClick={this.props.onTagClick} onTableClick={this.props.onTableClick} formFields={this.props.state.formFields} mappingFields={this.props.state.mappingFields} docId={this.props.state.docId} submitMergeFields={this.props.submitMergeFields} tableList={this.props.state.tableList} />
+            this.props.state.tableList && this.props.state.tableList.length > 0 && !this.props.state.modalTableListKey ? 
+            <SearchDataTable modalTableListKey={this.props.state.modalTableListKey} isLoadingTemplate={this.props.state.loadingTemplate} triggerLoadTemplate={() => this.props.loadUserTemplateForFile(this.props.state.docId)} triggerSaveTemplate={() => this.props.submitUserTemplate({userDetails: {docId: this.props.state.docId, formFields: this.props.state.mappingFields}})} triggerRefresh={this.props.searchMiraklOrders} loadingOrders={this.props.state.loadingOrders} miraklHeaders={this.props.state.miraklHeaders} onTagClick={this.props.onTagClick} onTableClick={this.props.onTableClick} formFields={this.props.state.formFields} mappingFields={this.props.state.mappingFields} docId={this.props.state.docId} submitMergeFields={this.props.submitMergeFields} tableList={this.props.state.tableList} />
             :
             <React.Fragment />
           }  

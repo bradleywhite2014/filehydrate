@@ -23,7 +23,7 @@ class DataTableModal extends Component {
   render() {
     return this.props.state.modalTableListKey ? (
         <Modal
-          size="lg"
+          size="xl"
           aria-labelledby="contained-modal-title-vcenter"
           centered
           show={true}
@@ -34,7 +34,7 @@ class DataTableModal extends Component {
             </Modal.Title>
           </Modal.Header>
           <Modal.Body>
-              <SearchDataTable isLoadingTemplate={this.props.state.loadingTemplate} triggerLoadTemplate={() => this.props.loadUserTemplateForFile(this.props.state.docId)} triggerSaveTemplate={() => this.props.submitUserTemplate({userDetails: {docId: this.props.state.docId, formFields: this.props.state.mappingFields}})} triggerRefresh={this.props.searchMiraklOrders} loadingOrders={this.props.state.loadingOrders} miraklHeaders={this.props.state.modalTableHeaders} onTagClick={this.props.onTagClick} onTableClick={this.props.onTableClick} formFields={this.props.state.formFields} mappingFields={this.props.state.mappingFields} docId={this.props.state.docId} submitMergeFields={this.props.submitMergeFields} tableList={this.props.state.modalTableList} />
+              <SearchDataTable modalTableListKey={this.props.state.modalTableListKey} isLoadingTemplate={this.props.state.loadingTemplate} triggerLoadTemplate={() => this.props.loadUserTemplateForFile(this.props.state.docId)} triggerSaveTemplate={() => this.props.submitUserTemplate({userDetails: {docId: this.props.state.docId, formFields: this.props.state.mappingFields}})} triggerRefresh={this.props.searchMiraklOrders} loadingOrders={this.props.state.loadingOrders} miraklHeaders={this.props.state.modalTableHeaders} onTagClick={this.props.onTagClick} onTableClick={this.props.onTableClick} formFields={this.props.state.formFields} mappingFields={this.props.state.mappingFields} docId={this.props.state.docId} submitMergeFields={this.props.submitMergeFields} tableList={this.props.state.modalTableList} />
           </Modal.Body>
           <Modal.Footer>
             <Button onClick={this.onHide}>Close</Button>

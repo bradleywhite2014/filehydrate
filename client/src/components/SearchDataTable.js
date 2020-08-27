@@ -78,7 +78,7 @@ function EnhancedTableHead(props) {
     onTableClick(event,property);
   }
 
-  const renderColumnIcon = (mappingFields, headCell, tableList) => {
+  const renderColumnIcon = (mappingFields, headCell, tableList, modalTableListKey) => {
     if(tableList.length > 0){
       if(Array.isArray(tableList[0][headCell.id]) && tableList[0][headCell.id].length > 0 && (!Array.isArray(tableList[0][headCell.id][0]) && typeof tableList[0][headCell.id][0] === 'object')){
         //if this column holds lists of objects, then we can display it as a table.. show table icon
@@ -86,13 +86,34 @@ function EnhancedTableHead(props) {
       }
     }
     //if we dont catch early with the table check, just check if its green or not
-    return mappingFields[headCell.id].open_tag ? (
-      <React.Fragment>
-        <TagModal header={headCell.id} mappingFields={mappingFields}/>
-        <LabelTwoToneIcon onClick={headerTagClick(headCell.id)} style={{color: 'green', transform: `translate(${-22}px`, cursor: 'pointer' }}/>
-      </React.Fragment>
-    ) : 
-      <LabelTwoToneIcon onClick={headerTagClick(headCell.id)} style={{transform: `translate(${-22}px`, cursor: 'pointer' }}/>
+    if(modalTableListKey){
+      return mappingFields[modalTableListKey][headCell.id].open_tag ? (
+        <React.Fragment>
+          <TagModal header={headCell.id} mappingFields={mappingFields}/>
+          <LabelTwoToneIcon onClick={headerTagClick(headCell.id)} style={{color: 'green', transform: `translate(${-22}px`, cursor: 'pointer' }}/>
+        </React.Fragment>
+      ) : 
+        <LabelTwoToneIcon onClick={headerTagClick(headCell.id)} style={{transform: `translate(${-22}px`, cursor: 'pointer' }}/>
+    }else{
+      return mappingFields[headCell.id].open_tag ? (
+        <React.Fragment>
+          <TagModal header={headCell.id} mappingFields={mappingFields}/>
+          <LabelTwoToneIcon onClick={headerTagClick(headCell.id)} style={{color: 'green', transform: `translate(${-22}px`, cursor: 'pointer' }}/>
+        </React.Fragment>
+      ) : 
+        <LabelTwoToneIcon onClick={headerTagClick(headCell.id)} style={{transform: `translate(${-22}px`, cursor: 'pointer' }}/>
+    }
+    
+  }
+
+  const renderIconStyle = (header, mappingFields, modalTableListKey) => {
+    if(mappingFields[header] && modalTableListKey && mappingFields[header][modalTableListKey]){
+      return mappingFields[header][modalTableListKey].column_mapping ? {color: 'green', backgroundColor: '#00ff002b', borderTopLeftRadius: '25px', borderTopRightRadius: '25px'} : {}
+    }else if(!!mappingFields[header]){
+      return mappingFields[header].column_mapping ? {color: 'green', backgroundColor: '#00ff002b', borderTopLeftRadius: '25px', borderTopRightRadius: '25px'} : {}
+    }else{
+      return {};
+    }
   }
 
   return (
@@ -112,10 +133,10 @@ function EnhancedTableHead(props) {
             align={headCell.numeric ? 'right' : 'left'}
             padding={headCell.disablePadding ? 'none' : 'default'}
             sortDirection={orderBy === headCell.id ? order : false}
-            style={props.mappingFields[headCell.id].column_mapping ? {color: 'green', backgroundColor: '#00ff002b', borderTopLeftRadius: '25px', borderTopRightRadius: '25px'} : {}}
+            style={renderIconStyle(headCell.id, props.mappingFields, props.modalTableListKey)}
           > 
             {
-              renderColumnIcon(props.mappingFields,headCell,props.tableList)
+              renderColumnIcon(props.mappingFields,headCell,props.tableList,props.modalTableListKey)
             }
             <TableSortLabel
               active={orderBy === headCell.id}
@@ -169,7 +190,7 @@ const useToolbarStyles = makeStyles((theme) => ({
 
 const EnhancedTableToolbar = (props) => {
   const classes = useToolbarStyles();
-  const { tableList, docId, selected, submitMergeFields, numSelected, formFields, mappingFields, triggerRefresh, triggerLoadTemplate, triggerSaveTemplate , isLoadingTemplate} = props;
+  const { tableList, docId, selected, submitMergeFields, numSelected, formFields, mappingFields, triggerRefresh, triggerLoadTemplate, triggerSaveTemplate , isLoadingTemplate, modalTableListKey} = props;
 
   const onClickMerge = (docId, tableList, selected, formFields, mappingFields) => {
     if(selected.length < 11){
@@ -180,7 +201,7 @@ const EnhancedTableToolbar = (props) => {
     const findMappingValue = (order, mappingKey, mappingFields) => {
       let temp = ''
       Object.keys(mappingFields).forEach((field) => {
-        if(mappingFields[field].column_mapping === mappingKey){
+        if(modalTableListKey ? mappingFields[field][modalTableListKey].column_mapping === mappingKey : mappingFields[field].column_mapping === mappingKey){
           //if match, grab value for this row
           temp = order[field]
         }
@@ -343,6 +364,16 @@ export default function SearchDataTable(props) {
     setDense(event.target.checked);
   };
 
+  const renderIconStyle = (header, mappingFields, modalTableListKey) => {
+    if(mappingFields[header] && modalTableListKey && mappingFields[header][modalTableListKey]){
+      return mappingFields[header][modalTableListKey].column_mapping ? {color: 'green', backgroundColor: '#00ff002b'} : {}
+    }else if(!!mappingFields[header]){
+      return mappingFields[header].column_mapping ? {color: 'green', backgroundColor: '#00ff002b'} : {}
+    }else{
+      return {};
+    }
+  }
+
   const isSelected = (name) => selected.indexOf(name) !== -1;
 
   const emptyRows = rowsPerPage - Math.min(rowsPerPage, props.tableList.length - page * rowsPerPage);
@@ -351,7 +382,7 @@ export default function SearchDataTable(props) {
     <div className={classes.root}>
       <Paper className={classes.paper}>
           <React.Fragment>
-            <EnhancedTableToolbar isLoadingTemplate={props.isLoadingTemplate} triggerLoadTemplate={props.triggerLoadTemplate} triggerSaveTemplate={props.triggerSaveTemplate} triggerRefresh={props.triggerRefresh} mappingFields={props.mappingFields} formFields={props.formFields} docId={props.docId} submitMergeFields={props.submitMergeFields} tableList={props.tableList} selected={selected} numSelected={selected.length} />
+            <EnhancedTableToolbar modalTableListKey={props.modalTableListKey} isLoadingTemplate={props.isLoadingTemplate} triggerLoadTemplate={props.triggerLoadTemplate} triggerSaveTemplate={props.triggerSaveTemplate} triggerRefresh={props.triggerRefresh} mappingFields={props.mappingFields} formFields={props.formFields} docId={props.docId} submitMergeFields={props.submitMergeFields} tableList={props.tableList} selected={selected} numSelected={selected.length} />
             <TableContainer>
               <Table
                 className={classes.table}
@@ -372,6 +403,7 @@ export default function SearchDataTable(props) {
                   mappingFields={props.mappingFields}
                   miraklHeaders={props.miraklHeaders}
                   tableList={props.tableList}
+                  modalTableListKey={props.modalTableListKey}
                 />
                 <TableBody>
                   {stableSort(props.tableList, getComparator(order, orderBy))
@@ -401,11 +433,7 @@ export default function SearchDataTable(props) {
                               return <TableCell 
                                 key={'cell-'+ index.toString()}
                                 align="center"
-                                style={
-                                  props.mappingFields[header] ? 
-                                    (props.mappingFields[header].column_mapping 
-                                      ? {color: 'green', backgroundColor: '#00ff002b'} : {}) : {}}
-                                      >
+                                style={renderIconStyle(header, props.mappingFields, props.modalTableListKey)}>
                                 {!!row[header] ? 
                                   ((Array.isArray(row[header]) && typeof row[header][0] !== 'object') ? row[header].toString() : (typeof row[header] === 'object' ? <div style={{display: 'flex', cursor: 'pointer'}}><ZoomInIcon/>Expand</div>: row[header])) : ''}
                               </TableCell>
