@@ -31,7 +31,8 @@ import {
     LOAD_USER_TEMPLATE_FOR_FILE,
     SUBMIT_USER_TEMPLATE,
     SUBMIT_USER_TEMPLATE_SUCCESS,
-    HIDE_DATA_MODAL
+    HIDE_DATA_MODAL,
+    ON_TABLE_BACK_CLICK
   } from '../utils/constants'
 
   import SearchDataTable from '../components/SearchDataTable'
@@ -61,6 +62,8 @@ import {convertMergeFieldsToFormFields, convertGoogleFileResponseToAutocompleteF
         miraklOrders: [],
         tableList: [],
         modalTableListKey: '',
+        modalTableListKeyList: [],
+        modalTableListIndexList: [],
         modalTableHeaders: [],
         modalTableList: [],
         authState: 'PENDING',
@@ -140,19 +143,52 @@ const reducer = (state = initialState, action) => {
       }
       case ON_TABLE_CLICK: {
         const {property, index} = action.payload
-        //TODO: Instead of property always being a value off of the main tablelist,
-        //need to be able to click even further inside lists
-        let modalTableList = state.tableList[index][property]
+        let modalTableList = (state.modalTableList && state.modalTableList.length > 0) ? state.modalTableList[index][property] : state.tableList[index][property]
         let headers = (modalTableList && modalTableList.length > 0) ? Object.keys(modalTableList[0]) : []
+        let tempModalTableListKeyList = state.modalTableListKeyList;
+        tempModalTableListKeyList.push(property);
+        let tempModalTableListIndexList = state.modalTableListIndexList;
+        tempModalTableListIndexList.push(index);
         return Object.assign({}, state, {
             modalTableListKey: property,
+            modalTableListKeyList: tempModalTableListKeyList,
+            modalTableListIndexList: tempModalTableListIndexList,
             modalTableHeaders: headers,
             modalTableList: modalTableList
         })
       }
+      case ON_TABLE_BACK_CLICK : {
+        let tempModalTableListKeyList = state.modalTableListKeyList;
+        tempModalTableListKeyList.pop();
+        let modalTableListIndexList = state.modalTableListIndexList;
+        modalTableListIndexList.pop();
+
+        const newTableListKey = tempModalTableListKeyList.length > 0 ? tempModalTableListKeyList[tempModalTableListKeyList.length -1] : ''
+        let temp = state.tableList
+        if(tempModalTableListKeyList.length > 0){
+            //we have a sub-table we need to find, lets get it
+            tempModalTableListKeyList.forEach((subKey, index) => {
+                temp = temp[modalTableListIndexList[index]][subKey]
+            });
+        }
+
+        let headers = (temp && temp.length > 0) ? Object.keys(temp[0]) : []
+        
+        return Object.assign({}, state, {
+            modalTableListKey: newTableListKey,
+            modalTableListKeyList: tempModalTableListKeyList,
+            modalTableListIndexList: modalTableListIndexList,
+            modalTableList: temp,
+            modalTableHeaders: headers
+        })
+        }
       case HIDE_DATA_MODAL: {
         return Object.assign({}, state, {
-            modalTableListKey: ''
+            modalTableListKey: '',
+            modalTableListKeyList: [],
+            modalTableListIndexList: [],
+            modalTableList: [],
+            modalTableHeaders: []
         })
       }
       case FETCH_MERGE_FIELDS: {
@@ -279,7 +315,14 @@ const reducer = (state = initialState, action) => {
       case ON_TAG_CLICK: {
         const field = action.payload
         let temp = state.mappingFields
-        temp[field].open_tag = !temp[field].open_tag
+        if(state.modalTableListKey){
+            //if we have a tablelist key, lets update the subvalue
+            //todo fix for depth
+            temp[state.modalTableListKey][field].open_tag = !temp[state.modalTableListKey][field].open_tag
+        }else{
+            temp[field].open_tag = !temp[field].open_tag
+        }
+        
         return Object.assign({}, state, {
             mappingFields: temp,
             formToMappingFields: convertMappingFieldsToForm(temp)
@@ -290,7 +333,13 @@ const reducer = (state = initialState, action) => {
         const columnHeader = action.payload.columnHeader
         const selected = action.payload.selected
         let temp = state.mappingFields
-        temp[columnHeader].column_mapping = selected ? tagKey : ''
+        if(state.modalTableListKey){
+            //if we have a tablelist key, lets update the subvalue
+            //todo fix for depth
+            temp[state.modalTableListKey][columnHeader].column_mapping = selected ? tagKey : ''
+        }else{
+            temp[columnHeader].column_mapping = selected ? tagKey : ''
+        }
         return Object.assign({}, state, {
             mappingFields: temp,
             formToMappingFields: convertMappingFieldsToForm(temp)

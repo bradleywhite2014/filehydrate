@@ -2,17 +2,22 @@ import React, { Component } from 'react';
 import Modal from 'react-bootstrap/Modal';
 import Button from 'react-bootstrap/Button';
 import { connect } from 'react-redux';
-import {hideDataModal, loadUserTemplateForFile, submitUserTemplate, searchMiraklOrders, onTagClick, onTableClick} from '../lib/actions';
+import {hideDataModal, onTableBackClick, loadUserTemplateForFile, submitUserTemplate, searchMiraklOrders, onTagClick, onTableClick} from '../lib/actions';
 import SearchDataTable from '../components/SearchDataTable';
 
 class DataTableModal extends Component {
   constructor(props) {
     super(props)
     this.onHide = this.onHide.bind(this);
+    this.onTableBackClick = this.onTableBackClick.bind(this);
   }
 
   onHide = (event) => {
     this.props.hideDataModal()
+  }
+
+  onTableBackClick = (event) => {
+    this.props.onTableBackClick()
   }
 
   //TODO: fix hacky ternary for document links
@@ -37,6 +42,7 @@ class DataTableModal extends Component {
               <SearchDataTable modalTableListKey={this.props.state.modalTableListKey} isLoadingTemplate={this.props.state.loadingTemplate} triggerLoadTemplate={() => this.props.loadUserTemplateForFile(this.props.state.docId)} triggerSaveTemplate={() => this.props.submitUserTemplate({userDetails: {docId: this.props.state.docId, formFields: this.props.state.mappingFields}})} triggerRefresh={this.props.searchMiraklOrders} loadingOrders={this.props.state.loadingOrders} miraklHeaders={this.props.state.modalTableHeaders} onTagClick={this.props.onTagClick} onTableClick={this.props.onTableClick} formFields={this.props.state.formFields} mappingFields={this.props.state.mappingFields} docId={this.props.state.docId} submitMergeFields={this.props.submitMergeFields} tableList={this.props.state.modalTableList} />
           </Modal.Body>
           <Modal.Footer>
+            <Button onClick={this.onTableBackClick}>Back</Button>
             <Button onClick={this.onHide}>Close</Button>
           </Modal.Footer>
         </Modal>
@@ -50,6 +56,6 @@ export default connect((state) => (
     state: state
   }
 ),
-  { hideDataModal , loadUserTemplateForFile, submitUserTemplate, searchMiraklOrders, onTagClick, onTableClick}
+  { hideDataModal ,onTableBackClick, loadUserTemplateForFile, submitUserTemplate, searchMiraklOrders, onTagClick, onTableClick}
 )
 ((DataTableModal));

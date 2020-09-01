@@ -319,7 +319,9 @@ export default function SearchDataTable(props) {
     props.onTagClick(property);
   }
 
-  const handleTableClick = (property, index) => {
+  const handleTableClick = (e, property, index) => {
+    e.stopPropagation();
+    e.nativeEvent.stopImmediatePropagation();
     props.onTableClick({property, index});
   }
 
@@ -436,7 +438,7 @@ export default function SearchDataTable(props) {
                                 align="center"
                                 style={renderIconStyle(header, props.mappingFields, props.modalTableListKey)}>
                                 {!!row[header] ? 
-                                  ((Array.isArray(row[header]) && typeof row[header][0] !== 'object') ? row[header].toString() : (typeof row[header] === 'object' ? <div style={{display: 'flex', cursor: 'pointer'}}><ZoomInIcon onClick={() => handleTableClick(header, index)}/>Expand</div>: row[header])) : ''}
+                                  ((Array.isArray(row[header]) && typeof row[header][0] !== 'object') ? row[header].toString() : (typeof row[header] === 'object' ? <div style={{display: 'flex', cursor: 'pointer'}}><ZoomInIcon onClick={(e) => handleTableClick(e, header, index)}/>Expand</div>: row[header])) : ''}
                               </TableCell>
                             })
                           }

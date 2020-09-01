@@ -18,6 +18,7 @@ export const updateMiraklUrl = (payload) => ({type: constants.UPDATE_MIRAKL_URL,
 export const onTagClick = (payload) => ({type: constants.ON_TAG_CLICK, payload});
 export const onTableClick = (payload) => ({type: constants.ON_TABLE_CLICK, payload});
 export const onCheckClick = (payload) => ({type: constants.ON_TAG_CHECK_CLICK, payload});
+export const onTableBackClick = (payload) => ({type: constants.ON_TABLE_BACK_CLICK, payload});
 
 
 export const getMiraklTokenStatus = (payload) => ({type: constants.GET_MIRAKL_TOKEN_STATUS, payload});

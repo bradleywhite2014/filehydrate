@@ -20,9 +20,18 @@ const GreenCheckbox = withStyles({
 })((props) => <Checkbox color="default" {...props} />);
 
 
-class GlobalModal extends Component {
+class TagModal extends Component {
   constructor(props) {
     super(props)
+    this.isChecked = this.isChecked.bind(this);
+  }
+
+  isChecked = (modalTableListKey, formToMappingFields, mappingFields, header, formKey) => {
+    if(modalTableListKey){
+      return !!formToMappingFields[formKey] || mappingFields[modalTableListKey][header].column_mapping === formKey;
+    }else{
+      return !!formToMappingFields[formKey] || mappingFields[header].column_mapping === formKey;
+    }
   }
 
   render() {
@@ -43,7 +52,7 @@ class GlobalModal extends Component {
               <div style={{display: 'flex', flexDirection: 'column', maxHeight: '250px', overflowY: 'scroll'}}>
                 {Object.keys(this.props.state.formFields).map( key => {
                   return <div style={{display: 'flex'}}> <FormControlLabel
-                      control={<GreenCheckbox onClick={(event) => this.props.onCheckClick({key, columnHeader: this.props.header, selected: event.target.checked})} checked={!!this.props.state.formToMappingFields[key] || this.props.state.mappingFields[this.props.header].column_mapping === key} name="checkedG" />}
+                      control={<GreenCheckbox onClick={(event) => this.props.onCheckClick({key, columnHeader: this.props.header, selected: event.target.checked})} checked={this.isChecked(this.props.state.modalTableListKey, this.props.state.formToMappingFields, this.props.state.mappingFields, this.props.header, key)} name="checkedG" />}
                       label={key}
                       disabled={(!!this.props.state.formToMappingFields[key] && this.props.state.formToMappingFields[key] !== this.props.header)}
                   />
@@ -71,4 +80,4 @@ export default connect((state) => (
 ),
   { onTagClick, onCheckClick }
 )
-((GlobalModal));
+((TagModal));
