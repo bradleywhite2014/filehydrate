@@ -41,12 +41,17 @@ export function* submitMergeFields({payload}) {
       }
       yield put(actions.putErrorMessage(results.error.message))
     }else {
-      yield put(actions.setModalInfo({
-        header: 'Success!',
-        title: 'Document Links',
-        content: results
-      }))
-      yield put(actions.showModal())
+      if(results.message && results.message === 'Internal server error'){
+        yield put(actions.putErrorMessage(results.error.message))
+      }else{
+        yield put(actions.setModalInfo({
+          header: 'Success!',
+          title: 'Document Links',
+          content: results
+        }))
+        yield put(actions.showModal())
+      }
+      
     }
   }catch(e){
     yield put(actions.putErrorMessage(e))

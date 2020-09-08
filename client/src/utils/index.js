@@ -173,43 +173,77 @@ export const convertSnakedObjectToLabels = (snakedObj, prevKey) => {
   }
 }
 
-
-export const convertResultsToMappingFields = (results) => {
+const convertResultsToMappingTuples = (results) => {
   if(results && Array.isArray(results)) {
-    let firstResult = results[0]
-    const temp = {}
-    //TODO: FIX MAPPING FIELDS AND MODAL TABLE LIST - HAS A SUBARRAY?
-    Object.keys(firstResult).forEach((field) => {
+    let firstResult = results[0];
+    let firstResultKeys = Object.keys(firstResult)    
+    return firstResultKeys.map((field) => {
       if((Array.isArray(firstResult[field])) && typeof firstResult[field][0] === 'object'){
-        temp[field] = {}
-        Object.keys(firstResult[field][0]).forEach((subField) => {
-          temp[field][subField] = {
-            open_tag: false,
-            column_mapping: ''
-          }
-        })
+        return [field, convertResultsToMappingFields(firstResult[field])]
       }else{
-        temp[field] = {
+        return [field,{
           open_tag: false,
           column_mapping: ''
-        }
+        }]
       }
-      
     })
-    return temp;
-  } else {
+  } else if(typeof results === 'object'){
+    let firstResultKeys = Object.keys(firstResult)
+    return firstResultKeys.map((field) => {
+      return [field,{
+        open_tag: false,
+        column_mapping: ''
+      }]
+    })
     return {}
+  } else {
+    return [results,{
+      open_tag: false,
+      column_mapping: ''
+    }]
   }
   
 }
 
-export const convertMappingFieldsToForm = (mappingFields) => {
-  let temp = {}
-  Object.keys(mappingFields).forEach((field) => {
-    if(mappingFields[field].column_mapping){
-      //if match, grab value for this row
-      temp[mappingFields[field].column_mapping] = field
+export const recurseSetNestedValue = (mappingFields, keyList, newVal) => {
+  var schema = mappingFields
+  var len = keyList.length;
+  for(var i = 0; i < len-1; i++) {
+    var elem = keyList[i];
+    if( !schema[elem] ) {
+      schema[elem] = {}
     }
+    schema = schema[elem];
+  }
+  schema[keyList[len-1]] = newVal;
+}
+
+export const convertResultsToMappingFields = (results) => {
+  let mappingTuples = convertResultsToMappingTuples(results)
+  let temp = {}
+  mappingTuples.forEach((tuple) => {
+    temp[tuple[0]] = tuple[1]
   })
   return temp
+}
+
+
+
+
+export const convertMappingFieldsToForm = (mappingFields, newObj, path) => {
+  let mappingFieldsKeys = Object.keys(mappingFields);
+  mappingFieldsKeys.forEach((field, index) => {
+    if(typeof mappingFields[field] === 'object' && !mappingFields[field].hasOwnProperty('column_mapping')){
+      //if we have a submapping field lets map it
+      convertMappingFieldsToForm(mappingFields[field], newObj, [...path, field])
+    }
+    else if(mappingFields[field].column_mapping){
+      //if match, grab value for this row
+      newObj[mappingFields[field].column_mapping] = {"value": field, "path": path}
+    }
+    //when done with this layer, remove path
+    if(mappingFieldsKeys.length -1 === index){
+      path = []
+    }
+  })
 }

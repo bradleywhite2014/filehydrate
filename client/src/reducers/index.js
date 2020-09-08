@@ -38,7 +38,7 @@ import {
   import SearchDataTable from '../components/SearchDataTable'
 import _ from 'underscore';
 
-import {convertMergeFieldsToFormFields, convertGoogleFileResponseToAutocompleteFields, genMsgId, parseTokenFromUrl, parseJwt, convertResultsToMappingFields, convertMappingFieldsToForm, convertSnakedObjectToLabels} from '../utils/index'
+import {convertMergeFieldsToFormFields, convertGoogleFileResponseToAutocompleteFields, genMsgId, parseTokenFromUrl, parseJwt, convertResultsToMappingFields, convertMappingFieldsToForm, convertSnakedObjectToLabels, recurseSetNestedValue} from '../utils/index'
 
   const initializeState = () => {
     return {
@@ -142,8 +142,17 @@ const reducer = (state = initialState, action) => {
         })
       }
       case ON_TABLE_CLICK: {
-        const {property, index} = action.payload
-        let modalTableList = (state.modalTableList && state.modalTableList.length > 0) ? state.modalTableList[index][property] : state.tableList[index][property]
+        const {property, id} = action.payload
+        let index = -1
+        let modalTableList;
+        if(state.modalTableList && state.modalTableList.length > 0){
+            //go with modal table list index
+            index = state.modalTableList.findIndex(x => x["Order Id"] === id);
+            modalTableList = state.modalTableList[index][property] 
+        }else{
+            index = state.tableList.findIndex(x => x["Order Id"] === id);
+            modalTableList = state.tableList[index][property]
+        }
         let headers = (modalTableList && modalTableList.length > 0) ? Object.keys(modalTableList[0]) : []
         let tempModalTableListKeyList = state.modalTableListKeyList;
         tempModalTableListKeyList.push(property);
@@ -295,9 +304,12 @@ const reducer = (state = initialState, action) => {
       }
       case LOAD_USER_TEMPLATE_FOR_FILE_SUCCESS: {
         const resp = action.payload
+        let newObj = {}
+        let path = []
+        convertMappingFieldsToForm(resp[state.docId], newObj, path)
         return Object.assign({}, state, {
             mappingFields: resp[state.docId],
-            formToMappingFields: convertMappingFieldsToForm(state.mappingFields),
+            formToMappingFields: newObj,
             loadingTemplate: false
         })
       }
@@ -313,36 +325,39 @@ const reducer = (state = initialState, action) => {
         })
       }
       case ON_TAG_CLICK: {
+        let tempModalTableListKeyList = state.modalTableListKeyList;
+        let tempObj = state.mappingFields
+        //create subjson which can be used to set the open tag
+        tempModalTableListKeyList.forEach((key) => {
+            tempObj = tempObj[key]
+        })
+
         const field = action.payload
-        let temp = state.mappingFields
-        if(state.modalTableListKey){
-            //if we have a tablelist key, lets update the subvalue
-            //todo fix for depth
-            temp[state.modalTableListKey][field].open_tag = !temp[state.modalTableListKey][field].open_tag
-        }else{
-            temp[field].open_tag = !temp[field].open_tag
-        }
-        
+        tempObj[field].open_tag = !tempObj[field].open_tag
+
         return Object.assign({}, state, {
-            mappingFields: temp,
-            formToMappingFields: convertMappingFieldsToForm(temp)
+            mappingFields: state.mappingFields
         }) 
       }
       case ON_TAG_CHECK_CLICK: {
         const tagKey = action.payload.key
         const columnHeader = action.payload.columnHeader
         const selected = action.payload.selected
-        let temp = state.mappingFields
-        if(state.modalTableListKey){
-            //if we have a tablelist key, lets update the subvalue
-            //todo fix for depth
-            temp[state.modalTableListKey][columnHeader].column_mapping = selected ? tagKey : ''
-        }else{
-            temp[columnHeader].column_mapping = selected ? tagKey : ''
-        }
+        let newVal = selected ? tagKey : ''
+        let tempKeyList = state.modalTableListKeyList
+        tempKeyList.push(columnHeader)
+        tempKeyList.push('column_mapping')
+        recurseSetNestedValue(state.mappingFields, tempKeyList, newVal)
+        //remove the temp values because this is a reference not a new obj
+        tempKeyList.pop()
+        tempKeyList.pop()
+
+        let newObj = {}
+        let path = []
+        convertMappingFieldsToForm(state.mappingFields, newObj, path)
         return Object.assign({}, state, {
-            mappingFields: temp,
-            formToMappingFields: convertMappingFieldsToForm(temp)
+            mappingFields: state.mappingFields,
+            formToMappingFields: newObj
         }) 
       }
       case LOGIN_PENDING: {

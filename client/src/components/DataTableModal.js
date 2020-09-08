@@ -39,7 +39,23 @@ class DataTableModal extends Component {
             </Modal.Title>
           </Modal.Header>
           <Modal.Body>
-              <SearchDataTable modalTableListKey={this.props.state.modalTableListKey} isLoadingTemplate={this.props.state.loadingTemplate} triggerLoadTemplate={() => this.props.loadUserTemplateForFile(this.props.state.docId)} triggerSaveTemplate={() => this.props.submitUserTemplate({userDetails: {docId: this.props.state.docId, formFields: this.props.state.mappingFields}})} triggerRefresh={this.props.searchMiraklOrders} loadingOrders={this.props.state.loadingOrders} miraklHeaders={this.props.state.modalTableHeaders} onTagClick={this.props.onTagClick} onTableClick={this.props.onTableClick} formFields={this.props.state.formFields} mappingFields={this.props.state.mappingFields} docId={this.props.state.docId} submitMergeFields={this.props.submitMergeFields} tableList={this.props.state.modalTableList} />
+              <SearchDataTable
+                modalTableListKeyList={this.props.state.modalTableListKeyList}
+                isLoadingTemplate={this.props.state.loadingTemplate}
+                triggerLoadTemplate={() => this.props.loadUserTemplateForFile(this.props.state.docId)}
+                triggerSaveTemplate={() => this.props.submitUserTemplate({userDetails: {docId: this.props.state.docId, formFields: this.props.state.mappingFields}})}
+                triggerRefresh={this.props.searchMiraklOrders}
+                loadingOrders={this.props.state.loadingOrders} 
+                miraklHeaders={this.props.state.modalTableHeaders}
+                onTagClick={this.props.onTagClick}
+                onTableClick={this.props.onTableClick}
+                formFields={this.props.state.formFields}
+                mappingFields={this.props.state.mappingFields}
+                docId={this.props.state.docId}
+                submitMergeFields={this.props.submitMergeFields}
+                tableList={this.props.state.modalTableList}
+                formToMappingFields={this.props.state.formToMappingFields}
+              />
           </Modal.Body>
           <Modal.Footer>
             <Button onClick={this.onTableBackClick}>Back</Button>
