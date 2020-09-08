@@ -471,7 +471,7 @@ export default function SearchDataTable(props) {
                                 align="center"
                                 style={renderIconStyle(props.mappingFields, header, props.modalTableListKeyList)}>
                                 {!!row[header] ? 
-                                  ((Array.isArray(row[header]) && typeof row[header][0] !== 'object') ? row[header].toString() : (typeof row[header] === 'object' ? <div style={{display: 'flex', cursor: 'pointer'}}><ZoomInIcon onClick={(e) => handleTableClick(e, header, row)}/>Expand</div>: row[header])) : ''}
+                                  ((Array.isArray(row[header]) && typeof row[header][0] !== 'object') ? row[header].toString() : (typeof row[header] === 'object' ? <div onClick={(e) => handleTableClick(e, header, row)} style={{display: 'flex', cursor: 'pointer'}}><ZoomInIcon />Expand</div>: row[header])) : ''}
                               </TableCell>
                             })
                           }
