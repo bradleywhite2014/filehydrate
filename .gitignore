@@ -105,6 +105,5 @@ dist
 py/credentials.json
 py/token.json
 
-lambda
 py/package
 myDeploymentPackage.zip

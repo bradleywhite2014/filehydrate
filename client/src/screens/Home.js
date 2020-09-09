@@ -57,7 +57,7 @@ function Index(props) {
     return ( <React.Fragment>
       <div style={{minHeight: '100%'}}>
         <AppAppBar />
-        {'404 Not Found'}
+        {'Coming soon...'}
         <ToastMessage />
         <GlobalModal/>
         </div>
