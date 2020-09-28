@@ -44,6 +44,7 @@ export function* submitMergeFields({payload}) {
       if(results.message && results.message === 'Internal server error'){
         yield put(actions.putErrorMessage(results.error.message))
       }else{
+        yield put(actions.submitMergeFieldsSuccess())
         yield put(actions.setModalInfo({
           header: 'Success!',
           title: 'Document Links',

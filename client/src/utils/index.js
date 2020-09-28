@@ -175,9 +175,23 @@ export const convertSnakedObjectToLabels = (snakedObj, prevKey) => {
 
 const convertResultsToMappingTuples = (results) => {
   if(results && Array.isArray(results)) {
-    let firstResult = results[0];
-    let firstResultKeys = Object.keys(firstResult)    
-    return firstResultKeys.map((field) => {
+    let firstResult = results[0]
+    let keylist
+    if(results.length > 0){
+        results.forEach((row, index) => {
+            if(index === 0){
+              keylist = Object.keys(row)
+            }else{
+                let currentKeyList = Object.keys(row)
+                let tempKeyList = keylist.concat(currentKeyList)
+                tempKeyList = [...new Set(tempKeyList)];
+                keylist = tempKeyList
+            }
+        })
+    }else{
+      keylist = []
+    }    
+    return keylist.map((field) => {
       if((Array.isArray(firstResult[field])) && typeof firstResult[field][0] === 'object'){
         return [field, convertResultsToMappingFields(firstResult[field])]
       }else{

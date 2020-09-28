@@ -3,6 +3,7 @@ import {
     FETCH_MERGE_FIELDS,
     FETCH_MERGE_FIELDS_SUCCESS,
     UPDATE_MERGE_FIELD,
+    SUBMIT_MERGE_FIELDS,
     SUBMIT_MERGE_FIELDS_SUCCESS,
     SUBMIT_MIRAKL_DETAILS_SUCCESS,
     GET_MIRAKL_TOKEN_STATUS_SUCCESS,
@@ -235,7 +236,8 @@ const reducer = (state = initialState, action) => {
             message: 'Merge completed successfully!'
         })
         return Object.assign({}, state, {
-            messages: currentMessages
+            messages: currentMessages,
+            loadingTemplate: false
         })
       }
       case SUBMIT_MIRAKL_DETAILS_SUCCESS: {
@@ -286,7 +288,22 @@ const reducer = (state = initialState, action) => {
       case SEARCH_MIRAKL_ORDERS_SUCCESS: {
         const resp = action.payload
         const tableList = convertSnakedObjectToLabels(resp);
-        let headers = tableList.length > 0 ? Object.keys(tableList[0]) : []
+
+        let headers
+        if(tableList.length > 0){
+            tableList.forEach((row, index) => {
+                if(index === 0){
+                    headers = Object.keys(row)
+                }else{
+                    let currentRowHeaders = Object.keys(row)
+                    let tempHeaders = headers.concat(currentRowHeaders)
+                    tempHeaders = [...new Set(tempHeaders)];
+                    headers = tempHeaders
+                }
+            })
+        }else{
+            headers = []
+        }
         headers = headers.filter(item => (item !== "Created Date" && item !== "Order Id"));
         headers.unshift("Created Date");
         headers.unshift("Order Id");
@@ -314,6 +331,11 @@ const reducer = (state = initialState, action) => {
         })
       }
       case SUBMIT_USER_TEMPLATE: {
+        return Object.assign({}, state, {
+            loadingTemplate: true
+        })
+      }
+      case SUBMIT_MERGE_FIELDS: {
         return Object.assign({}, state, {
             loadingTemplate: true
         })

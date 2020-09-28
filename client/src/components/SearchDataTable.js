@@ -235,6 +235,9 @@ const EnhancedTableToolbar = (props) => {
       })
       //add any fields we didnt have in the formToMaps
       Object.keys(formFields).forEach((formField) => {
+        if(temp[formField] === undefined){
+          temp[formField] = '~~delete~~'
+        }
         if(!temp.hasOwnProperty(formField)){
           temp[formField] = ''
         }
@@ -273,7 +276,7 @@ const EnhancedTableToolbar = (props) => {
      </React.Fragment>
       ) : (
         isLoadingTemplate ?
-        <CircularProgress />
+        <CircularProgress style={{zIndex: 10000}} />
        :
        <>
        <Typography className={classes.title} variant="h6" id="tableTitle" component="div">
