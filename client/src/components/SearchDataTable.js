@@ -203,8 +203,6 @@ const EnhancedTableToolbar = (props) => {
       order[currentKey].forEach((row) => {
         if(path.length === 0){
           // we popped the last one, use the finalKey key
-          console.log(row)
-          console.log(finalKey)
           result.push(row[finalKey]);
         }else{
           convertPathAndKeyToList(order[currentKey],path,finalKey,result)
@@ -217,11 +215,8 @@ const EnhancedTableToolbar = (props) => {
     const convertOrderToMergeFields = (order, formToMappingFields, formFields) => {
       let temp = {}
       let formToMapKeys = Object.keys(formToMappingFields);
-      console.log(formToMappingFields)
       formToMapKeys.forEach((key) => {
         if(formToMappingFields[key].path.length === 0){
-          console.log("working on key " + key)
-          console.log(formToMappingFields[key])
           //were at the base, just grab it
           temp[key] = order[formToMappingFields[key].value]
         }else{
@@ -251,8 +246,6 @@ const EnhancedTableToolbar = (props) => {
     ordersToMerge.forEach((order) => {
       mappedVals.push(convertOrderToMergeFields(order,formToMappingFields, formFields))   
     })
-    console.log('mappedVals')
-    console.log(mappedVals)
     submitMergeFields({docId, formFields: mappedVals});
   }
 }
