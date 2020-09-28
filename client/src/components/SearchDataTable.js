@@ -199,10 +199,12 @@ const EnhancedTableToolbar = (props) => {
       return selected.indexOf(order['Order Id']) !== -1
     })
     const convertPathAndKeyToList = (order, path, finalKey, result) => {
-      let currentKey = path.shift();
+      let currentKey = path.pop(0);
       order[currentKey].forEach((row) => {
         if(path.length === 0){
           // we popped the last one, use the finalKey key
+          console.log(row)
+          console.log(finalKey)
           result.push(row[finalKey]);
         }else{
           convertPathAndKeyToList(order[currentKey],path,finalKey,result)
@@ -215,13 +217,24 @@ const EnhancedTableToolbar = (props) => {
     const convertOrderToMergeFields = (order, formToMappingFields, formFields) => {
       let temp = {}
       let formToMapKeys = Object.keys(formToMappingFields);
+      console.log(formToMappingFields)
       formToMapKeys.forEach((key) => {
         if(formToMappingFields[key].path.length === 0){
+          console.log("working on key " + key)
+          console.log(formToMappingFields[key])
           //were at the base, just grab it
           temp[key] = order[formToMappingFields[key].value]
         }else{
           let arrayValue = []
+          let tempPath = []
+          formToMappingFields[key].path.forEach((path) => {
+            tempPath.push(path)
+          })
           convertPathAndKeyToList(order, formToMappingFields[key].path, formToMappingFields[key].value, arrayValue)
+          //reset to avoid pointer issues
+          tempPath.forEach((subPath) => {
+            formToMappingFields[key].path.push(subPath)
+          })
           temp[key] = arrayValue
         }
       })
@@ -238,6 +251,8 @@ const EnhancedTableToolbar = (props) => {
     ordersToMerge.forEach((order) => {
       mappedVals.push(convertOrderToMergeFields(order,formToMappingFields, formFields))   
     })
+    console.log('mappedVals')
+    console.log(mappedVals)
     submitMergeFields({docId, formFields: mappedVals});
   }
 }

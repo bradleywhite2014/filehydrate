@@ -20,6 +20,7 @@ Google Docs (REST) API mail-merge sample app
 # [START mail_merge_python]
 from __future__ import print_function
 import time
+import re
 from google_auth_oauthlib.flow import InstalledAppFlow
 from googleapiclient import discovery
 from httplib2 import Http
@@ -60,6 +61,160 @@ merge = {
             'Pichai said in his keynote that users love their new phones.'
 }
 
+def read_paragraph_element(element):
+    """Returns the text in the given ParagraphElement.
+
+        Args:
+            element: a ParagraphElement from a Google Doc.
+    """
+    text_run = element.get('textRun')
+    if not text_run:
+        return ''
+    return text_run.get('content')
+
+
+def read_strucutural_elements(elements):
+    """Recurses through a list of Structural Elements to read a document's text where text may be
+        in nested elements.
+
+        Args:
+            elements: a list of Structural Elements.
+    """
+    text = ''
+    for value in elements:
+        if 'paragraph' in value:
+            elements = value.get('paragraph').get('elements')
+            for elem in elements:
+                text += read_paragraph_element(elem)
+        elif 'table' in value:
+            # The text in table cells are in nested Structural Elements and tables may be
+            # nested.
+            table = value.get('table')
+            for row in table.get('tableRows'):
+                cells = row.get('tableCells')
+                for cell in cells:
+                    text += read_strucutural_elements(cell.get('content'))
+        elif 'tableOfContents' in value:
+            # The text in the TOC is also in a Structural Element.
+            toc = value.get('tableOfContents')
+            text += read_strucutural_elements(toc.get('content'))
+    return text
+
+def find_table_elements(elements):
+    """Recurses through a list of Structural Elements to read a document's text where text may be
+        in nested elements.
+
+        Args:
+            elements: a list of Structural Elements.
+    """
+    allTables = []
+    text = ''
+    for value in elements:
+        if 'table' in value:
+            # The text in table cells are in nested Structural Elements and tables may be
+            # nested.
+            allTables.append(value)
+    return allTables
+
+def convert_tables_to_row_inserts(tables,merge_items):
+    inserts = []
+    if(len(tables) > 0):
+        # weve got some tables to check
+        for item in tables:
+            table = item.get('table')
+            rows = table.get('tableRows')
+            for index, row in enumerate(rows):
+                cells = row.get('tableCells')
+                for cell in cells:
+                    elements = cell.get('content')
+                    if not elements:
+                        continue;
+                    for value in elements:
+                        if 'paragraph' in value:
+                            paraElements = value.get('paragraph').get('elements')
+                            for elem in paraElements:
+                                str = elem.get('textRun').get('content')
+                                mergeFieldsInCell = re.findall(r"{{\w+}}", str)
+                                if(len(mergeFieldsInCell) > 0):
+                                    # LATEST: CURRENTLY INSERTING TOO MANY ROWS - 3 FOR EACH FIELD, NEED TO CHECK AND
+                                    # LIMIT THE ROW INSERTS
+                                    # FAILING TO REVERSE FILLER INSERTS, GETTING OUT OF INDEX, VERY CLOSE!!
+                                    # this cell has a merge field, need to duplicate line
+
+                                    # note: this is greedy and only checks the first, assuming
+                                    # that implementors would not have half of a row repeating
+                                    # while another value is not. It is assumed one value can
+                                    # represent the type of all other values. if repeating: new rows
+                                    if isinstance(merge_items[mergeFieldsInCell[0]], list):
+                                        for x in range(len(merge_items[mergeFieldsInCell[0]]) - 1):
+                                            inserts.append({
+                                                'insertTableRow': {
+                                                    'tableCellLocation': {
+                                                        'tableStartLocation': {
+                                                                'index': item.get('startIndex')
+                                                        },
+                                                        'rowIndex': index,
+                                                        'columnIndex': 1
+                                                    },
+                                                    'insertBelow': 'true'
+                                                }
+                                            })
+                                        return inserts
+    return inserts
+
+def convert_tables_to_merge_filler_inserts(tables,merge_items):
+    inserts = []
+    if(len(tables) > 0):
+        # weve got some tables to check
+        for item in tables:
+            table = item.get('table')
+            rows = table.get('tableRows')
+            for index, row in enumerate(rows):
+                cells = row.get('tableCells')
+                for cellIndex, cell in enumerate(cells):
+                    elements = cell.get('content')
+                    if not elements:
+                        continue;
+                    for value in elements:
+                        if 'paragraph' in value:
+                            paraElements = value.get('paragraph').get('elements')
+                            for elem in paraElements:
+                                str = elem.get('textRun').get('content')
+                                mergeFieldsInCell = re.findall(r"{{\w+}}", str)
+                                if(len(mergeFieldsInCell) > 0):
+                                    # this cell has a merge field, need to duplicate line
+
+                                    # note: this is greedy and only checks the first, assuming
+                                    # that implementors would not have half of a row repeating
+                                    # while another value is not. It is assumed one value can
+                                    # represent the type of all other values. if repeating: new rows
+                                    if isinstance(merge_items[mergeFieldsInCell[0]], list):
+                                        for x in range(len(merge_items[mergeFieldsInCell[0]])):
+                                            if(x == 0):
+                                                continue
+                                            nextRow = rows[index + x]
+                                            cells = nextRow.get('tableCells')
+                                            for nextRowCellIndex, cell in enumerate(cells):
+                                                if(cellIndex == nextRowCellIndex):
+                                                    if(isinstance(cell, dict)):
+                                                        elements = cell.get('content')
+                                                        if not elements:
+                                                            continue;
+                                                        for i, el in enumerate(elements):
+                                                            if 'paragraph' in el:  
+                                                                fillerText = str.replace(mergeFieldsInCell[0],mergeFieldsInCell[0] + "_{}".format(x))
+                                                                fillerText = fillerText.replace("\n", "")
+                                                                inserts.append({
+                                                                    'insertText': {
+                                                                        'location': {
+                                                                            'index': el.get('startIndex'),
+                                                                        },
+                                                                        'text': fillerText
+                                                                    }
+                                                                })
+                                            
+    return inserts
+
 
 def get_data(source):
     """Gets mail merge data from chosen data source.
@@ -94,21 +249,52 @@ def merge_template(tmpl_id, source, service, docs, merge_items):
     """
     # copy template and set context data struct for merging template values
     copy_id = _copy_template(tmpl_id, source, service)
+    context = merge.iteritems() if hasattr({}, 'iteritems') else merge.items()
+    
+    doc = docs.documents().get(documentId=copy_id).execute()
+    doc_content = doc.get('body').get('content')
+    # need to eventually find all tables, not just one
+    tables = find_table_elements(doc_content)
+    inserts = convert_tables_to_row_inserts(tables,merge_items)
+    # if we didnt find any inserts, who cares about array row replacement, we had no arrays
+    if(len(inserts) > 0):
+        _updResp = docs.documents().batchUpdate(body={'requests': inserts},
+                documentId=copy_id, fields='').execute()
+        doc = docs.documents().get(documentId=copy_id).execute()
+        doc_content = doc.get('body').get('content')
+        tables = find_table_elements(doc_content)
 
-    # "search & replace" API requests for mail merge substitutions
-    # ********* TODO: check for any arrays, if received, duplicate the found row of fields
-    # so that we can get {{quantity_0}} {{product_title_0}}
-    #                    {{quantity_1}} {{product_title_1}}
-    # and then you have the values in the quantity/product_title array fill in these for each index
-    # -- need to reconcile the fact that keys from the first item isnt consistent
-    reqs = [{'replaceAllText': {
-                'containsText': {
-                    'text': '%s' % key.upper(), # {{VARS}} are uppercase
-                    'matchCase': True,
-                },
-                'replaceText': value,
-            }} for key, value in merge_items.items()]
+        fillerInserts = convert_tables_to_merge_filler_inserts(tables,merge_items)
+        fillerInserts.sort(key=lambda x: x['insertText']['location']['index'], reverse=True)
+        # need to eventually find all tables, not just one
+        if(len(fillerInserts) > 0 ):
+            docs.documents().batchUpdate(body={'requests': fillerInserts},
+                    documentId=copy_id, fields='').execute()
 
+    ## now that the template is ready for lists, lets merge               
+    reqs = []
+    for key, value in merge_items.items():
+        if(isinstance(value,list)):
+            for i, val in enumerate(value):
+                replaceText = key.upper()
+                if(i != 0):
+                    replaceText = key.upper() + "_{}".format(i)
+                reqs.append({'replaceAllText': {
+                    'containsText': {
+                        'text': '%s' % replaceText, # {{VARS}} are uppercase
+                        'matchCase': True,
+                    },
+                    'replaceText': str(val),
+                }})
+        else:
+            reqs.append({'replaceAllText': {
+                    'containsText': {
+                        'text': '%s' % key.upper(), # {{VARS}} are uppercase
+                        'matchCase': True,
+                    },
+                    'replaceText': str(value),
+                }})
+    reqs.reverse()
     # send requests to Docs API to do actual merge
     docs.documents().batchUpdate(body={'requests': reqs},
             documentId=copy_id, fields='').execute()
