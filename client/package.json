@@ -9,6 +9,7 @@
     "@material-ui/lab": "^4.0.0-alpha.48",
     "@material/button": "^4.0.0",
     "bootstrap": "^4.4.1",
+    "firebase": "^7.21.1",
     "framer-motion": "^2.4.1",
     "googleapis": "^43.0.0",
     "material-ui": "^0.20.2",

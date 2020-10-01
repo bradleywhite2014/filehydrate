@@ -8,6 +8,24 @@ import {randomString} from '../utils'
 import {appConfig} from '../config'
 
 import {get, post, httpPut} from './http'
+import * as firebase from 'firebase';
+
+var firebaseConfig = {
+  apiKey: "AIzaSyBQ7lZvlZI6LAZNBPo8ClcuvRhAort8Pbk",
+  authDomain: "filehydrate.firebaseapp.com",
+  databaseURL: "https://filehydrate.firebaseio.com",
+  projectId: "filehydrate",
+  storageBucket: "filehydrate.appspot.com",
+  messagingSenderId: "323006440161",
+  appId: "1:323006440161:web:2fc14bd37c28071338cda0",
+  measurementId: "G-5ZLNJ18GZZ"
+};
+// Initialize Firebase
+firebase.initializeApp(firebaseConfig);
+firebase.analytics();
+
+var provider = new firebase.auth.GoogleAuthProvider();
+provider.addScope('https://www.googleapis.com/auth/contacts.readonly https://www.googleapis.com/auth/documents https://www.googleapis.com/auth/drive');
 
   
 export function* fetchMergeFields({payload}) {
@@ -204,32 +222,33 @@ export function* performAuthCheck({payload}) {
 
 export function* performLogin({payload}) {
   try {
-    const googleScopes = 'https://www.googleapis.com/auth/documents https://www.googleapis.com/auth/drive email profile'
-    const generatedNonce = randomString(12)
-    const authConfig = {
-      'client_id': '382267252700-csiq3fr71ifkfckr39s6tdr3bqgpb3gn.apps.googleusercontent.com',
-      'redirect_uri': window.origin += '/implicit/callback',
-      'response_type': 'token id_token',
-      'scope': googleScopes,
-      'include_granted_scopes': 'true',
-      'state': 'pass-through value',
-      'nonce': generatedNonce,
-    }
+    // const googleScopes = 'https://www.googleapis.com/auth/documents https://www.googleapis.com/auth/drive email profile'
+    // const generatedNonce = randomString(12)
+    // const authConfig = {
+    //   'client_id': '382267252700-csiq3fr71ifkfckr39s6tdr3bqgpb3gn.apps.googleusercontent.com',
+    //   'redirect_uri': window.origin += '/implicit/callback',
+    //   'response_type': 'token id_token',
+    //   'scope': googleScopes,
+    //   'include_granted_scopes': 'true',
+    //   'state': 'pass-through value',
+    //   'nonce': generatedNonce,
+    // }
 
-    // Google's OAuth 2.0 endpoint for requesting an access token
-    var oauth2RedirectEndpoint = 'https://accounts.google.com/o/oauth2/v2/auth?';
+    // // Google's OAuth 2.0 endpoint for requesting an access token
+    // var oauth2RedirectEndpoint = 'https://accounts.google.com/o/oauth2/v2/auth?';
 
-    // Add form parameters as hidden input values.
-    for (var key in authConfig) {
-      if(key && authConfig[key]) {
-        oauth2RedirectEndpoint += key + '=' + authConfig[key] + '&'; // we'll remove the last amp
-      }
-    }
-    //remove extra amp
-    var oauth2RedirectEndpoint = oauth2RedirectEndpoint.slice(0, -1)
+    // // Add form parameters as hidden input values.
+    // for (var key in authConfig) {
+    //   if(key && authConfig[key]) {
+    //     oauth2RedirectEndpoint += key + '=' + authConfig[key] + '&'; // we'll remove the last amp
+    //   }
+    // }
+    // //remove extra amp
+    // var oauth2RedirectEndpoint = oauth2RedirectEndpoint.slice(0, -1)
 
-    window.location.href = oauth2RedirectEndpoint; 
+    // window.location.href = oauth2RedirectEndpoint; 
 
+    firebase.auth().signInWithRedirect(provider);
     yield put(actions.loginPending())
 
    
