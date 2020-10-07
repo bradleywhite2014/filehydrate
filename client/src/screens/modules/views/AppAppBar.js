@@ -128,7 +128,7 @@ function AppAppBar(props) {
     <Toolbar className={classes.toolbar}>
       <div className={classes.left} />
       <Typography align="center" variant="body2" className={classes.h4}>
-        <Link href="/" underline="none">
+        <Link style={{color: 'white', fontFamily: 'cursive', fontSize:'26px'}} href="/" underline="none">
           File Hydrate
         </Link>
       </Typography>
