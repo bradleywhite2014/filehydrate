@@ -21,7 +21,7 @@ function Index(props) {
     case 'merge': 
       return ( <React.Fragment>
         <div style={{minHeight: '100%'}}>
-          <AppAppBar />
+          <AppAppBar firebase={props.firebase} />
           <Merge />
           <ToastMessage />
           <GlobalModal/>
@@ -33,7 +33,7 @@ function Index(props) {
     case 'fileMerge': 
       return ( <React.Fragment>
         <div style={{minHeight: '100%'}}>
-          <AppAppBar />
+          <AppAppBar firebase={props.firebase} />
           <FileSelect />
           <ToastMessage />
           <GlobalModal/>
@@ -45,7 +45,7 @@ function Index(props) {
     case 'apiconfiguration': 
       return ( <React.Fragment>
         <div style={{minHeight: '100%'}}>
-          <AppAppBar />
+          <AppAppBar firebase={props.firebase} />
           <ApiManagement/>
           <ToastMessage />
           <GlobalModal/>
@@ -56,7 +56,7 @@ function Index(props) {
     case '404':
     return ( <React.Fragment>
       <div style={{minHeight: '100%'}}>
-        <AppAppBar />
+        <AppAppBar firebase={props.firebase} />
         {'Coming soon...'}
         <ToastMessage />
         <GlobalModal/>
@@ -67,7 +67,7 @@ function Index(props) {
     default: 
       return (<React.Fragment>
         <div style={{minHeight: '100%'}}>
-        <AppAppBar />
+        <AppAppBar firebase={props.firebase} />
         <ProductHero />
         <ProductHowItWorks />
         <ToastMessage />

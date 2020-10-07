@@ -1,5 +1,6 @@
 import {
     SET_USER_INFO,
+    SET_AUTH_STATE_ERROR,
     FETCH_MERGE_FIELDS,
     FETCH_MERGE_FIELDS_SUCCESS,
     UPDATE_MERGE_FIELD,
@@ -33,7 +34,9 @@ import {
     SUBMIT_USER_TEMPLATE,
     SUBMIT_USER_TEMPLATE_SUCCESS,
     HIDE_DATA_MODAL,
-    ON_TABLE_BACK_CLICK
+    ON_TABLE_BACK_CLICK,
+    SET_AUTH_STATE,
+    SET_FIREBASE
   } from '../utils/constants'
 
   import SearchDataTable from '../components/SearchDataTable'
@@ -83,7 +86,7 @@ import {convertMergeFieldsToFormFields, convertGoogleFileResponseToAutocompleteF
 
 const loadState = () => {
     try {
-        let serializedState = localStorage.getItem("documerge_state");
+        let serializedState = localStorage.getItem("filehydrate_state");
 
         if (serializedState === null) {
             return initializeState();
@@ -101,19 +104,14 @@ const initialState = initializeState();
 const reducer = (state = initialState, action) => {
     switch (action.type) {
       case SET_USER_INFO: {
-          console.log(action)
-        // Remove any old data from sessionStorage
-        sessionStorage.removeItem('accessToken');
-        // Save new key
-        sessionStorage.setItem('accessToken', action.payload.accessToken);
-        sessionStorage.setItem('idToken', action.payload.tokenId);
-        const userInfo = action.payload.profileObj
+        const {idToken, name, imageUrl } = action.payload
         return Object.assign({}, state, {
+            authState: 'VALID',
             userInfo: {
-              name: userInfo.name,
-              imageUrl: userInfo.imageUrl
+              name: name,
+              imageUrl: imageUrl
             },
-            accessToken: action.payload.tokenId
+            accessToken: idToken
         })
         
       }
@@ -387,14 +385,28 @@ const reducer = (state = initialState, action) => {
             authState: 'PENDING'
         })
       }
-
-      case PARSE_TOKENS_FROM_URL: {
-        const {accessToken, idToken } = parseTokenFromUrl();
-        const jwt = parseJwt(idToken)
-        window.location.href = window.origin // lets go to root, we got this token in our sessionstorage
+      case SET_AUTH_STATE: {
+        const {accessToken, user } = action.payload
+        sessionStorage.removeItem('accessToken');
+        // Save new key
+        sessionStorage.setItem('accessToken', accessToken);
+        sessionStorage.setItem('user', user);
+        const userInfo = user.profileObj
         return Object.assign({}, state, {
-            authState: 'VALID',
-            userPhotoUrl: jwt ? jwt.picture : ''
+            userInfo: {
+              name: userInfo.name,
+              imageUrl: userInfo.imageUrl
+            },
+            accessToken: idToken
+        })
+      }
+      case SET_AUTH_STATE_ERROR: {
+        return Object.assign({}, state, {
+            userInfo: {
+                name: '',
+                imageUrl: ''
+            },
+            accessToken: '',
         })
         
       }
@@ -425,9 +437,16 @@ const reducer = (state = initialState, action) => {
         // Remove any old data from sessionStorage
         sessionStorage.removeItem('accessToken');
         sessionStorage.removeItem('idToken');
-        localStorage.removeItem('documerge_state');
+        localStorage.removeItem('filehydrate_state');
         
         return Object.assign({}, state, initializeState());
+      }
+      case SET_FIREBASE: {
+        const {firebase, provider} = action.payload
+        return Object.assign({}, state, {
+            firebase: firebase,
+            provider: provider
+        })
       }
       default:  
         return Object.assign({}, state,loadState())

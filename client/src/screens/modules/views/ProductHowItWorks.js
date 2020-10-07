@@ -103,7 +103,7 @@ function ProductHowItWorks(props) {
                   className={classes.image}
                 />
                 <Typography variant="h5" align="center">
-                  {'Let Documerge automate your document creation.'}
+                  {'Let File Hydrate automate your document creation.'}
                 </Typography>
               </div>
             </Grid>

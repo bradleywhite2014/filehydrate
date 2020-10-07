@@ -11,7 +11,7 @@ import TextField from '../../../components/TextField';
 //     <React.Fragment>
 //       {'© '}
 //       <Typography variant="body2" color="inherit" >
-//       Documerge
+//       File Hydrate
 //       </Typography>{' '}
 //       {new Date().getFullYear()}
 //     </React.Fragment>
@@ -78,7 +78,7 @@ export default function AppFooter() {
   return (
     <Typography style={{
       height: '60px' , alignItems: 'center', paddingLeft: '8px'}}component="footer" className={classes.root} variant="h5" marked="center" component="h2">
-      @DocuMerge 2020
+      @File Hydrate 2020
     </Typography>
   );
 }

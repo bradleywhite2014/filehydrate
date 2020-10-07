@@ -8,7 +8,6 @@ import reducer from './reducers';
 import rootSagas from './middleware/sagas';
 import Home from './screens/Home';
 import createSagaMiddleware from 'redux-saga'
-import LoginCallback from './screens/LoginCallback';
 
 // Importing the Bootstrap CSS
 import 'bootstrap/dist/css/bootstrap.min.css'
@@ -27,7 +26,7 @@ const sagaMiddleware = createSagaMiddleware();
 const saveState = (state) => {
     try {
         let serializedState = JSON.stringify(state);
-        localStorage.setItem("documerge_state", serializedState);
+        localStorage.setItem("filehydrate_state", serializedState);
 
     }
     catch (err) {
@@ -55,7 +54,6 @@ render((
         <BrowserRouter>
             <Switch>
                 <Route path='/' exact={true} render={(props) => <Home/> } />
-                <Route path='/implicit/callback' component={LoginCallback}/>
                 <Route path='/merge' exact={true} render={(props) => <Home mainSection={'merge'} /> } />
                 <Route path='/fileMerge' exact={true} render={(props) => <Home mainSection={'fileMerge'} /> } />
                 <Route path='/apiconfiguration' exact={true} render={(props) => <Home mainSection={'apiconfiguration'} /> } />

@@ -8,7 +8,7 @@ export const post = async (path, body) => {
         headers: {
         'Accept': 'application/json',
         'Content-Type': 'application/json',
-        'Authorization': sessionStorage.getItem('idToken')
+        'Authorization': sessionStorage.getItem('filehydrate:idToken')
         },
         body: JSON.stringify(body)
     })
@@ -27,7 +27,7 @@ export const httpPut = async (path, body) => {
         headers: {
         'Accept': 'application/json',
         'Content-Type': 'application/json',
-        'Authorization': sessionStorage.getItem('idToken')
+        'Authorization': sessionStorage.getItem('filehydrate:idToken')
         },
         body: JSON.stringify(body)
     })
@@ -46,7 +46,7 @@ export const del = async (path, body) => {
         headers: {
         'Accept': 'application/json',
         'Content-Type': 'application/json',
-        'Authorization': sessionStorage.getItem('idToken')
+        'Authorization': sessionStorage.getItem('filehydrate:idToken')
         },
         body: JSON.stringify(body)
     })
@@ -69,7 +69,7 @@ export const get = async (path, token, includeBearer = true) => {
         headers: {
         'Accept': 'application/json',
         'Content-Type': 'application/json',
-        'Authorization': token ? bearerString + token : sessionStorage.getItem('idToken')
+        'Authorization': token ? bearerString + token : sessionStorage.getItem('filehydrate:idToken')
         }
     })
 

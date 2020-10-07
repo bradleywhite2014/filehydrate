@@ -7,30 +7,11 @@ import {randomString} from '../utils'
 
 import {appConfig} from '../config'
 
-import {get, post, httpPut} from './http'
-import * as firebase from 'firebase';
+import {get, post, httpPut} from './http' 
 
-var firebaseConfig = {
-  apiKey: "AIzaSyBQ7lZvlZI6LAZNBPo8ClcuvRhAort8Pbk",
-  authDomain: "filehydrate.firebaseapp.com",
-  databaseURL: "https://filehydrate.firebaseio.com",
-  projectId: "filehydrate",
-  storageBucket: "filehydrate.appspot.com",
-  messagingSenderId: "323006440161",
-  appId: "1:323006440161:web:2fc14bd37c28071338cda0",
-  measurementId: "G-5ZLNJ18GZZ"
-};
-// Initialize Firebase
-firebase.initializeApp(firebaseConfig);
-firebase.analytics();
-
-var provider = new firebase.auth.GoogleAuthProvider();
-provider.addScope('https://www.googleapis.com/auth/contacts.readonly https://www.googleapis.com/auth/documents https://www.googleapis.com/auth/drive');
-
-  
 export function* fetchMergeFields({payload}) {
   try{
-    const mergeFields = yield call(get, 'https://lipyjnw0f8.execute-api.us-east-2.amazonaws.com/main' + '?docId=' + payload + '&access_token=' + sessionStorage.getItem('accessToken'))
+    const mergeFields = yield call(get, 'https://lipyjnw0f8.execute-api.us-east-2.amazonaws.com/main' + '?docId=' + payload + '&access_token=' + sessionStorage.getItem('filehydrate:accessToken'))
     
     if(mergeFields.error){
       if(mergeFields.error.code === 401 || mergeFields.error.code === 403) {
@@ -50,7 +31,7 @@ export function* fetchMergeFields({payload}) {
 //https://fxr009j313.execute-api.us-east-2.amazonaws.com/main
 export function* submitMergeFields({payload}) {
   try{
-    const results = yield call(post,'https://lipyjnw0f8.execute-api.us-east-2.amazonaws.com/main'  + '?docId=' + payload.docId + '&access_token=' + sessionStorage.getItem('accessToken'), payload.formFields)
+    const results = yield call(post,'https://lipyjnw0f8.execute-api.us-east-2.amazonaws.com/main'  + '?docId=' + payload.docId + '&access_token=' + sessionStorage.getItem('filehydrate:accessToken'), payload.formFields)
     
     if(results.error){
       if(results.error.code === 401 || results.error.code === 403) {
@@ -169,9 +150,9 @@ export function* performFileSearch({payload}) {
   try{
     var files = [];
     if(payload) {
-      files = yield call(get, 'https://www.googleapis.com/drive/v3/files' + "?q=name contains " + "'" + payload + "'" , sessionStorage.getItem('accessToken'))
+      files = yield call(get, 'https://www.googleapis.com/drive/v3/files' + "?q=name contains " + "'" + payload + "'" , sessionStorage.getItem('filehydrate:accessToken'))
     } else {
-      files = yield call(get, 'https://www.googleapis.com/drive/v3/files', sessionStorage.getItem('accessToken'))
+      files = yield call(get, 'https://www.googleapis.com/drive/v3/files', sessionStorage.getItem('filehydrate:accessToken'))
     }
     if(files.error){
       if(files.error.code === 401 || results.error.code === 403) {
@@ -211,10 +192,23 @@ export function* performMiraklSearch({payload}) {
 }
 
 export function* performAuthCheck({payload}) {
+  console.log(payload)
   try {
-
+    result = yield call(payload.firebase.auth().getRedirectResult)
+    console.log(result)
+    if(result.credential) {
+      // This gives you a Google Access Token. You can use it to access the Google API.
+      var accessToken = result.credential.accessToken;
+      var idToken = result.credential.idToken;
+      // The signed-in user info.
+      var user = result.user;
+  
+      yield put(actions.setAuthStateSuccess({"accessToken": accessToken, "user": user}))
+    }else{
+      yield put(actions.setAuthStateError())
+    }
   }catch(e){
-    yield put(actions.putErrorMessage(e))
+    yield put(actions.setAuthStateError())
   }
 }
 
@@ -247,8 +241,9 @@ export function* performLogin({payload}) {
     // var oauth2RedirectEndpoint = oauth2RedirectEndpoint.slice(0, -1)
 
     // window.location.href = oauth2RedirectEndpoint; 
+    console.log(payload)
+    yield call(payload.firebase.auth().signInWithRedirect(payload.provider))
 
-    firebase.auth().signInWithRedirect(provider);
     yield put(actions.loginPending())
 
    
@@ -262,7 +257,7 @@ export function* performLogout({payload}) {
   try {
 
     // Google's OAuth 2.0 endpoint for requesting an access token
-    var oauth2Endpoint = 'https://oauth2.googleapis.com/revoke?token=' + sessionStorage.getItem('accessToken');
+    var oauth2Endpoint = 'https://oauth2.googleapis.com/revoke?token=' + sessionStorage.getItem('filehydrate:accessToken');
     console.log(oauth2Endpoint);
     const resp = yield call(post, oauth2Endpoint)
 

@@ -7,7 +7,7 @@ import AppBar from '../../../components/AppBar';
 import Typography from '../../../components/Typography';
 import Toolbar, { styles as toolbarStyles } from '../../../components/Toolbar';
 import { connect } from 'react-redux'
-import { setUserInfo , logoutUser} from '../../../lib/actions'
+import {logoutUser, setUserInfo} from '../../../lib/actions'
 import { useHistory } from "react-router-dom";
 import OIDCLoginButton from '../../../components/OIDCLoginButton';
 import {NavHamburger} from '../../../components/NavHamburger';
@@ -53,9 +53,36 @@ const styles = theme => ({
     marginRight: '10px'
   }});
 
+import * as firebase from 'firebase';
+import firebaseConfig from '../../../firebase.config'
+firebase.initializeApp(firebaseConfig)
+
 function AppAppBar(props) {
   const history = useHistory();
   const { classes } = props; 
+
+  const signInWithGoogle = () => {
+    const provider = new firebase.auth.GoogleAuthProvider();
+    provider.addScope(googleScopes)
+    firebase
+    .auth()
+    .setPersistence(firebase.auth.Auth.Persistence.NONE)
+    .then(() => { 
+      firebase
+      .auth()
+      .signInWithPopup(provider)
+      .then(result => {
+        //console.log(result)
+        sessionStorage.setItem('filehydrate:accessToken', result.credential.accessToken);
+        sessionStorage.setItem('filehydrate:idToken', result.credential.idToken);
+        props.setUserInfo({name: result.user.displayName, imageUrl: result.user.photoURL, idToken: result.credential.idToken})
+        //history.push('/merge')
+        Auth.setLoggedIn(true)
+      })
+      .catch(e => console.log(e.message))
+    })
+   
+  }
 
   
   return <div>
@@ -65,12 +92,18 @@ function AppAppBar(props) {
       <div className={classes.left} />
       <Typography align="center" variant="body2" className={classes.h4}>
         <Link href="/" underline="none">
-          DocuMerge
+          File Hydrate
         </Link>
       </Typography>
       <div className={classes.right}>
       {props.state.userPhotoUrl ? <img src={props.state.userPhotoUrl} className={classes.profileIcon}/> : <React.Fragment /> }
-      <OIDCLoginButton />
+      <button onClick={() => signInWithGoogle()} className="googleBtn" type="button">
+        <img
+          src="https://upload.wikimedia.org/wikipedia/commons/5/53/Google_%22G%22_Logo.svg"
+          alt="logo"
+        />
+        Login With Google
+      </button>
       </div>
     </Toolbar>
   </AppBar>
@@ -87,6 +120,6 @@ export default connect((state) => (
     state: state
   }
 ),
-  { setUserInfo , logoutUser}
+  { logoutUser, setUserInfo}
 )
 (withStyles(styles)(AppAppBar));

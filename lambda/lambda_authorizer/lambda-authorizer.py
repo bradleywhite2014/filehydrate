@@ -29,7 +29,7 @@ def lambda_handler(event, context):
         idInformation = id_token.verify_oauth2_token(
             event['authorizationToken'],
             requests.Request(),
-            '382267252700-csiq3fr71ifkfckr39s6tdr3bqgpb3gn.apps.googleusercontent.com')
+            '323006440161-a87360cdth2doe8sc1cb3o8pst877b2b.apps.googleusercontent.com')
         print(idInformation)
  
         # Deny access if the account is not a Google account
