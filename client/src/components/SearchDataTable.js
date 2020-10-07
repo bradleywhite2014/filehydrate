@@ -276,7 +276,9 @@ const EnhancedTableToolbar = (props) => {
      </React.Fragment>
       ) : (
         isLoadingTemplate ?
-        <CircularProgress style={{zIndex: 10000}} />
+        <div style={{zIndex: '1000'}}>
+        <CircularProgress  />
+        </div>
        :
        <>
        <Typography className={classes.title} variant="h6" id="tableTitle" component="div">

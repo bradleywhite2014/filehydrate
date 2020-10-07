@@ -11,9 +11,10 @@ import {logoutUser, setUserInfo} from '../../../lib/actions'
 import { useHistory } from "react-router-dom";
 import OIDCLoginButton from '../../../components/OIDCLoginButton';
 import {NavHamburger} from '../../../components/NavHamburger';
+import GoogleIcon from '../../../components/GoogleIcon'
 //1E5Us1TfM8QojOqgfe0-pdmSaw3VOFBK-jTIl6dziPcY
 
-const googleScopes = 'https://www.googleapis.com/auth/documents https://www.googleapis.com/auth/drive email profile'
+const googleScopes = 'https://www.googleapis.com/auth/drive.file email profile'
 
 
 
@@ -51,7 +52,42 @@ const styles = theme => ({
     width: '20px',
     height: '20px',
     marginRight: '10px'
-  }});
+  },
+  customBtn: {
+    display: 'inline-block',
+    background: 'white',
+    color: '#444',
+    width: '190px',
+    borderRadius: '5px',
+    border: 'thin solid #888',
+    boxShadow: '1px 1px 1px grey',
+    whiteSpace: 'nowrap',
+  },
+  customBtn_hover: {
+    cursor: 'pointer',
+  },
+  span_label: {
+    fontFamily: 'serif',
+    fontWeight: 'normal',
+  },
+  span_icon: {
+    backgorund:'transparent 5px 50% no-repeat',
+    display: 'inline-block',
+    verticalSlign: 'middle',
+    width: '42px',
+    height: '42px',
+  },
+  span_buttonText: {
+    display: 'inline-block',
+    verticalAlign: 'middle',
+    paddingLeft: '42px',
+    paddingRight: '42px',
+    fontSize: '14px',
+    fontWeight: 'bold',
+    /* Use the Roboto font that is loaded in the <head> */
+    fontFamily: 'Roboto sans-serif'
+  }
+});
 
 import * as firebase from 'firebase';
 import firebaseConfig from '../../../firebase.config'
@@ -64,6 +100,7 @@ function AppAppBar(props) {
   const signInWithGoogle = () => {
     const provider = new firebase.auth.GoogleAuthProvider();
     provider.addScope(googleScopes)
+    
     firebase
     .auth()
     .setPersistence(firebase.auth.Auth.Persistence.NONE)
@@ -96,14 +133,21 @@ function AppAppBar(props) {
         </Link>
       </Typography>
       <div className={classes.right}>
-      {props.state.userPhotoUrl ? <img src={props.state.userPhotoUrl} className={classes.profileIcon}/> : <React.Fragment /> }
-      <button onClick={() => signInWithGoogle()} className="googleBtn" type="button">
-        <img
-          src="https://upload.wikimedia.org/wikipedia/commons/5/53/Google_%22G%22_Logo.svg"
-          alt="logo"
-        />
-        Login With Google
-      </button>
+      {props.state.userInfo.imageUrl ? <img src={props.state.userInfo.imageUrl} className={classes.profileIcon}/> : <React.Fragment /> }
+      
+      {props.state.authState === 'VALID' ? 
+        <div id="customBtn" onClick={() => props.logoutUser()} class="customGPlusSignIn">
+        <GoogleIcon key={1} style={{marginRight: '26px'}} />
+        <div style={{height:'18px'}} class="buttonText">Logout of Google</div>
+      </div>
+        
+      :
+      <div id="customBtn" onClick={() => signInWithGoogle()} class="customGPlusSignIn">
+        <GoogleIcon key={1} style={{marginRight: '26px'}} />
+        <div style={{height:'18px'}} class="buttonText">Login With Google</div>
+      </div>
+      }
+      
       </div>
     </Toolbar>
   </AppBar>

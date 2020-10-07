@@ -321,12 +321,19 @@ const reducer = (state = initialState, action) => {
         const resp = action.payload
         let newObj = {}
         let path = []
-        convertMappingFieldsToForm(resp[state.docId], newObj, path)
-        return Object.assign({}, state, {
-            mappingFields: resp[state.docId],
-            formToMappingFields: newObj,
-            loadingTemplate: false
-        })
+        if(resp[state.docId]){
+            convertMappingFieldsToForm(resp[state.docId], newObj, path)
+            return Object.assign({}, state, {
+                mappingFields: resp[state.docId],
+                formToMappingFields: newObj,
+                loadingTemplate: false
+            })
+        }else{
+            return Object.assign({}, state, {
+                loadingTemplate: false
+            })
+        }
+        
       }
       case SUBMIT_USER_TEMPLATE: {
         return Object.assign({}, state, {
