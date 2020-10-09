@@ -5,7 +5,7 @@ import Button from '../../../components/Button';
 import Typography from '../../../components/Typography';
 import ProductHeroLayout from './ProductHeroLayout';
 
-import backgroundImg from '../../../assets/images/turtle_cropped_background.png';
+import backgroundImg from '../../../assets/images/nature_background.svg';
 
 const styles = theme => ({
   background: {
@@ -34,14 +34,12 @@ function ProductHero(props) {
   return (
     <ProductHeroLayout backgroundClassName={classes.background}>
       {/* Increase the network loading priority of the background image. */}
-      <Typography color="inherit" align="center" variant="h2" marked="center">
-        Relax
+      <Typography style={{width: '35%', position: 'absolute', right: '40px'}} color="black" align="center" variant="h4" marked="center">
+        Tired of filling out the same document over and over?
       </Typography>
-      <Typography color="inherit" align="center" variant="h5" className={classes.h5}>
-        Document automation made easy
-      </Typography>
-      <Typography variant="body2" color="inherit" className={classes.more}>
-        Discover the experience
+      <br/>
+      <Typography style={{width: '35%', position: 'absolute', right: '40px', marginTop: '120px'}} color="black" align="center" variant="h4">
+        Let File Hydate do the work.
       </Typography>
     </ProductHeroLayout>
   );

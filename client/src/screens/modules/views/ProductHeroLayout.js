@@ -56,15 +56,7 @@ function ProductHeroLayout(props) {
     <section className={classes.root}>
       <Container className={classes.container}>
         {children}
-        <div className={classes.backdrop} />
         <div className={clsx(classes.background, backgroundClassName)} />
-        <img
-          className={classes.arrowDown}
-          src={require("../../../assets/images/productHeroArrowDown.png")}
-          height="16"
-          width="12"
-          alt="arrow down"
-        />
       </Container>
     </section>
   );
