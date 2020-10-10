@@ -174,8 +174,9 @@ export const convertSnakedObjectToLabels = (snakedObj, prevKey) => {
 }
 
 const convertResultsToMappingTuples = (results) => {
+  let firstResult
   if(results && Array.isArray(results)) {
-    let firstResult = results[0]
+    firstResult = results[0]
     let keylist
     if(results.length > 0){
         results.forEach((row, index) => {

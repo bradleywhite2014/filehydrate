@@ -6,8 +6,12 @@ import './assets/styles/index.css';
 import { createStore, applyMiddleware } from 'redux'
 import reducer from './reducers';
 import rootSagas from './middleware/sagas';
-import Home from './screens/Home';
 import createSagaMiddleware from 'redux-saga'
+// pages for this product
+import Components from "views/Components/Components.js";
+import LandingPage from "views/LandingPage/LandingPage.js";
+import ProfilePage from "views/ProfilePage/ProfilePage.js";
+import LoginPage from "views/LoginPage/LoginPage.js";
 
 // Importing the Bootstrap CSS
 import 'bootstrap/dist/css/bootstrap.min.css'
@@ -53,11 +57,11 @@ render((
     <Provider store={store}>
         <BrowserRouter>
             <Switch>
-                <Route path='/' exact={true} render={(props) => <Home/> } />
-                <Route path='/merge' exact={true} render={(props) => <Home mainSection={'merge'} /> } />
-                <Route path='/fileMerge' exact={true} render={(props) => <Home mainSection={'fileMerge'} /> } />
-                <Route path='/apiconfiguration' exact={true} render={(props) => <Home mainSection={'apiconfiguration'} /> } />
-                <Route path='/*' exact={true} render={(props) => <Home mainSection={'404'} /> } />
+                <Route path='/' exact={true} render={(props) => <LandingPage/> } />
+                <Route path='/merge' exact={true} render={(props) => <LandingPage mainSection={'merge'} /> } />
+                <Route path='/fileMerge' exact={true} render={(props) => <LandingPage mainSection={'fileMerge'} /> } />
+                <Route path='/apiconfiguration' exact={true} render={(props) => <LandingPage mainSection={'apiconfiguration'} /> } />
+                <Route path='/*' exact={true} render={(props) => <LandingPage mainSection={'404'} /> } />
             </Switch>
         </BrowserRouter>
     </Provider>

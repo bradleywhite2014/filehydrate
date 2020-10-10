@@ -155,7 +155,7 @@ export function* performFileSearch({payload}) {
       files = yield call(get, 'https://www.googleapis.com/drive/v3/files', sessionStorage.getItem('filehydrate:accessToken'))
     }
     if(files.error){
-      if(files.error.code === 401 || results.error.code === 403) {
+      if(files.error.code === 401 || files.error.code === 403) {
         //lets go a head and get logged out
         yield put(actions.logoutUser())
       }
@@ -176,7 +176,7 @@ export function* performMiraklSearch({payload}) {
     orders = yield call(get,'https://6m5cadt7n1.execute-api.us-east-2.amazonaws.com/main')
     
     if(orders.error){
-      if(orders.error.code === 401 || results.error.code === 403) {
+      if(orders.error.code === 401 || orders.error.code === 403) {
         //lets go a head and get logged out
         yield put(actions.logoutUser())
       }
@@ -194,7 +194,7 @@ export function* performMiraklSearch({payload}) {
 export function* performAuthCheck({payload}) {
   console.log(payload)
   try {
-    result = yield call(payload.firebase.auth().getRedirectResult)
+    let result = yield call(payload.firebase.auth().getRedirectResult)
     console.log(result)
     if(result.credential) {
       // This gives you a Google Access Token. You can use it to access the Google API.

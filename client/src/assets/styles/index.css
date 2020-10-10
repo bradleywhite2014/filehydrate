@@ -6,7 +6,6 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  background-image:url('../images/double-bubble-outline.png')
 }
 
 code {
@@ -15,7 +14,6 @@ code {
 }
 
 .app {
-  background-image: url('../images/ray_underwater.jpg');
   background-size: cover;
   height: 100vh;
   display: flex;

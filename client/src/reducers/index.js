@@ -39,7 +39,6 @@ import {
     SET_FIREBASE
   } from '../utils/constants'
 
-  import SearchDataTable from '../components/SearchDataTable'
 import _ from 'underscore';
 
 import {convertMergeFieldsToFormFields, convertGoogleFileResponseToAutocompleteFields, genMsgId, parseTokenFromUrl, parseJwt, convertResultsToMappingFields, convertMappingFieldsToForm, convertSnakedObjectToLabels, recurseSetNestedValue} from '../utils/index'
@@ -404,7 +403,7 @@ const reducer = (state = initialState, action) => {
               name: userInfo.name,
               imageUrl: userInfo.imageUrl
             },
-            accessToken: idToken
+            accessToken: accessToken
         })
       }
       case SET_AUTH_STATE_ERROR: {
