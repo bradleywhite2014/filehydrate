@@ -15,11 +15,11 @@ import Tooltip from "@material-ui/core/Tooltip";
 import { Apps, CloudDownload } from "@material-ui/icons";
 
 // core components
-import GoogleIcon from "components/GoogleIcon"
-import CustomDropdown from "components/CustomDropdown/CustomDropdown.js";
-import Button from "components/CustomButtons/Button.js";
+import GoogleIcon from "../../components/GoogleIcon"
+import CustomDropdown from "../../components/CustomDropdown/CustomDropdown.js";
+import Button from "../../components/CustomButtons/Button.js";
 
-import styles from "assets/jss/material-kit-react/components/headerLinksStyle.js";
+import styles from "../../assets/jss/material-kit-react/components/headerLinksStyle.js";
 
 const googleScopes = 'https://www.googleapis.com/auth/drive.file email profile'
 import { connect } from 'react-redux'

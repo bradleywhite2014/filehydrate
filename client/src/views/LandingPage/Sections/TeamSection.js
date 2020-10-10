@@ -7,16 +7,16 @@ import { makeStyles } from "@material-ui/core/styles";
 // @material-ui/icons
 
 // core components
-import GridContainer from "components/Grid/GridContainer.js";
-import GridItem from "components/Grid/GridItem.js";
-import Button from "components/CustomButtons/Button.js";
-import Card from "components/Card/Card.js";
-import CardBody from "components/Card/CardBody.js";
-import CardFooter from "components/Card/CardFooter.js";
+import GridContainer from "../../../components/Grid/GridContainer.js";
+import GridItem from "../../../components/Grid/GridItem.js";
+import Button from "../../../components/CustomButtons/Button.js";
+import Card from "../../../components/Card/Card.js";
+import CardBody from "../../../components/Card/CardBody.js";
+import CardFooter from "../../../components/Card/CardFooter.js";
 
-import styles from "assets/jss/material-kit-react/views/landingPageSections/teamStyle.js";
+import styles from "../../../assets/jss/material-kit-react/views/landingPageSections/teamStyle.js";
 
-import bradley from "assets/img/faces/bradley.jpg";
+import bradley from "../../../assets/img/faces/bradley.jpg";
 
 const useStyles = makeStyles(styles);
 
