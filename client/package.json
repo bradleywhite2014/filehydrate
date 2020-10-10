@@ -50,7 +50,7 @@
     "typescript": "3.9.3"
   },
   "scripts": {
-    "start": "react-scripts start",
+    "start": "parcel ./src/index.html",
     "build": "parcel build ./src/index.html",
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject",
