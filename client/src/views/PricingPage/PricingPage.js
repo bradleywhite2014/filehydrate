@@ -18,15 +18,14 @@ import Parallax from "../../components/Parallax/Parallax.js";
 import styles from "../../assets/jss/material-kit-react/views/landingPage.js";
 
 // Sections for this page
-import ProductSection from "./Sections/ProductSection.js";
-import TeamSection from "./Sections/TeamSection.js";
-import WorkSection from "./Sections/WorkSection.js";
+import PricingTierSection from "./Sections/PricingTierSection.js";
+
 
 const dashboardRoutes = [];
 
 const useStyles = makeStyles(styles);
 
-export default function LandingPage(props) {
+export default function PricingPage(props) {
   const classes = useStyles();
   const { ...rest } = props;
   return (
@@ -49,15 +48,15 @@ export default function LandingPage(props) {
             <GridItem xs={12} sm={12} md={6}>
               <h1 className={classes.title}>Welcome to FileHydrate.</h1>
               <h4>
-                Were glad to have you. At File Hydrate we want to give you back your
-                time losing it instead of tedious document creation. With integrations from any API,
+                Were glad to have you. At File Hydrate we want to give back your
+                time lost building documents it instead of tedious document creation. With integrations from any API,
                 we're ready to support whatever automation you need.
               </h4>
               <br />
               <Button
                 color="danger"
                 size="lg"
-                href="https://www.youtube.com/watch?v=dQw4w9WgXcQ&ref=filehydrate"
+                href="https://www.youtube.com/watch?v=dQw4w9WgXcQ&ref=creativetim"
                 target="_blank"
                 rel="noopener noreferrer"
               >
@@ -70,9 +69,7 @@ export default function LandingPage(props) {
       </Parallax>
       <div className={classNames(classes.main, classes.mainRaised)}>
         <div className={classes.container}>
-          <ProductSection />
-          <TeamSection />
-          <WorkSection />
+          <PricingTierSection />
         </div>
       </div>
       <Footer />

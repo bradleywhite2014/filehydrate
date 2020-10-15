@@ -28,6 +28,7 @@ import { useHistory } from "react-router-dom";
 const useStyles = makeStyles(styles);
 import * as firebase from 'firebase';
 import firebaseConfig from '../../firebase.config'
+firebase.initializeApp(firebaseConfig)
 
 
 function HeaderLinks(props) {
@@ -60,15 +61,15 @@ function HeaderLinks(props) {
     <List >
       <ListItem >
       {props.state && props.state.authState === 'VALID' ? 
-        <div id="customBtn" onClick={() => props.logoutUser()} class="customGPlusSignIn">
+        <div id="customBtn" onClick={() => props.logoutUser()} className="customGPlusSignIn">
         <GoogleIcon key={1} style={{marginRight: '26px'}} />
-        <div style={{height:'18px'}} class="buttonText">Logout of Google</div>
+        <div style={{height:'18px'}} className="buttonText">Logout of Google</div>
       </div>
         
       :
-      <div id="customBtn" onClick={() => signInWithGoogle()} class="customGPlusSignIn">
+      <div id="customBtn" onClick={() => signInWithGoogle()} className="customGPlusSignIn">
         <GoogleIcon key={1} style={{marginRight: '26px'}} />
-        <div style={{height:'18px'}} class="buttonText">Login With Google</div>
+        <div style={{height:'18px'}} className="buttonText">Login With Google</div>
       </div>
       }
       </ListItem>

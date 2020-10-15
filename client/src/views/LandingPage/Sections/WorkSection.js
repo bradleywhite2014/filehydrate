@@ -19,51 +19,16 @@ export default function WorkSection() {
   return (
     <div className={classes.section}>
       <GridContainer justify="center">
-        <GridItem cs={12} sm={12} md={8}>
-          <h2 className={classes.title}>Work with us</h2>
-          <h4 className={classes.description}>
-            Divide details about your product or agency work into parts. Write a
-            few lines about each one and contact us about any further
-            collaboration. We will responde get back to you in a couple of
-            hours.
-          </h4>
-          <form>
-            <GridContainer>
-              <GridItem xs={12} sm={12} md={6}>
-                <CustomInput
-                  labelText="Your Name"
-                  id="name"
-                  formControlProps={{
-                    fullWidth: true
-                  }}
-                />
-              </GridItem>
-              <GridItem xs={12} sm={12} md={6}>
-                <CustomInput
-                  labelText="Your Email"
-                  id="email"
-                  formControlProps={{
-                    fullWidth: true
-                  }}
-                />
-              </GridItem>
-              <CustomInput
-                labelText="Your Message"
-                id="message"
-                formControlProps={{
-                  fullWidth: true,
-                  className: classes.textArea
-                }}
-                inputProps={{
-                  multiline: true,
-                  rows: 5
-                }}
-              />
-              <GridItem xs={12} sm={12} md={4}>
-                <Button color="primary">Send Message</Button>
-              </GridItem>
-            </GridContainer>
-          </form>
+        <GridItem style={{textAlign: "center"}} cs={12} sm={12} md={8}>
+        <Button
+          color="danger"
+          size="lg"
+          href="/pricing"
+          rel="noopener noreferrer"
+        >
+          <i className="fas fa-play" />
+          Get Started
+        </Button>
         </GridItem>
       </GridContainer>
     </div>
