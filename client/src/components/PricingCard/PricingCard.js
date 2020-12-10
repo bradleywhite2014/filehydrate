@@ -5,22 +5,18 @@ import classNames from "classnames";
 import PropTypes from "prop-types";
 // @material-ui/core components
 import { makeStyles } from "@material-ui/core/styles";
-// @material-ui/icons
+
+import { connect } from 'react-redux';
+import {kickoffCheckout} from '../../lib/actions';
 
 // core components
 import styles from "../../assets/jss/material-kit-react/components/cardStyle.js";
 
 const useStyles = makeStyles(styles);
 
-export default function PricingCard(props) {
+function PricingCard(props) {
   const classes = useStyles();
   const { amount,level, mergeCount, bulkFileAmount, teamMembers, className, children, plain, carousel, ...rest } = props;
-  // const cardClasses = classNames({
-  //   [classes.card]: true,
-  //   [classes.cardPlain]: plain,
-  //   [classes.cardCarousel]: carousel,
-  //   [className]: className !== undefined
-  // });
   return (
     <div className={`card card-pricing `}>
       <div className="content-rose">
@@ -35,11 +31,20 @@ export default function PricingCard(props) {
           <li><b>{bulkFileAmount}</b> Bulk File Amount</li>
           <li><b>{mergeCount}</b> Total Merges per Month</li>
         </ul>
-        <a href="#bradley" className="btn btn-white btn-raised btn-round pricing-btn">
+        <a onClick={() => props.kickoffCheckout(level)} className="btn btn-white btn-raised btn-round pricing-btn">
           Get Started
         </a>
       </div>
     </div>
   );
 }
+
+export default connect((state) => (
+  {
+    state: state
+  }
+),
+  { kickoffCheckout }
+)
+((PricingCard));
 

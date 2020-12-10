@@ -36,7 +36,9 @@ import {
     HIDE_DATA_MODAL,
     ON_TABLE_BACK_CLICK,
     SET_AUTH_STATE,
-    SET_FIREBASE
+    SET_FIREBASE,
+    KICKOFF_CHECKOUT,
+    RESET_CHECKOUT
   } from '../utils/constants'
 
 import _ from 'underscore';
@@ -78,7 +80,8 @@ import {convertMergeFieldsToFormFields, convertGoogleFileResponseToAutocompleteF
             title: '',
             content: ''
         },
-        miraklHeaders: []
+        miraklHeaders: [],
+        checkoutScreen: ''
     }
     
 };
@@ -453,6 +456,17 @@ const reducer = (state = initialState, action) => {
             firebase: firebase,
             provider: provider
         })
+      }
+      case KICKOFF_CHECKOUT: {
+        const level = action.payload
+        return Object.assign({}, state, {
+            checkoutScreen: level
+        })    
+      }
+      case RESET_CHECKOUT: {
+        return Object.assign({}, state, {
+            checkoutScreen: ''
+        })    
       }
       default:  
         return Object.assign({}, state,loadState())

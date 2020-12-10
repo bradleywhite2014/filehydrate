@@ -57,4 +57,5 @@ export const hideDataModal = (payload) => ({type: constants.HIDE_DATA_MODAL, pay
 
 //firebase
 export const setFirebase = (payload) => ({type: constants.SET_FIREBASE, payload});
-
+export const kickoffCheckout = (payload) => ({type: constants.KICKOFF_CHECKOUT, payload});
+export const resetCheckout = (payload) => ({type: constants.RESET_CHECKOUT, payload});

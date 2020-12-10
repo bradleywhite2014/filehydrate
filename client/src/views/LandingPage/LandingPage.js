@@ -49,15 +49,15 @@ export default function LandingPage(props) {
             <GridItem xs={12} sm={12} md={6}>
               <h1 className={classes.title}>Welcome to FileHydrate.</h1>
               <h4>
-                Were glad to have you. At File Hydrate we want to give you back your
-                time losing it instead of tedious document creation. With integrations from any API,
-                we're ready to support whatever automation you need.
+                Were glad to have you. At File Hydrate we want to recover lost
+                time from manually typing documents. With integrations from any API,
+                we're ready to support any file creation and automation you need.
               </h4>
               <br />
               <Button
                 color="danger"
                 size="lg"
-                href="https://www.youtube.com/watch?v=dQw4w9WgXcQ&ref=filehydrate"
+                href="https://www.youtube.com/watch?v=dQw4w9WgXcQ&ref=creativetim"
                 target="_blank"
                 rel="noopener noreferrer"
               >

@@ -5858,17 +5858,6 @@ select[data-dropdownjs][disabled] + .dropdownjs > input[readonly] {
   filter: alpha(opacity=0);
 }
 
-.select2-hidden-accessible {
-  border: 0 !important;
-  clip: rect(0 0 0 0) !important;
-  height: 1px !important;
-  margin: -1px !important;
-  overflow: hidden !important;
-  padding: 0 !important;
-  position: absolute !important;
-  width: 1px !important;
-}
-
 .select2-container--default .select2-selection--single .select2-selection__clear {
   cursor: pointer;
   float: right;
@@ -7370,20 +7359,6 @@ select[data-dropdownjs][disabled] + .dropdownjs > input[readonly] {
 .projects-4 hr {
   margin: 70px auto;
   max-width: 970px;
-}
-
-.pricing-1 h2.title {
-  margin-bottom: 10px;
-}
-
-.pricing-1 .card-separator {
-  width: 1px;
-  display: block;
-  height: 100%;
-  background-color: rgba(153, 153, 153, 0.2);
-  position: absolute;
-  left: 0;
-  top: 0;
 }
 
 .pricing-1.section-image:after {
@@ -10073,5 +10048,39 @@ select.selectpicker {
   .main.main-raised .container {
       width: 920px;
   }
+}
+
+.card-payment {
+  background-color: white;
+  padding: 10px 20px 11px;
+  border-radius: 5px;
+  width: 100%;
+  border: 1px solid #afafaf;
+  box-shadow: 0px 4px 5.5px 0px rgba(0, 0, 0, 0.07);
+}
+.pay-button{
+  padding: 0.7rem 2rem;
+  width: 100%;
+  margin: 1rem 0;
+  color: white;
+  font-weight: bold;
+  font-size: medium;
+  background-color: #556cd6;
+  border: 0;
+  border-radius: 5px;
+  box-shadow: 0px 4px 5.5px 0px rgba(0, 0, 0, 0.07);
+  transition: box-shadow 500ms;
+  cursor: pointer;
+}
+.pay-button:disabled{
+  background-color: #afafaf;
+  box-shadow: none;
+  cursor: default;
+}
+.pay-button:disabled:hover{
+  box-shadow: none;
+}
+.pay-button:hover{
+  box-shadow: 2px 5px 15px 2px rgba(0, 0, 0, 0.2);
 }
 

@@ -44,7 +44,7 @@ function HeaderLinks(props) {
     .then(() => { 
       firebase
       .auth()
-      .signInWithPopup(provider)
+      .signInWithRedirect(provider)
       .then(result => {
         //console.log(result)
         sessionStorage.setItem('filehydrate:accessToken', result.credential.accessToken);
