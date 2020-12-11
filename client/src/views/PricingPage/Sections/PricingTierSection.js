@@ -29,92 +29,10 @@ import {
   useElements,
 } from '@stripe/react-stripe-js';
 
-const getClientSecret = () => {
-  return 'cus_IVxm3YK1YImYLA_secret_sk_test_51Haz1VAt5lSr2FnXyrDAZU1KTCB7K1Zsl6am2FTBTFZiwkmtQqpMZO6GG9Bc4by6gBTm8QzECcvRgDWUjN9Wltrq00MLLGIiUz';
-}
-
-const CheckoutForm = () => {
-  const [isPaymentLoading, setPaymentLoading] = useState(false);
-  const stripe = useStripe();
-  const elements = useElements();
-  const payMoney = async (e) => {
-    e.preventDefault();
-    if (!stripe || !elements) {
-      return;
-    }
-    setPaymentLoading(true);
-    const clientSecret = getClientSecret();
-    const paymentResult = await stripe.confirmCardPayment(clientSecret, {
-      payment_method: {
-        card: elements.getElement(CardElement),
-        billing_details: {
-          name: "B Dub",
-        },
-      },
-    });
-    setPaymentLoading(false);
-    if (paymentResult.error) {
-      alert(paymentResult.error.message);
-    } else {
-      if (paymentResult.paymentIntent.status === "succeeded") {
-        alert("Success!");
-      }
-    }
-  };
-
-  return (
-    <div
-      style={{
-        padding: "3rem",
-      }}
-    >
-      <div
-        style={{
-          maxWidth: "500px",
-          margin: "0 auto",
-        }}
-      >
-        <form
-          style={{
-            display: "block",
-            width: "100%",
-          }}
-          onSubmit = {payMoney}
-        >
-          <div
-            style={{
-              display: "flex",
-              flexDirection: "column",
-              alignItems: "center",
-            }}
-          >
-            <CardElement
-              className="card-payment"
-              options={{
-                style: {
-                  base: {
-                    backgroundColor: "white"
-                  } 
-                },
-              }}
-            />
-            <button
-              className="pay-button"
-              disabled={isPaymentLoading}
-            >
-              {isPaymentLoading ? "Loading..." : "Pay"}
-            </button>
-          </div>
-        </form>
-      </div>
-    </div>
-  );
-}
-
-const stripePromise = loadStripe('pk_test_51Haz1VAt5lSr2FnXP2rNSAJ4ONL8LcfWt7cdhplJ4rO55TM2H3uS3MlnXSia6Bh06SQ6ckMQeVX3bSjstnC27Uv60083wJIIfA');
 
 
 function PricingTierSection(props) {
+
   const classes = useStyles();
   return (
     <div className={classes.section}>
@@ -127,29 +45,20 @@ function PricingTierSection(props) {
           </h5>
         </GridItem>
       </GridContainer>
-      
-      {
-        !props.state.checkoutScreen ?
         <div className="row">   
-          <div className="col-md-4">
-            <PricingCard level="Basic" amount="FREE" mergeCount="10" bulkFileAmount="1" teamMembers="1"  />
+          <div className="col-md-1">
           </div>
           <div className="col-md-4">
-              <PricingCard level="Professional" amount="9.99" mergeCount="500" bulkFileAmount="10" teamMembers="10" />
+            <PricingCard level="Basic" amount="9.99" mergeCount="10" bulkFileAmount="1" teamMembers="1"  />
+          </div>
+          <div className="col-md-2">
           </div>
           <div className="col-md-4">
-              <PricingCard level="Enterprise" amount="49.99" mergeCount="Unlimited" bulkFileAmount="50" teamMembers="500" />
+              <PricingCard level="Professional" amount="25.00" mergeCount="500" bulkFileAmount="10" teamMembers="10" />
+          </div>
+          <div className="col-md-1">
           </div>
         </div>
-      : 
-      <GridContainer justify="center" style={{marginBottom: "15px"}}>
-        <GridItem xs={12} sm={12} md={8}>
-          <Elements stripe={stripePromise}>
-            <CheckoutForm />
-          </Elements>
-        </GridItem>
-      </GridContainer>
-      }
     </div>
   );
 }
