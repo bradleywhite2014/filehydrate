@@ -79,7 +79,7 @@ function PricingCard(props) {
           <li><b>{bulkFileAmount}</b> Bulk File Amount</li>
           <li><b>{mergeCount}</b> Total Merges per Month</li>
         </ul>
-        <a onClick={
+        <button onClick={
           () =>  {
             switch(level){
               case "Basic": {
@@ -108,7 +108,7 @@ function PricingCard(props) {
             }
           } className="btn btn-white btn-raised btn-round pricing-btn">
           Get Started
-        </a>
+        </button>
       </div>
     </div>
   );
