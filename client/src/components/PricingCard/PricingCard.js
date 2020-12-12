@@ -80,7 +80,8 @@ function PricingCard(props) {
           <li><b>{mergeCount}</b> Total Merges per Month</li>
         </ul>
         <button style={{cursor: 'button'}} onClick={
-          () =>  {
+          (event) =>  {
+            event.preventDefault();
             switch(level){
               case "Basic": {
                 createCheckoutSession(basicPriceId).then(function(data) {
