@@ -28,12 +28,13 @@ exports.handler = async (event) => {
     });
     const response = {
       statusCode: 200,
-      body: {
+      body: JSON.stringify({
         sessionId: session.id,
-      },
+      }),
     };
     return response;
   } catch (e) {
+    console.log('Error in stripe session creation - ' + e)
     const response = {
       statusCode: 400,
       body: JSON.stringify('Bad Request.'),

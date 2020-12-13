@@ -92,7 +92,7 @@ function PricingCard(props) {
                     })
                     .then(handleResult);
                 });
-                break;
+                
               }
               case "Professional": {
                 createCheckoutSession(proPriceId).then(function(data) {
@@ -103,7 +103,7 @@ function PricingCard(props) {
                     })
                     .then(handleResult);
                 });
-                break;
+                
               }
             } 
             
