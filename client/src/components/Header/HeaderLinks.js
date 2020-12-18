@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 import DeleteIcon from "@material-ui/icons/Delete";
 import IconButton from "@material-ui/core/IconButton";
 // react components for routing our app without refresh
-import { Link, useHistory } from "react-router-dom";
+import { Link, useHistory, withRouter } from "react-router-dom";
 
 // @material-ui/core components
 import { makeStyles } from "@material-ui/core/styles";
@@ -16,6 +16,7 @@ import { Apps, CloudDownload } from "@material-ui/icons";
 
 // core components
 import GoogleIcon from "../../components/GoogleIcon"
+import GoogleButton from 'react-google-button'
 import CustomDropdown from "../../components/CustomDropdown/CustomDropdown.js";
 import Button from "../../components/CustomButtons/Button.js";
 
@@ -72,7 +73,6 @@ class HeaderLinks extends Component {
         sessionStorage.setItem('filehydrate:accessToken', result.credential.accessToken);
         sessionStorage.setItem('filehydrate:idToken', result.credential.idToken);
         this.props.setUserInfo({name: result.user.displayName, imageUrl: result.user.photoURL, idToken: result.credential.idToken, uid: user.uid})
-        //history.push('/merge')
         
         this.props.findOrCreateUserSubStatus(user.uid);
 
@@ -83,17 +83,18 @@ class HeaderLinks extends Component {
   }
 
   render() {
+    const { history, hideDashBtn } = this.props;
     return (
       <List style={{'display': 'flex'}} >
         {
-          this.props.state.sub_status && this.props.state.sub_status === 'active' ?
+          !hideDashBtn && this.props.state.sub_status && this.props.state.sub_status === 'active' ?
           <ListItem>
           <Button
               color="danger"
               size="lg"
               rel="noopener noreferrer"
+              onClick={() => {history.push('/merge')}}
             >
-              <Link to="/merge"></Link>
               <i className="fas fa-play" />
               Go to Dashboard
             </Button>
@@ -103,16 +104,16 @@ class HeaderLinks extends Component {
         }
         <ListItem >
         {this.props.state && this.props.state.authState === 'VALID' ? 
-          <div style={{'display': 'flex', 'cursor' :'pointer'}} id="customBtn" onClick={() => this.props.logoutUser()} className="customGPlusSignIn">
-          <GoogleIcon key={1} style={{marginRight: '8px'}} />
-          <div style={{height:'18px'}} className="buttonText">Logout of Google</div>
-        </div>
-          
+        <GoogleButton
+          label='Logout of Google'
+          style={{cursor: 'pointer'}}
+          onClick={() => this.props.logoutUser()}
+        />        
         :
-        <div style={{'display': 'flex'}} id="customBtn" onClick={() => this.signInWithGoogle()} className="customGPlusSignIn">
-          <GoogleIcon key={1} style={{marginRight: '8px'}} />
-          <div style={{height:'18px'}} className="buttonText">Login With Google</div>
-        </div>
+        <GoogleButton
+          style={{cursor: 'pointer'}}
+          onClick={() => this.signInWithGoogle()}
+        />
         }
         </ListItem>
       </List>
@@ -121,11 +122,11 @@ class HeaderLinks extends Component {
 }
 
 
-export default connect((state) => (
+export default withRouter(connect((state) => (
   {
     state: state
   }
 ),
   { logoutUser, setUserInfo, checkAuthState, findOrCreateUserSubStatus}
 )
-(HeaderLinks);
+(HeaderLinks));

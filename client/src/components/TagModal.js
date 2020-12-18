@@ -37,6 +37,7 @@ class TagModal extends Component {
           aria-labelledby="contained-modal-title-vcenter"
           centered
           show={true}
+          animation={false}
         >
           <Modal.Header>
             <Modal.Title id="contained-modal-title-vcenter">
@@ -47,7 +48,7 @@ class TagModal extends Component {
             <h4>Fields</h4>
               <div style={{display: 'flex', flexDirection: 'column', maxHeight: '250px', overflowY: 'scroll'}}>
                 {Object.keys(this.props.state.formFields).map( key => {
-                  return <div style={{display: 'flex'}}> <FormControlLabel
+                  return <div style={{display: 'flex' , marginLeft: '8px'}}> <FormControlLabel
                       control={<GreenCheckbox onClick={(event) => this.props.onCheckClick({key, columnHeader: this.props.header, selected: event.target.checked})} checked={this.isChecked(this.props.subFields, this.props.header, key)} name="checked" />}
                       label={key}
                       disabled={(!!this.props.state.formToMappingFields[key] && !!this.props.state.formToMappingFields[key].value && this.props.state.formToMappingFields[key].value !== this.props.header)}

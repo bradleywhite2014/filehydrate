@@ -8,7 +8,6 @@ import Typography from '../components/Typography';
 import Toolbar, { styles as toolbarStyles } from '../components/Toolbar';
 import { connect } from 'react-redux'
 import { fetchMergeFields, updateMergeField, submitMergeFields } from './../lib/actions'
-import ProductHeroLayout from './modules/views/ProductHeroLayout';
 import Grid from '@material-ui/core/Grid';
 import Container from '@material-ui/core/Container';
 import Button from '../components/Button';

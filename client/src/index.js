@@ -11,6 +11,7 @@ import createSagaMiddleware from 'redux-saga'
 import LandingPage from "./views/LandingPage/LandingPage.js";
 import PricingPage from "./views/PricingPage/PricingPage.js";
 import ProfilePage from "./views/ProfilePage/ProfilePage.js";
+import MergePage from "./views/MergePage/MergePage.js";
 import LoginPage from "./views/LoginPage/LoginPage.js";
 
 // Importing the Bootstrap CSS
@@ -58,9 +59,9 @@ render((
         <BrowserRouter>
             <Switch>
                 <Route path='/' exact={true} render={(props) => <LandingPage/> } />
-                <Route path='/merge' exact={true} render={(props) => <LandingPage mainSection={'merge'} /> } />
-                <Route path='/fileMerge' exact={true} render={(props) => <LandingPage mainSection={'fileMerge'} /> } />
-                <Route path='/pricing' exact={true} render={(props) => <PricingPage mainSection={'pricingPage'} /> } />
+                <Route path='/merge' exact={true} render={(props) => <MergePage  /> } />
+                <Route path='/fileMerge' exact={true} render={(props) => <LandingPage /> } />
+                <Route path='/pricing' exact={true} render={(props) => <PricingPage /> } />
                 <Route path='/apiconfiguration' exact={true} render={(props) => <LandingPage mainSection={'apiconfiguration'} /> } />
                 <Route path='/*' exact={true} render={(props) => <LandingPage mainSection={'404'} /> } />
             </Switch>

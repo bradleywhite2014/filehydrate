@@ -268,6 +268,7 @@ const EnhancedTableToolbar = (props) => {
          color="secondary"
          size="large"
          variant="contained"
+         disabled={isLoadingTemplate}
          style={{marginBottom: 15,marginTop: 15,marginRight: 15}} 
          onClick={() => onClickMerge(docId, tableList, selected,formFields,mappingFields)}
        >

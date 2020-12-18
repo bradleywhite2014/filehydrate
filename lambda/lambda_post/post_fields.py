@@ -250,7 +250,7 @@ def merge_template(tmpl_id, source, service, docs, merge_items):
     # copy template and set context data struct for merging template values
     copy_id = _copy_template(tmpl_id, source, service)
     context = merge.iteritems() if hasattr({}, 'iteritems') else merge.items()
-    
+    time.sleep(1);
     doc = docs.documents().get(documentId=copy_id).execute()
     doc_content = doc.get('body').get('content')
     # need to eventually find all tables, not just one

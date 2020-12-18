@@ -27,6 +27,7 @@ class GlobalModal extends Component {
           aria-labelledby="contained-modal-title-vcenter"
           centered
           show={true}
+          animation={false}
         >
           <Modal.Header>
             <Modal.Title id="contained-modal-title-vcenter">
@@ -36,7 +37,7 @@ class GlobalModal extends Component {
           <Modal.Body>
             {this.props.state.modalTableList ? <React.Fragment></React.Fragment> : <div/> }
             <h4>{this.props.state.globalModal.title}</h4>
-              {this.props.state.globalModal.title === 'Document Links' ? this.props.state.globalModal.content.map((id) => <li> <a href={this.buildLink(id)}>{this.buildLink(id)}</a> </li>) : this.props.state.globalModal.content}
+              {this.props.state.globalModal.title === 'Document Links' ? this.props.state.globalModal.content.map((id) => <li key={id}> <a href={this.buildLink(id)}>{this.buildLink(id)}</a> </li>) : this.props.state.globalModal.content}
           </Modal.Body>
           <Modal.Footer>
             <Button onClick={this.onHide}>Close</Button>
