@@ -12,17 +12,22 @@ import { green } from '@material-ui/core/colors';
 const GreenCheckbox = withStyles({
   root: {
     color: green[400],
-    '&$checked': {
-      color: green[600],
+    '&$disabled': {
+      color: 'grey',
     },
   },
   checked: {},
 })((props) => <Checkbox color="default" {...props} />);
 
 
-class GlobalModal extends Component {
+class TagModal extends Component {
   constructor(props) {
     super(props)
+    this.isChecked = this.isChecked.bind(this);
+  }
+
+  isChecked = (subFields, header, formKey) => {
+    return subFields[header].column_mapping === formKey
   }
 
   render() {
@@ -32,6 +37,7 @@ class GlobalModal extends Component {
           aria-labelledby="contained-modal-title-vcenter"
           centered
           show={true}
+          animation={false}
         >
           <Modal.Header>
             <Modal.Title id="contained-modal-title-vcenter">
@@ -42,10 +48,15 @@ class GlobalModal extends Component {
             <h4>Fields</h4>
               <div style={{display: 'flex', flexDirection: 'column', maxHeight: '250px', overflowY: 'scroll'}}>
                 {Object.keys(this.props.state.formFields).map( key => {
-                  return <FormControlLabel
-                      control={<GreenCheckbox onClick={(event) => this.props.onCheckClick({key, columnHeader: this.props.header, selected: event.target.checked})} checked={this.props.state.mappingFields[this.props.header].column_mapping === key} name="checkedG" />}
+                  return <div style={{display: 'flex' , marginLeft: '8px'}}> <FormControlLabel
+                      control={<GreenCheckbox onClick={(event) => this.props.onCheckClick({key, columnHeader: this.props.header, selected: event.target.checked})} checked={this.isChecked(this.props.subFields, this.props.header, key)} name="checked" />}
                       label={key}
+                      disabled={(!!this.props.state.formToMappingFields[key] && !!this.props.state.formToMappingFields[key].value && this.props.state.formToMappingFields[key].value !== this.props.header)}
                   />
+                  {
+                    !!this.props.state.formToMappingFields[key] && !!this.props.state.formToMappingFields[key].value ? <label style={{color: 'green'}}>Currently assigned to {this.props.state.formToMappingFields[key].value}</label> : <React.Fragment/>
+                  }
+                  </div> 
                 })
               }
             </div>
@@ -66,4 +77,4 @@ export default connect((state) => (
 ),
   { onTagClick, onCheckClick }
 )
-((GlobalModal));
+((TagModal));

@@ -16,7 +16,9 @@ export const changeMergeStyle = (payload) => ({type: constants.CHANGE_MERGE_STYL
 export const updateMiraklToken = (payload) => ({type: constants.UPDATE_MIRAKL_TOKEN, payload});
 export const updateMiraklUrl = (payload) => ({type: constants.UPDATE_MIRAKL_URL, payload});
 export const onTagClick = (payload) => ({type: constants.ON_TAG_CLICK, payload});
+export const onTableClick = (payload) => ({type: constants.ON_TABLE_CLICK, payload});
 export const onCheckClick = (payload) => ({type: constants.ON_TAG_CHECK_CLICK, payload});
+export const onTableBackClick = (payload) => ({type: constants.ON_TABLE_BACK_CLICK, payload});
 
 
 export const getMiraklTokenStatus = (payload) => ({type: constants.GET_MIRAKL_TOKEN_STATUS, payload});
@@ -32,7 +34,9 @@ export const loadUserTemplateForFile = (payload) => ({type: constants.LOAD_USER_
 export const loadUserTemplateForFileSuccess = (payload) => ({type: constants.LOAD_USER_TEMPLATE_FOR_FILE_SUCCESS, payload});
 
 //auth
-export const isAuthed = (payload) => ({type: constants.CHECK_AUTH_STATUS, payload});
+export const checkAuthState = (payload) => ({type: constants.CHECK_AUTH_STATUS, payload});
+export const setAuthStateSuccess = (payload) => ({type: constants.SET_AUTH_STATE, payload});
+export const setAuthStateError = (payload) => ({type: constants.SET_AUTH_STATE_ERROR, payload});
 export const parseTokens =(payload) => ({type: constants.PARSE_TOKENS_FROM_URL, payload});
 export const loginPending = (payload) => ({type: constants.LOGIN_PENDING, payload});
 export const logoutUser = (payload) => ({type: constants.LOGOUT_USER, payload});
@@ -48,3 +52,13 @@ export const hideModal = (payload)  => ({type: constants.HIDE_GLOBAL_MODAL, payl
 export const setModalInfo = (payload)  => ({type: constants.SET_GLOBAL_MODAL_INFO, payload});
 export const clearModalInfo = (payload)  => ({type: constants.CLEAR_GLOBAL_MODAL_INFO, payload});
 
+//data modal
+export const hideDataModal = (payload) => ({type: constants.HIDE_DATA_MODAL, payload});
+
+//firebase
+export const setFirebase = (payload) => ({type: constants.SET_FIREBASE, payload});
+export const kickoffCheckout = (payload) => ({type: constants.KICKOFF_CHECKOUT, payload});
+export const resetCheckout = (payload) => ({type: constants.RESET_CHECKOUT, payload});
+
+export const findOrCreateUserSubStatus = (payload) => ({type: constants.FIND_OR_CREATE_SUB_STATUS, payload});
+export const findOrCreateSubStatusSuccess = (payload) => ({type: constants.FIND_OR_CREATE_SUB_STATUS_SUCCESS, payload});

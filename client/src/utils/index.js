@@ -87,73 +87,178 @@ export const parseJwt = (token) => {
   }
 };
 
-// export const reorderMappingFields = (mappingFields) => {
-//   let orderId = mappingFields.splice(mappingFields.indexOf('Order ID'), 1);
-//   let orderStatus = mappingFields.splice(mappingFields.indexOf('Order Status'), 1);
-//   let createdDate = mappingFields.splice(mappingFields.indexOf('Created Date'), 1);
-//   let productTitle = mappingFields.splice(mappingFields.indexOf('Product Title'), 1);
+const jsUcfirst = (string) => {
+  return string.charAt(0).toUpperCase() + string.slice(1);
+}
 
-//   mappingFields.unshift(productTitle);
-//   mappingFields.unshift(createdDate);
-//   mappingFields.unshift(orderStatus);
-//   mappingFields.unshift(orderId);
-// }
+const convertSnakeKeyToLabel = (key,prevKey) => {
+  let pieces = key.split('_');
+  pieces = pieces.map((piece) => {return jsUcfirst(piece);})
+  return pieces.join(' ');
+}
 
-export const mapMiraklOrders = (orders) => {
-  if(orders.length > 0) {
-    orders = orders.filter((order) => !!order.customer.billing_address)
-    return orders.map((order) => {
-      if(order.customer.billing_address){
-        return {
-          'Order ID': order.order_id,
-          'Order Status': order.order_state,
-          'Created Date': order.created_date,
-          'Product Title': order.order_lines[0].product_title,
-          'Billing Address City': order.customer.billing_address.city,
-          'Billing Address Country': order.customer.billing_address.country,
-          'Billing Address Country_iso_code': order.customer.billing_address.country_iso_code,
-          'Billing Address Firstname': order.customer.billing_address.firstname,
-          'Billing Address Lastname': order.customer.billing_address.lastname,
-          'Billing Address State': order.customer.billing_address.state,
-          'Billing Address Street1': order.customer.billing_address.street_1,
-          'Billing Address Street2': order.customer.billing_address.street_2,
-          'Billing Address Zip Code': order.customer.billing_address.zip_code,
-          'Shipping Address City': order.customer.shipping_address.city,
-          'Shipping Address Country': order.customer.shipping_address.country,
-          'Shipping Address Country Code': order.customer.shipping_address.country_iso_code,
-          'Shipping Address First Name': order.customer.shipping_address.firstname,
-          'Shipping Address Last Name': order.customer.shipping_address.lastname,
-          'Shipping Address State': order.customer.shipping_address.state,
-          'Shipping Address Street1': order.customer.shipping_address.street_1,
-          'Shipping Address Street2': order.customer.shipping_address.street_2,
-          'Shipping Address Zip Code': order.customer.shipping_address.zip_code, 
-          'Shipping Tracking Number': order.shipping_tracking,
-          'Shipping Tracking URL': order.shipping_tracking_url
-          // 'order_lines:[0]:quantity': order.order_lines[0].quantity
-    
+
+const flattenAndRemoveKeys = (jsonStruct) => {
+  let temp = {}
+
+  const recurseRemove = (jsonStruct) => {
+    Object.keys(jsonStruct).forEach((key) => {
+      if(Array.isArray(jsonStruct[key])){
+        //if array
+        temp[key] = jsonStruct[key]
+        // jsonStruct[key].map((item) => {
+        //   return recurseRemove(item);
+        // })
+      }
+      else if(typeof jsonStruct[key] === 'object'){
+        //we have a subjson, lets move these keys to the top level
+        recurseRemove(jsonStruct[key])
+      }else{
+        //end of a json
+        temp[key] = jsonStruct[key]
+      }
+    });
+  }
+  
+  recurseRemove(jsonStruct)
+  return temp;
+}
+//TODO: use this for the table creation. possibly upgrade table here too... ?
+export const convertSnakedObjectToLabels = (snakedObj, prevKey) => {
+  if(Array.isArray(snakedObj)){
+    snakedObj.map((item) => {
+      return convertSnakedObjectToLabels(item);
+    });
+  } else if(typeof snakedObj === "object"){
+    Object.keys(snakedObj).forEach((key) => {
+      if(snakedObj[key]){
+        // array must come before obj, because an array is an obj in js
+        if(Array.isArray(snakedObj[key])){
+          //if we have a list or obj, keep going
+          let tempVal = snakedObj[key];
+          delete snakedObj[key];
+          snakedObj[convertSnakeKeyToLabel(key)] = convertSnakedObjectToLabels(tempVal);
         }
+        else if(typeof snakedObj[key] === "object"){
+          //need to concat the json key names instead of setting it right away
+          if(prevKey){
+            convertSnakedObjectToLabels(snakedObj[key], prevKey + ' ' + convertSnakeKeyToLabel(key));
+          }else{
+            convertSnakedObjectToLabels(snakedObj[key], convertSnakeKeyToLabel(key));
+          } 
+        }else{
+          if(prevKey){
+            let tempVal = snakedObj[key];
+            delete snakedObj[key];
+            snakedObj[prevKey +' ' + convertSnakeKeyToLabel(key)] = tempVal;
+          }else{
+            let tempVal = snakedObj[key];
+            delete snakedObj[key];
+            snakedObj[convertSnakeKeyToLabel(key)] = tempVal;
+          }
+        }
+      }else{
+        delete snakedObj[key];
       }
       
     })
+  }
+  if(Array.isArray(snakedObj)){
+    //need to loop
+    return snakedObj.map((obj) => {
+      return flattenAndRemoveKeys(obj);
+    })
   }else{
-    return []
+    return flattenAndRemoveKeys(snakedObj);
+  }
+}
+
+const convertResultsToMappingTuples = (results) => {
+  let firstResult
+  if(results && Array.isArray(results)) {
+    firstResult = results[0]
+    let keylist
+    if(results.length > 0){
+        results.forEach((row, index) => {
+            if(index === 0){
+              keylist = Object.keys(row)
+            }else{
+                let currentKeyList = Object.keys(row)
+                let tempKeyList = keylist.concat(currentKeyList)
+                tempKeyList = [...new Set(tempKeyList)];
+                keylist = tempKeyList
+            }
+        })
+    }else{
+      keylist = []
+    }    
+    return keylist.map((field) => {
+      if((Array.isArray(firstResult[field])) && typeof firstResult[field][0] === 'object'){
+        return [field, convertResultsToMappingFields(firstResult[field])]
+      }else{
+        return [field,{
+          open_tag: false,
+          column_mapping: ''
+        }]
+      }
+    })
+  } else if(typeof results === 'object'){
+    let firstResultKeys = Object.keys(firstResult)
+    return firstResultKeys.map((field) => {
+      return [field,{
+        open_tag: false,
+        column_mapping: ''
+      }]
+    })
+    return {}
+  } else {
+    return [results,{
+      open_tag: false,
+      column_mapping: ''
+    }]
   }
   
 }
 
-export const convertResultsToMappingFields = (results) => {
-  if(results && Array.isArray(results)) {
-    let firstResult = results[0]
-    const temp = {}
-    Object.keys(firstResult).forEach((field) => {
-      temp[field] = {
-        open_tag: false,
-        column_mapping: ''
-      }
-    })
-    return temp;
-  } else {
-    return {}
+export const recurseSetNestedValue = (mappingFields, keyList, newVal) => {
+  var schema = mappingFields
+  var len = keyList.length;
+  for(var i = 0; i < len-1; i++) {
+    var elem = keyList[i];
+    if( !schema[elem] ) {
+      schema[elem] = {}
+    }
+    schema = schema[elem];
   }
-  
+  schema[keyList[len-1]] = newVal;
+}
+
+export const convertResultsToMappingFields = (results) => {
+  let mappingTuples = convertResultsToMappingTuples(results)
+  let temp = {}
+  mappingTuples.forEach((tuple) => {
+    temp[tuple[0]] = tuple[1]
+  })
+  return temp
+}
+
+
+
+
+export const convertMappingFieldsToForm = (mappingFields, newObj, path) => {
+  let mappingFieldsKeys = Object.keys(mappingFields);
+  mappingFieldsKeys.forEach((field, index) => {
+    if(typeof mappingFields[field] === 'object' && !mappingFields[field].hasOwnProperty('column_mapping')){
+      //if we have a submapping field lets map it
+      convertMappingFieldsToForm(mappingFields[field], newObj, [...path, field])
+    }
+    else if(mappingFields[field].column_mapping){
+      //if match, grab value for this row
+      newObj[mappingFields[field].column_mapping] = {"value": field, "path": path}
+    }
+    //when done with this layer, remove path
+    if(mappingFieldsKeys.length -1 === index){
+      path = []
+    }
+  })
 }

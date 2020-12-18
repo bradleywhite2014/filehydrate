@@ -7,12 +7,15 @@ import AppBar from '../../../components/AppBar';
 import Typography from '../../../components/Typography';
 import Toolbar, { styles as toolbarStyles } from '../../../components/Toolbar';
 import { connect } from 'react-redux'
-import { setUserInfo , logoutUser} from '../../../lib/actions'
+import {logoutUser, setUserInfo} from '../../../lib/actions'
 import { useHistory } from "react-router-dom";
 import OIDCLoginButton from '../../../components/OIDCLoginButton';
-//1E5Us1TfM8QojOqgfe0-pdmSaw3VOFBK-jTIl6dziPcY
+import {NavHamburger} from '../../../components/NavHamburger';
+import GoogleIcon from '../../../components/GoogleIcon'
+const googleScopes = 'https://www.googleapis.com/auth/drive.file email profile'
 
-const googleScopes = 'https://www.googleapis.com/auth/documents https://www.googleapis.com/auth/drive email profile'
+// Initialize the FirebaseUI Widget using Firebase.
+const firebaseui = new firebaseui.auth.AuthUI(firebase.auth());
 
 
 
@@ -50,25 +53,110 @@ const styles = theme => ({
     width: '20px',
     height: '20px',
     marginRight: '10px'
-  }});
+  },
+  customBtn: {
+    display: 'inline-block',
+    background: 'white',
+    color: '#444',
+    width: '190px',
+    borderRadius: '5px',
+    border: 'thin solid #888',
+    boxShadow: '1px 1px 1px grey',
+    whiteSpace: 'nowrap',
+  },
+  customBtn_hover: {
+    cursor: 'pointer',
+  },
+  span_label: {
+    fontFamily: 'serif',
+    fontWeight: 'normal',
+  },
+  span_icon: {
+    backgorund:'transparent 5px 50% no-repeat',
+    display: 'inline-block',
+    verticalSlign: 'middle',
+    width: '42px',
+    height: '42px',
+  },
+  span_buttonText: {
+    display: 'inline-block',
+    verticalAlign: 'middle',
+    paddingLeft: '42px',
+    paddingRight: '42px',
+    fontSize: '14px',
+    fontWeight: 'bold',
+    /* Use the Roboto font that is loaded in the <head> */
+    fontFamily: 'Roboto sans-serif'
+  }
+});
+
+import * as firebase from 'firebase';
+import firebaseConfig from '../../../firebase.config'
+firebase.initializeApp(firebaseConfig)
 
 function AppAppBar(props) {
   const history = useHistory();
   const { classes } = props; 
 
+  const signInWithGoogle = () => {
+    const provider = new firebase.auth.GoogleAuthProvider();
+    provider.addScope(googleScopes)
+    
+    firebase
+    .auth()
+    .setPersistence(firebase.auth.Auth.Persistence.NONE)
+    .then(() => { 
+      firebase
+      .auth()
+      .signInWithRedirect()
+      .then(result => {
+        //console.log(result)
+        sessionStorage.setItem('filehydrate:accessToken', result.credential.accessToken);
+        sessionStorage.setItem('filehydrate:idToken', result.credential.idToken);
+        props.setUserInfo({name: result.user.displayName, imageUrl: result.user.photoURL, idToken: result.credential.idToken})
+        //history.push('/merge')
+        // let user = result.user
+        // const customer = await stripe.customers.create({ email: user.email });
+        // const intent = await stripe.setupIntents.create({
+        //   customer: customer.id,
+        // });
+        // await admin.firestore().collection('stripe_customers').doc(user.uid).set({
+        //   customer_id: customer.id,
+        //   setup_secret: intent.client_secret,
+        // });
+        Auth.setLoggedIn(true)
+      })
+      .catch(e => console.log(e.message))
+    })
+  }
+
   
   return <div>
-  <AppBar position="fixed">
+    <NavHamburger history={history}/>
+  <AppBar position="fixed" style={{zIndex: '10'}}>
     <Toolbar className={classes.toolbar}>
       <div className={classes.left} />
       <Typography align="center" variant="body2" className={classes.h4}>
-        <Link href="/" underline="none">
-          DocuMerge
+        <Link style={{color: 'white', fontFamily: 'cursive', fontSize:'26px'}} href="/" underline="none">
+          File Hydrate
         </Link>
       </Typography>
       <div className={classes.right}>
-      {props.state.userPhotoUrl ? <img src={props.state.userPhotoUrl} className={classes.profileIcon}/> : <React.Fragment /> }
-      <OIDCLoginButton />
+      {props.state.userInfo.imageUrl ? <img src={props.state.userInfo.imageUrl} className={classes.profileIcon}/> : <React.Fragment /> }
+      
+      {props.state.authState === 'VALID' ? 
+        <div id="customBtn" onClick={() => props.logoutUser()} class="customGPlusSignIn">
+        <GoogleIcon key={1} style={{marginRight: '26px'}} />
+        <div style={{height:'18px'}} class="buttonText">Logout of Google</div>
+      </div>
+        
+      :
+      <div id="customBtn" onClick={() => signInWithGoogle()} class="customGPlusSignIn">
+        <GoogleIcon key={1} style={{marginRight: '26px'}} />
+        <div style={{height:'18px'}} class="buttonText">Login With Google</div>
+      </div>
+      }
+      
       </div>
     </Toolbar>
   </AppBar>
@@ -85,6 +173,6 @@ export default connect((state) => (
     state: state
   }
 ),
-  { setUserInfo , logoutUser}
+  { logoutUser, setUserInfo}
 )
 (withStyles(styles)(AppAppBar));

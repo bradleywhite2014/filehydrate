@@ -7,15 +7,14 @@ import {randomString} from '../utils'
 
 import {appConfig} from '../config'
 
-import {get, post, httpPut} from './http'
+import {get, post, httpPut} from './http' 
 
-  
 export function* fetchMergeFields({payload}) {
   try{
-    const mergeFields = yield call(get, 'https://lipyjnw0f8.execute-api.us-east-2.amazonaws.com/main' + '?docId=' + payload + '&access_token=' + sessionStorage.getItem('accessToken'))
+    const mergeFields = yield call(get, 'https://lipyjnw0f8.execute-api.us-east-2.amazonaws.com/main' + '?docId=' + payload + '&access_token=' + sessionStorage.getItem('filehydrate:accessToken'))
     
     if(mergeFields.error){
-      if(mergeFields.error.code === 401) {
+      if(mergeFields.error.code === 401 || mergeFields.error.code === 403) {
         //lets go a head and get logged out
         yield put(actions.logoutUser())
       }
@@ -32,7 +31,7 @@ export function* fetchMergeFields({payload}) {
 //https://fxr009j313.execute-api.us-east-2.amazonaws.com/main
 export function* submitMergeFields({payload}) {
   try{
-    const results = yield call(post,'https://lipyjnw0f8.execute-api.us-east-2.amazonaws.com/main'  + '?docId=' + payload.docId + '&access_token=' + sessionStorage.getItem('accessToken'), payload.formFields)
+    const results = yield call(post,'https://lipyjnw0f8.execute-api.us-east-2.amazonaws.com/main'  + '?docId=' + payload.docId + '&access_token=' + sessionStorage.getItem('filehydrate:accessToken'), payload.formFields)
     
     if(results.error){
       if(results.error.code === 401 || results.error.code === 403) {
@@ -41,12 +40,18 @@ export function* submitMergeFields({payload}) {
       }
       yield put(actions.putErrorMessage(results.error.message))
     }else {
-      yield put(actions.setModalInfo({
-        header: 'Success!',
-        title: 'Document Links',
-        content: results
-      }))
-      yield put(actions.showModal())
+      if(results.message && results.message === 'Internal server error'){
+        yield put(actions.putErrorMessage(results.error.message))
+      }else{
+        yield put(actions.submitMergeFieldsSuccess())
+        yield put(actions.setModalInfo({
+          header: 'Success!',
+          title: 'Document Links',
+          content: results
+        }))
+        yield put(actions.showModal())
+      }
+      
     }
   }catch(e){
     yield put(actions.putErrorMessage(e))
@@ -57,7 +62,10 @@ export function* submitMergeFields({payload}) {
 export function* getMiraklTokenStatus({payload}) {
   try{
     const results = yield call(get,'https://fxr009j313.execute-api.us-east-2.amazonaws.com/main')
-    
+    if(results.Message){
+      //lambda error, not authorized
+      yield put(actions.logoutUser())
+    }
     if(results.error){
       if(results.error.code === 401 || results.error.code === 403) {
         //lets go a head and get logged out
@@ -142,12 +150,12 @@ export function* performFileSearch({payload}) {
   try{
     var files = [];
     if(payload) {
-      files = yield call(get, 'https://www.googleapis.com/drive/v3/files' + "?q=name contains " + "'" + payload + "'" , sessionStorage.getItem('accessToken'))
+      files = yield call(get, 'https://www.googleapis.com/drive/v3/files' + "?q=name contains " + "'" + payload + "'" , sessionStorage.getItem('filehydrate:accessToken'))
     } else {
-      files = yield call(get, 'https://www.googleapis.com/drive/v3/files', sessionStorage.getItem('accessToken'))
+      files = yield call(get, 'https://www.googleapis.com/drive/v3/files', sessionStorage.getItem('filehydrate:accessToken'))
     }
     if(files.error){
-      if(files.error.code === 401) {
+      if(files.error.code === 401 || files.error.code === 403) {
         //lets go a head and get logged out
         yield put(actions.logoutUser())
       }
@@ -165,12 +173,10 @@ export function* performFileSearch({payload}) {
 export function* performMiraklSearch({payload}) {
   try{
     var orders = [];
-
     orders = yield call(get,'https://6m5cadt7n1.execute-api.us-east-2.amazonaws.com/main')
     
-    //console.log(orders)
     if(orders.error){
-      if(orders.error.code === 401) {
+      if(orders.error.code === 401 || orders.error.code === 403) {
         //lets go a head and get logged out
         yield put(actions.logoutUser())
       }
@@ -187,9 +193,21 @@ export function* performMiraklSearch({payload}) {
 
 export function* performAuthCheck({payload}) {
   try {
-
+    let result = yield call(payload.firebase.auth().getRedirectResult)
+    console.log(result)
+    if(result.credential) {
+      // This gives you a Google Access Token. You can use it to access the Google API.
+      var accessToken = result.credential.accessToken;
+      var idToken = result.credential.idToken;
+      // The signed-in user info.
+      var user = result.user;
+  
+      yield put(actions.setAuthStateSuccess({"accessToken": accessToken, "user": user}))
+    }else{
+      yield put(actions.setAuthStateError())
+    }
   }catch(e){
-    yield put(actions.putErrorMessage(e))
+    yield put(actions.setAuthStateError())
   }
 }
 
@@ -197,31 +215,33 @@ export function* performAuthCheck({payload}) {
 
 export function* performLogin({payload}) {
   try {
-    const googleScopes = 'https://www.googleapis.com/auth/documents https://www.googleapis.com/auth/drive email profile'
-    const generatedNonce = randomString(12)
-    const authConfig = {
-      'client_id': '382267252700-csiq3fr71ifkfckr39s6tdr3bqgpb3gn.apps.googleusercontent.com',
-      'redirect_uri': window.origin += '/implicit/callback',
-      'response_type': 'token id_token',
-      'scope': googleScopes,
-      'include_granted_scopes': 'true',
-      'state': 'pass-through value',
-      'nonce': generatedNonce,
-    }
+    // const googleScopes = 'https://www.googleapis.com/auth/documents https://www.googleapis.com/auth/drive email profile'
+    // const generatedNonce = randomString(12)
+    // const authConfig = {
+    //   'client_id': '382267252700-csiq3fr71ifkfckr39s6tdr3bqgpb3gn.apps.googleusercontent.com',
+    //   'redirect_uri': window.origin += '/implicit/callback',
+    //   'response_type': 'token id_token',
+    //   'scope': googleScopes,
+    //   'include_granted_scopes': 'true',
+    //   'state': 'pass-through value',
+    //   'nonce': generatedNonce,
+    // }
 
-    // Google's OAuth 2.0 endpoint for requesting an access token
-    var oauth2RedirectEndpoint = 'https://accounts.google.com/o/oauth2/v2/auth?';
+    // // Google's OAuth 2.0 endpoint for requesting an access token
+    // var oauth2RedirectEndpoint = 'https://accounts.google.com/o/oauth2/v2/auth?';
 
-    // Add form parameters as hidden input values.
-    for (var key in authConfig) {
-      if(key && authConfig[key]) {
-        oauth2RedirectEndpoint += key + '=' + authConfig[key] + '&'; // we'll remove the last amp
-      }
-    }
-    //remove extra amp
-    var oauth2RedirectEndpoint = oauth2RedirectEndpoint.slice(0, -1)
+    // // Add form parameters as hidden input values.
+    // for (var key in authConfig) {
+    //   if(key && authConfig[key]) {
+    //     oauth2RedirectEndpoint += key + '=' + authConfig[key] + '&'; // we'll remove the last amp
+    //   }
+    // }
+    // //remove extra amp
+    // var oauth2RedirectEndpoint = oauth2RedirectEndpoint.slice(0, -1)
 
-    window.location.href = oauth2RedirectEndpoint; 
+    // window.location.href = oauth2RedirectEndpoint; 
+    console.log(payload)
+    yield call(payload.firebase.auth().signInWithRedirect(payload.provider))
 
     yield put(actions.loginPending())
 
@@ -236,7 +256,7 @@ export function* performLogout({payload}) {
   try {
 
     // Google's OAuth 2.0 endpoint for requesting an access token
-    var oauth2Endpoint = 'https://oauth2.googleapis.com/revoke?token=' + sessionStorage.getItem('accessToken');
+    var oauth2Endpoint = 'https://oauth2.googleapis.com/revoke?token=' + sessionStorage.getItem('filehydrate:accessToken');
     console.log(oauth2Endpoint);
     const resp = yield call(post, oauth2Endpoint)
 
@@ -250,6 +270,29 @@ export function* performLogout({payload}) {
   }catch(e){
     yield put(actions.putErrorMessage(e))
   }
+}
+
+//findOrCreateSubStatus
+export function* findOrCreateSubStatus({payload}) {
+  try{
+    const results = yield call(get,'https://fxr009j313.execute-api.us-east-2.amazonaws.com/main/subscription-status')
+    console.log(results);
+    if(results.error){
+      if(results.error.code === 401 || results.error.code === 403) {
+        //lets go a head and get logged out
+        yield put(actions.logoutUser())
+      }
+      yield put(actions.putErrorMessage(results.error.message))
+    }else if(results.Message === 'User is not authorized to access this resource with an explicit deny'){
+      //lets go a head and get logged out
+      yield put(actions.logoutUser())
+    }else {
+      yield put(actions.findOrCreateSubStatusSuccess(results))
+    }
+  }catch(e){
+    yield put(actions.putErrorMessage(e))
+  }
+  
 }
 
 function * watcher () {
@@ -271,6 +314,7 @@ function * watcher () {
     yield takeEvery(constants.SUBMIT_MIRAKL_DETAILS, submitMiraklHostAndToken)
     yield takeEvery(constants.SUBMIT_USER_TEMPLATE, submitUserTemplate)
     yield takeEvery(constants.LOAD_USER_TEMPLATE_FOR_FILE, loadUserTemplateForFile)
+    yield takeEvery(constants.FIND_OR_CREATE_SUB_STATUS, findOrCreateSubStatus)
     
   }
 }

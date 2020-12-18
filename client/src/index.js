@@ -6,9 +6,13 @@ import './assets/styles/index.css';
 import { createStore, applyMiddleware } from 'redux'
 import reducer from './reducers';
 import rootSagas from './middleware/sagas';
-import Home from './screens/Home';
 import createSagaMiddleware from 'redux-saga'
-import LoginCallback from './screens/LoginCallback';
+// pages for this product
+import LandingPage from "./views/LandingPage/LandingPage.js";
+import PricingPage from "./views/PricingPage/PricingPage.js";
+import ProfilePage from "./views/ProfilePage/ProfilePage.js";
+import MergePage from "./views/MergePage/MergePage.js";
+import LoginPage from "./views/LoginPage/LoginPage.js";
 
 // Importing the Bootstrap CSS
 import 'bootstrap/dist/css/bootstrap.min.css'
@@ -27,7 +31,7 @@ const sagaMiddleware = createSagaMiddleware();
 const saveState = (state) => {
     try {
         let serializedState = JSON.stringify(state);
-        localStorage.setItem("documerge_state", serializedState);
+        localStorage.setItem("filehydrate_state", serializedState);
 
     }
     catch (err) {
@@ -54,10 +58,12 @@ render((
     <Provider store={store}>
         <BrowserRouter>
             <Switch>
-                <Route path='/' exact={true} render={(props) => <Home/> } />
-                <Route path='/implicit/callback' component={LoginCallback}/>
-                <Route path='/merge' exact={true} render={(props) => <Home mainSection={'merge'} /> } />
-                <Route path='/fileSelect' exact={true} render={(props) => <Home mainSection={'fileSelect'} /> } />
+                <Route path='/' exact={true} render={(props) => <LandingPage/> } />
+                <Route path='/merge' exact={true} render={(props) => <MergePage  /> } />
+                <Route path='/fileMerge' exact={true} render={(props) => <LandingPage /> } />
+                <Route path='/pricing' exact={true} render={(props) => <PricingPage /> } />
+                <Route path='/apiconfiguration' exact={true} render={(props) => <LandingPage mainSection={'apiconfiguration'} /> } />
+                <Route path='/*' exact={true} render={(props) => <LandingPage mainSection={'404'} /> } />
             </Switch>
         </BrowserRouter>
     </Provider>

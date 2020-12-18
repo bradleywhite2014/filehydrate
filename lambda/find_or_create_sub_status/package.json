@@ -1,0 +1,15 @@
+{
+  "name": "stripe_filehydrate",
+  "version": "0.1.0",
+  "private": true,
+  "dependencies": {
+    "stripe":"8.128.0"
+  },
+  "devDependencies": {
+  },
+  "scripts": {
+  },
+  "eslintConfig": {
+    "extends": "react-app"
+  }
+}
