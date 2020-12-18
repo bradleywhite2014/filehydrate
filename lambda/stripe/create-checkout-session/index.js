@@ -74,6 +74,9 @@ exports.handler = (event, context, callback) => {
             });
             const response = {
               statusCode: 200,
+              headers: {
+                "Access-Control-Allow-Origin": "*",
+              },
               body: JSON.stringify({
                 sessionId: session.id,
               }),
@@ -83,6 +86,9 @@ exports.handler = (event, context, callback) => {
             console.log('Error in stripe session creation - ' + e)
             const response = {
               statusCode: 400,
+              headers: {
+                "Access-Control-Allow-Origin": "*",
+              },
               body: JSON.stringify('Bad Request.'),
             };
             callback(null, response);
@@ -98,6 +104,9 @@ exports.handler = (event, context, callback) => {
             if(err){
                 callback(null, {
                     statusCode: 500,
+                    headers: {
+                      "Access-Control-Allow-Origin": "*",
+                    },
                     body: JSON.stringify({
                         status: 'error',
                         message: "Did not upsert successfully."
@@ -128,6 +137,9 @@ exports.handler = (event, context, callback) => {
                 });
                 const response = {
                   statusCode: 200,
+                  headers: {
+                    "Access-Control-Allow-Origin": "*",
+                  },
                   body: JSON.stringify({
                     sessionId: session.id,
                   }),
@@ -137,6 +149,9 @@ exports.handler = (event, context, callback) => {
                 console.log('Error in stripe session creation - ' + e)
                 const response = {
                   statusCode: 400,
+                  headers: {
+                    "Access-Control-Allow-Origin": "*",
+                  },
                   body: JSON.stringify('Bad Request.'),
                 };
                 return response;
@@ -165,6 +180,9 @@ exports.handler = (event, context, callback) => {
             });
             const response = {
               statusCode: 200,
+              headers: {
+                "Access-Control-Allow-Origin": "*",
+              },
               body: JSON.stringify({
                 sessionId: session.id,
               }),
@@ -174,6 +192,9 @@ exports.handler = (event, context, callback) => {
             console.log('Error in stripe session creation - ' + e)
             const response = {
               statusCode: 400,
+              headers: {
+                "Access-Control-Allow-Origin": "*",
+              },
               body: JSON.stringify('Bad Request.'),
             };
             callback(null, response);
