@@ -14,6 +14,9 @@ import {NavHamburger} from '../../../components/NavHamburger';
 import GoogleIcon from '../../../components/GoogleIcon'
 const googleScopes = 'https://www.googleapis.com/auth/drive.file email profile'
 
+// Initialize the FirebaseUI Widget using Firebase.
+const firebaseui = new firebaseui.auth.AuthUI(firebase.auth());
+
 
 
 const styles = theme => ({
@@ -112,6 +115,15 @@ function AppAppBar(props) {
         sessionStorage.setItem('filehydrate:idToken', result.credential.idToken);
         props.setUserInfo({name: result.user.displayName, imageUrl: result.user.photoURL, idToken: result.credential.idToken})
         //history.push('/merge')
+        // let user = result.user
+        // const customer = await stripe.customers.create({ email: user.email });
+        // const intent = await stripe.setupIntents.create({
+        //   customer: customer.id,
+        // });
+        // await admin.firestore().collection('stripe_customers').doc(user.uid).set({
+        //   customer_id: customer.id,
+        //   setup_secret: intent.client_secret,
+        // });
         Auth.setLoggedIn(true)
       })
       .catch(e => console.log(e.message))

@@ -38,7 +38,8 @@ import {
     SET_AUTH_STATE,
     SET_FIREBASE,
     KICKOFF_CHECKOUT,
-    RESET_CHECKOUT
+    RESET_CHECKOUT,
+    FIND_OR_CREATE_SUB_STATUS_SUCCESS
   } from '../utils/constants'
 
 import _ from 'underscore';
@@ -49,7 +50,8 @@ import {convertMergeFieldsToFormFields, convertGoogleFileResponseToAutocompleteF
     return {
         userInfo: {
             name: '',
-            imageUrl: ''
+            imageUrl: '',
+            uid: ''
         },
         accessToken: '',
         mappingFields: [],
@@ -81,7 +83,9 @@ import {convertMergeFieldsToFormFields, convertGoogleFileResponseToAutocompleteF
             content: ''
         },
         miraklHeaders: [],
-        checkoutScreen: ''
+        checkoutScreen: '',
+        sub_status: 'inactive',
+        sub_type: 'free'
     }
     
 };
@@ -106,14 +110,16 @@ const initialState = initializeState();
 const reducer = (state = initialState, action) => {
     switch (action.type) {
       case SET_USER_INFO: {
-        const {idToken, name, imageUrl } = action.payload
+        const {idToken, name, imageUrl, uid } = action.payload
         return Object.assign({}, state, {
             authState: 'VALID',
             userInfo: {
               name: name,
-              imageUrl: imageUrl
+              imageUrl: imageUrl,
+              uid: uid
             },
-            accessToken: idToken
+            accessToken: idToken,
+            
         })
         
       }
@@ -404,7 +410,8 @@ const reducer = (state = initialState, action) => {
         return Object.assign({}, state, {
             userInfo: {
               name: userInfo.name,
-              imageUrl: userInfo.imageUrl
+              imageUrl: userInfo.imageUrl,
+              uid: userInfo.uid
             },
             accessToken: accessToken
         })
@@ -413,7 +420,8 @@ const reducer = (state = initialState, action) => {
         return Object.assign({}, state, {
             userInfo: {
                 name: '',
-                imageUrl: ''
+                imageUrl: '',
+                uid: ''
             },
             accessToken: '',
         })
@@ -467,6 +475,13 @@ const reducer = (state = initialState, action) => {
         return Object.assign({}, state, {
             checkoutScreen: ''
         })    
+      }
+      case FIND_OR_CREATE_SUB_STATUS_SUCCESS: {
+        const res = action.payload
+        return Object.assign({}, state, {
+            sub_status: res.sub_status,
+            sub_type: res.sub_type
+        })  
       }
       default:  
         return Object.assign({}, state,loadState())

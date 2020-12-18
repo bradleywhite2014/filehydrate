@@ -13,6 +13,7 @@
     "bootstrap": "^4.4.1",
     "classnames": "2.2.6",
     "firebase": "^7.24.0",
+    "firebase-admin": "^9.4.2",
     "framer-motion": "^2.4.1",
     "googleapis": "^43.0.0",
     "history": "4.10.1",
@@ -35,6 +36,7 @@
     "react-swipeable-views": "^0.13.9",
     "redux": "^4.0.1",
     "redux-saga": "^1.0.2",
+    "stripe": "^8.128.0",
     "underscore": "^1.11.0"
   },
   "devDependencies": {

@@ -30,11 +30,14 @@ const handleFetchResult = function(result) {
 };
 
 // Create a Checkout Session with the selected plan ID
+// TODO: you cant create another checkout session when youre already a sub
 const createCheckoutSession = function(priceId) {
   return fetch("https://yk39zpa2ae.execute-api.us-east-2.amazonaws.com/main/checkout_session", {
     method: "POST",
     headers: {
-      "Content-Type": "application/json"
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+      'Authorization': sessionStorage.getItem('filehydrate:idToken')
     },
     body: JSON.stringify({
       priceId: priceId
@@ -82,6 +85,29 @@ function PricingCard(props) {
         <button style={{cursor: 'button'}} onClick={
           (event) =>  {
             event.preventDefault();
+            //after sign in, check dynamodb for account status. lets even hardcode mine and toggle
+            //to begin and get that working first..
+            //if user doesnt exist, the backend will create the customer
+            //getSubStatus(user.uid) => always returns customer_id and sub_status
+            //use the dynamodb mapping of customer_id and uid
+
+            //require login before checkout.. 
+            //use a "login with google" (with to get started subtext) button where it says "get started" now for payments
+            //if they arent logged in, they will use the login button, and we will automatically
+            //get the customer status after sign-in, and trigger redirect with customer_id
+            //if they are already logged in (by using top right)
+            //we will already have a customer_id, and we can display "Get Started"
+            //instead of showing login with google.
+            //create checkout session with the customer_id
+            //when customer is done, we will get a webhook event to turn their account to active
+
+
+            
+            //if no customer exists, create customer..
+            //this will allow us to connect the logged in user with a valid sub or not
+            //then when user finishes triggering subscription, webhook will receive
+            //the new sub and it can find the existing row and update the sub_status column by
+            //using the customer_id as a query mechanism.
             switch(level){
               case "Basic": {
                 createCheckoutSession(basicPriceId).then(function(data) {

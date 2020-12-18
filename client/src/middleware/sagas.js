@@ -192,7 +192,6 @@ export function* performMiraklSearch({payload}) {
 }
 
 export function* performAuthCheck({payload}) {
-  console.log(payload)
   try {
     let result = yield call(payload.firebase.auth().getRedirectResult)
     console.log(result)
@@ -273,6 +272,29 @@ export function* performLogout({payload}) {
   }
 }
 
+//findOrCreateSubStatus
+export function* findOrCreateSubStatus({payload}) {
+  try{
+    const results = yield call(get,'https://fxr009j313.execute-api.us-east-2.amazonaws.com/main/subscription-status')
+    console.log(results);
+    if(results.error){
+      if(results.error.code === 401 || results.error.code === 403) {
+        //lets go a head and get logged out
+        yield put(actions.logoutUser())
+      }
+      yield put(actions.putErrorMessage(results.error.message))
+    }else if(results.Message === 'User is not authorized to access this resource with an explicit deny'){
+      //lets go a head and get logged out
+      yield put(actions.logoutUser())
+    }else {
+      yield put(actions.findOrCreateSubStatusSuccess(results))
+    }
+  }catch(e){
+    yield put(actions.putErrorMessage(e))
+  }
+  
+}
+
 function * watcher () {
   if (appConfig.OFFLINE_MODE) {
     // going to use mocked out versions
@@ -292,6 +314,7 @@ function * watcher () {
     yield takeEvery(constants.SUBMIT_MIRAKL_DETAILS, submitMiraklHostAndToken)
     yield takeEvery(constants.SUBMIT_USER_TEMPLATE, submitUserTemplate)
     yield takeEvery(constants.LOAD_USER_TEMPLATE_FOR_FILE, loadUserTemplateForFile)
+    yield takeEvery(constants.FIND_OR_CREATE_SUB_STATUS, findOrCreateSubStatus)
     
   }
 }

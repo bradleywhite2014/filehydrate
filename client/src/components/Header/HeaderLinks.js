@@ -1,9 +1,9 @@
 /*eslint-disable*/
-import React from "react";
+import React, { Component } from 'react';
 import DeleteIcon from "@material-ui/icons/Delete";
 import IconButton from "@material-ui/core/IconButton";
 // react components for routing our app without refresh
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 
 // @material-ui/core components
 import { makeStyles } from "@material-ui/core/styles";
@@ -23,18 +23,39 @@ import styles from "../../assets/jss/material-kit-react/components/headerLinksSt
 
 const googleScopes = 'https://www.googleapis.com/auth/drive.file email profile'
 import { connect } from 'react-redux'
-import {logoutUser, setUserInfo} from '../../lib/actions'
-import { useHistory } from "react-router-dom";
+import {logoutUser, setUserInfo, checkAuthState, findOrCreateUserSubStatus} from '../../lib/actions'
 const useStyles = makeStyles(styles);
 import * as firebase from 'firebase';
 import firebaseConfig from '../../firebase.config'
 firebase.initializeApp(firebaseConfig)
 
 
-function HeaderLinks(props) {
-  const history = useHistory();
+var publishableKey = 'pk_test_51Haz1VAt5lSr2FnXP2rNSAJ4ONL8LcfWt7cdhplJ4rO55TM2H3uS3MlnXSia6Bh06SQ6ckMQeVX3bSjstnC27Uv60083wJIIfA';
+import {Stripe} from 'stripe';
+const stripe = new Stripe(publishableKey, {
+  apiVersion: '2020-08-27',
+});
 
-  const signInWithGoogle = () => {
+
+
+class HeaderLinks extends Component {
+
+  constructor(props) {
+    super(props)
+    this.signInWithGoogle = this.signInWithGoogle.bind(this);
+  }
+  
+
+  componentDidMount = () => {
+    this.props.checkAuthState();
+    if(this.props.state.userInfo.uid){
+      this.props.findOrCreateUserSubStatus(this.props.state.userInfo.uid);
+    }
+    
+  }
+  
+
+  signInWithGoogle = () => {
     const provider = new firebase.auth.GoogleAuthProvider();
     provider.addScope(googleScopes)
     
@@ -44,37 +65,59 @@ function HeaderLinks(props) {
     .then(() => { 
       firebase
       .auth()
-      .signInWithRedirect(provider)
-      .then(result => {
+      .signInWithPopup(provider)
+      .then(async (result) => {
         //console.log(result)
+        let user = result.user;
         sessionStorage.setItem('filehydrate:accessToken', result.credential.accessToken);
         sessionStorage.setItem('filehydrate:idToken', result.credential.idToken);
-        props.setUserInfo({name: result.user.displayName, imageUrl: result.user.photoURL, idToken: result.credential.idToken})
+        this.props.setUserInfo({name: result.user.displayName, imageUrl: result.user.photoURL, idToken: result.credential.idToken, uid: user.uid})
         //history.push('/merge')
-        Auth.setLoggedIn(true)
+        
+        this.props.findOrCreateUserSubStatus(user.uid);
+
+        Auth.setLoggedIn(true) 
       })
       .catch(e => console.log(e.message))
     })
   }
 
-  return (
-    <List >
-      <ListItem >
-      {props.state && props.state.authState === 'VALID' ? 
-        <div id="customBtn" onClick={() => props.logoutUser()} className="customGPlusSignIn">
-        <GoogleIcon key={1} style={{marginRight: '26px'}} />
-        <div style={{height:'18px'}} className="buttonText">Logout of Google</div>
-      </div>
-        
-      :
-      <div id="customBtn" onClick={() => signInWithGoogle()} className="customGPlusSignIn">
-        <GoogleIcon key={1} style={{marginRight: '26px'}} />
-        <div style={{height:'18px'}} className="buttonText">Login With Google</div>
-      </div>
-      }
-      </ListItem>
-    </List>
-  );
+  render() {
+    return (
+      <List style={{'display': 'flex'}} >
+        {
+          this.props.state.sub_status && this.props.state.sub_status === 'active' ?
+          <ListItem>
+          <Button
+              color="danger"
+              size="lg"
+              rel="noopener noreferrer"
+            >
+              <Link to="/merge"></Link>
+              <i className="fas fa-play" />
+              Go to Dashboard
+            </Button>
+          </ListItem>
+          : 
+          <React.Fragment></React.Fragment>
+        }
+        <ListItem >
+        {this.props.state && this.props.state.authState === 'VALID' ? 
+          <div style={{'display': 'flex', 'cursor' :'pointer'}} id="customBtn" onClick={() => this.props.logoutUser()} className="customGPlusSignIn">
+          <GoogleIcon key={1} style={{marginRight: '8px'}} />
+          <div style={{height:'18px'}} className="buttonText">Logout of Google</div>
+        </div>
+          
+        :
+        <div style={{'display': 'flex'}} id="customBtn" onClick={() => this.signInWithGoogle()} className="customGPlusSignIn">
+          <GoogleIcon key={1} style={{marginRight: '8px'}} />
+          <div style={{height:'18px'}} className="buttonText">Login With Google</div>
+        </div>
+        }
+        </ListItem>
+      </List>
+    );
+  }
 }
 
 
@@ -83,6 +126,6 @@ export default connect((state) => (
     state: state
   }
 ),
-  { logoutUser, setUserInfo}
+  { logoutUser, setUserInfo, checkAuthState, findOrCreateUserSubStatus}
 )
 (HeaderLinks);
