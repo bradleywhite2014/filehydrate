@@ -176,15 +176,22 @@ class FileSelect extends Component {
                 size="lg"
                 rel="noopener noreferrer"
                 onClick={this.onClickCreateDoc}
+                disabled={!this.props.state.docTemplateNameInput}
               >
                 <i className="fas fa-play" />
                 Create New Template
               </Button>
-              <a href="/fakelink">Link to document here</a>
+              {
+                this.props.state.docId ?
+                  <a style={{marginLeft: '8px'}} href={`https://docs.google.com/document/d/${this.props.state.docId}/edit`}>Edit Google Doc Template</a>
+                :
+                <React.Fragment/>
+              }
             <AutoComplete
               id="tags-standard"
               options={this.props.state.fileList}
               getOptionLabel={(option) => option.label}
+              getOptionSelected={(option, value) => option.value}
               onChange={this.selectFile}
               onInputChange={this.onUpdateInput}
               style={{marginTop: "16px"}}

@@ -278,9 +278,9 @@ def merge_template(tmpl_id, source, service, docs, merge_items):
             for i, val in enumerate(value):
                 if(str(val) == "~~delete~~"):
                     val = ""
-                replaceText = key.upper()
+                replaceText = key
                 if(i != 0):
-                    replaceText = key.upper() + "_{}".format(i)
+                    replaceText = key + "_{}".format(i)
                 reqs.append({'replaceAllText': {
                     'containsText': {
                         'text': '%s' % replaceText, # {{VARS}} are uppercase
@@ -293,7 +293,7 @@ def merge_template(tmpl_id, source, service, docs, merge_items):
                 value = ""
             reqs.append({'replaceAllText': {
                     'containsText': {
-                        'text': '%s' % key.upper(), # {{VARS}} are uppercase
+                        'text': '%s' % key, # {{VARS}} are uppercase
                         'matchCase': True,
                     },
                     'replaceText': str(value),
