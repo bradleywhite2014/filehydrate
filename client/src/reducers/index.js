@@ -39,7 +39,9 @@ import {
     SET_FIREBASE,
     KICKOFF_CHECKOUT,
     RESET_CHECKOUT,
-    FIND_OR_CREATE_SUB_STATUS_SUCCESS
+    FIND_OR_CREATE_SUB_STATUS_SUCCESS,
+    CREATE_BLANK_GOOGLE_DOC_SUCCESS,
+    UPDATE_DOC_TEMPLATE_NAME
   } from '../utils/constants'
 
 import _ from 'underscore';
@@ -85,7 +87,8 @@ import {convertMergeFieldsToFormFields, convertGoogleFileResponseToAutocompleteF
         miraklHeaders: [],
         checkoutScreen: '',
         sub_status: 'inactive',
-        sub_type: 'free'
+        sub_type: 'free',
+        docTemplateNameInput: 'FileHydrate_default'
     }
     
 };
@@ -266,6 +269,12 @@ const reducer = (state = initialState, action) => {
         const resp = action.payload
         return Object.assign({}, state, {
             fileList: convertGoogleFileResponseToAutocompleteFields(resp.files)
+        })
+      }
+      case CREATE_BLANK_GOOGLE_DOC_SUCCESS: {
+        return Object.assign({}, state, {
+            docId: action.payload.id,
+            fileList: [{label: action.payload.name, value: action.payload.id}]
         })
       }
       case CHANGE_MERGE_STYLE: {
@@ -474,6 +483,11 @@ const reducer = (state = initialState, action) => {
       case RESET_CHECKOUT: {
         return Object.assign({}, state, {
             checkoutScreen: ''
+        })    
+      }
+      case UPDATE_DOC_TEMPLATE_NAME: {
+        return Object.assign({}, state, {
+            docTemplateNameInput: action.payload
         })    
       }
       case FIND_OR_CREATE_SUB_STATUS_SUCCESS: {

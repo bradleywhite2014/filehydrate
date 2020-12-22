@@ -2,13 +2,17 @@ import {appConfig} from '../config'
 
 import "regenerator-runtime/runtime";
 
-export const post = async (path, body) => {
+export const post = async (path, body, includeBearer = false, token) => {
+    let bearerString = ''
+    if(includeBearer){
+        bearerString = 'Bearer '
+    }
     const response = await fetch(path, {
         method: 'POST',
         headers: {
         'Accept': 'application/json',
         'Content-Type': 'application/json',
-        'Authorization': sessionStorage.getItem('filehydrate:idToken')
+        'Authorization': token ? bearerString + token : sessionStorage.getItem('filehydrate:idToken')
         },
         body: JSON.stringify(body)
     })

@@ -11,6 +11,9 @@ export const setFileText = (payload) => ({type: constants.SET_FILE_TEXT, payload
 export const performFileSearch = (payload) => ({type: constants.PERFORM_FILE_SEARCH, payload});
 export const performFileSearchSuccess = (payload) => ({type: constants.PERFORM_FILE_SEARCH_SUCCESS, payload});
 export const performFileSearchFailure = (payload) => ({type: constants.PERFORM_FILE_SEARCH_FAILURE, payload});
+export const createBlankGoogleDoc = (payload) => ({type: constants.CREATE_BLANK_GOOGLE_DOC, payload});
+export const createBlankGoogleDocSuccess = (payload) => ({type: constants.CREATE_BLANK_GOOGLE_DOC_SUCCESS, payload});
+export const updateDocTemplateName = (payload) => ({type: constants.UPDATE_DOC_TEMPLATE_NAME, payload});
 export const removeMessage = (payload) => ({type: constants.REMOVE_MESSAGE, payload});
 export const changeMergeStyle = (payload) => ({type: constants.CHANGE_MERGE_STYLE, payload});
 export const updateMiraklToken = (payload) => ({type: constants.UPDATE_MIRAKL_TOKEN, payload});

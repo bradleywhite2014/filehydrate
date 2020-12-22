@@ -170,6 +170,28 @@ export function* performFileSearch({payload}) {
   
 }
 
+export function* createBlankGoogleDoc({payload}) {
+  try{
+    let res = yield call(post, 'https://www.googleapis.com/drive/v3/files', {
+      'name' : payload,
+      'mimeType':'application/vnd.google-apps.document'
+      }, true,sessionStorage.getItem('filehydrate:accessToken'))
+    if(res.error){
+      if(res.error.code === 401 || res.error.code === 403) {
+        //lets go a head and get logged out
+        yield put(actions.logoutUser())
+      }
+      yield put(actions.putErrorMessage(res.error.message))
+    }else {
+      yield put(actions.createBlankGoogleDocSuccess(res)) 
+    }
+    
+  }catch(e){
+    yield put(actions.putErrorMessage(e))
+  }
+  
+}
+
 export function* performMiraklSearch({payload}) {
   try{
     var orders = [];
@@ -268,7 +290,7 @@ export function* performLogout({payload}) {
     }
 
   }catch(e){
-    yield put(actions.putErrorMessage(e))
+    yield put(actions.logoutUserSuccess()) 
   }
 }
 
@@ -304,6 +326,7 @@ function * watcher () {
     yield takeEvery(constants.FETCH_MERGE_FIELDS, fetchMergeFields)
     yield takeEvery(constants.SUBMIT_MERGE_FIELDS, submitMergeFields)
     yield takeLatest(constants.PERFORM_FILE_SEARCH, performFileSearch)
+    yield takeEvery(constants.CREATE_BLANK_GOOGLE_DOC, createBlankGoogleDoc)
     yield takeEvery(constants.SEARCH_MIRAKL_ORDERS, performMiraklSearch)
     yield takeEvery(constants.CHECK_AUTH_STATUS, performAuthCheck)
     yield takeEvery(constants.LOGIN_USER, performLogin)

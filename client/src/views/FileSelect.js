@@ -7,13 +7,14 @@ import TextField from '@material-ui/core/TextField';
 import Typography from '../components/Typography';
 import Toolbar, { styles as toolbarStyles } from '../components/Toolbar';
 import { connect } from 'react-redux'
-import { setFileId, performFileSearch, fetchMergeFields , changeMergeStyle, getMiraklTokenStatus, searchMiraklOrders, submitMergeFields,submitUserTemplate, loadUserTemplateForFile, setModalInfo,showModal, onTagClick, onTableClick} from './../lib/actions'
+import { setFileId, performFileSearch, fetchMergeFields , changeMergeStyle, getMiraklTokenStatus, searchMiraklOrders, submitMergeFields,submitUserTemplate, loadUserTemplateForFile, setModalInfo,showModal, onTagClick, onTableClick, createBlankGoogleDoc, updateDocTemplateName} from './../lib/actions'
 import Grid from '@material-ui/core/Grid';
 import Container from '@material-ui/core/Container';
 import AutoComplete from '@material-ui/lab/Autocomplete';
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
-import Button from '../components/Button';
+import Button from "../components/CustomButtons/Button.js";
+
 import SearchDataTable from '../components/SearchDataTable'
 import Skeleton from '@material-ui/lab/Skeleton';
 import ToggleButton from '@material-ui/lab/ToggleButton';
@@ -34,6 +35,14 @@ const styles = theme => ({
     position: 'relative',
     display: 'flex',
     flexDirection: 'column',
+    alignItems: 'center',
+  },
+  container_horizontal: {
+    marginTop: theme.spacing(10),
+    marginBottom: theme.spacing(15),
+    position: 'relative',
+    display: 'flex',
+    flexDirection: 'row',
     alignItems: 'center',
   },
   item: {
@@ -81,6 +90,8 @@ class FileSelect extends Component {
       this.onSaveTemplate = this.onSaveTemplate.bind(this);
       this.onLoadTemplate = this.onLoadTemplate.bind(this);
       this.onSearchMirakl = this.onSearchMirakl.bind(this);
+      this.onClickCreateDoc = this.onClickCreateDoc.bind(this);
+      this.updateTemplateName = this.updateTemplateName.bind(this);
 
       ReactGA.initialize('UA-163141688-1');
     }
@@ -97,6 +108,10 @@ class FileSelect extends Component {
         category: 'User',
         action: 'Entered File Select Page'
       });
+    }
+
+    onClickCreateDoc = () => {
+      this.props.createBlankGoogleDoc(this.props.state.docTemplateNameInput);
     }
 
     updateFileId = (event, value) => {
@@ -145,50 +160,68 @@ class FileSelect extends Component {
       this.props.searchMiraklOrders()
     }
 
+    updateTemplateName(event) {
+      this.props.updateDocTemplateName(event.target.value);
+    }
+
     render() {
       
       return (
         <section className={styles.root}>
           <Container className={styles.container}>
-          
-          <AutoComplete
-            id="tags-standard"
-            options={this.props.state.fileList}
-            getOptionLabel={(option) => option.label}
-            onChange={this.selectFile}
-            onInputChange={this.onUpdateInput} 
-            style={{marginTop: "16px"}}
-            renderInput={(params) => (
-              <TextField
-                {...params}
-                variant="standard"
-                label="File Search"
-                placeholder="Type to search..."
-              />
-            )}
-          />
-          <Grid style={{marginTop: "36px", marginBottom: "8px"}} item>
-            <Typography style={{marginTop: "8px"}} variant="h5" marked="center" component="h2">
-              Data Source:
-            </Typography>
-            <ToggleButtonGroup size="large" value={this.props.state.mergeStyle} exclusive onChange={this.changeMergeStyle}>
-              <ToggleButton key={1} value="manual">
-                <Typography style={{marginTop: "8px"}} variant="h5" marked="center" component="h2">
-                  Manual
-                </Typography>
-              </ToggleButton>,
-              <ToggleButton key={2} value="mirakl">
-                <Typography style={{marginTop: "8px"}} variant="h5" marked="center" component="h2">
-                  Mirakl
-                </Typography>
-              </ToggleButton>,
-              <ToggleButton key={3} value="gsheet" disabled={true}>
-                <Typography style={{marginTop: "8px"}} variant="h5" marked="center" component="h2">
-                  Google Sheets
-                </Typography>
-              </ToggleButton>,
-            </ToggleButtonGroup>
-          </Grid>
+            <Container className={styles.container_horizontal}>
+            <TextField onChange={(event) => this.updateTemplateName(event)} style={{width: '-webkit-fill-available' , marginTop: 8, marginBottom: 8}} label={'Template Name'} variant="outlined" />
+            <Button
+                color="danger"
+                size="lg"
+                rel="noopener noreferrer"
+                onClick={this.onClickCreateDoc}
+              >
+                <i className="fas fa-play" />
+                Create New Template
+              </Button>
+              <a href="/fakelink">Link to document here</a>
+            <AutoComplete
+              id="tags-standard"
+              options={this.props.state.fileList}
+              getOptionLabel={(option) => option.label}
+              onChange={this.selectFile}
+              onInputChange={this.onUpdateInput}
+              style={{marginTop: "16px"}}
+              renderInput={(params) => (
+                <TextField
+                  {...params}
+                  variant="standard"
+                  label="File Search"
+                  placeholder="Type to search..."
+                />
+              )}
+            />
+          </Container>
+          <Container className={styles.container}>
+            <Grid style={{marginTop: "36px", marginBottom: "8px"}} item>
+              <Typography style={{marginTop: "8px"}} variant="h5" marked="center" component="h2">
+                Data Source:
+              </Typography>
+              <ToggleButtonGroup size="large" value={this.props.state.mergeStyle} exclusive onChange={this.changeMergeStyle}>
+                <ToggleButton key={1} value="manual">
+                  <Typography style={{marginTop: "8px"}} variant="h5" marked="center" component="h2">
+                    Manual
+                  </Typography>
+                </ToggleButton>,
+                <ToggleButton key={2} value="mirakl">
+                  <Typography style={{marginTop: "8px"}} variant="h5" marked="center" component="h2">
+                    Mirakl
+                  </Typography>
+                </ToggleButton>,
+                <ToggleButton key={3} value="gsheet" disabled={true}>
+                  <Typography style={{marginTop: "8px"}} variant="h5" marked="center" component="h2">
+                    Google Sheets
+                  </Typography>
+                </ToggleButton>,
+              </ToggleButtonGroup>
+            </Grid>
+          </Container>
          { this.props.state.docId && this.props.state.mergeStyle === 'manual' ?
         <div style={{marginTop: "36px", marginBottom: "8px"}}>
         <Grid container spacing={5}>
@@ -280,7 +313,9 @@ export default connect((state) => (
     setModalInfo,
     showModal,
     onTagClick,
-    onTableClick
+    onTableClick,
+    createBlankGoogleDoc,
+    updateDocTemplateName
   }
 )
 (withStyles(styles)(FileSelect));
