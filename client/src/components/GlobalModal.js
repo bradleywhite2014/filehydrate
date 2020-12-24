@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import Modal from 'react-bootstrap/Modal';
-import Button from 'react-bootstrap/Button';
+import Button from "../components/CustomButtons/Button.js";
 import { connect } from 'react-redux';
 import {hideModal} from '../lib/actions';
 
@@ -40,7 +40,13 @@ class GlobalModal extends Component {
               {this.props.state.globalModal.title === 'Document Links' ? this.props.state.globalModal.content.map((id) => <li key={id}> <a href={this.buildLink(id)}>{this.buildLink(id)}</a> </li>) : this.props.state.globalModal.content}
           </Modal.Body>
           <Modal.Footer>
-            <Button onClick={this.onHide}>Close</Button>
+            <Button 
+                color="danger"
+                size="lg"
+                rel="noopener noreferrer"
+                onClick={this.onHide}>
+              Close
+            </Button>
           </Modal.Footer>
         </Modal>
       ) : <React.Fragment />;
