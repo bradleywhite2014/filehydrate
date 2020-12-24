@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import Modal from 'react-bootstrap/Modal';
-import Button from 'react-bootstrap/Button';
+import Button from "../components/CustomButtons/Button.js";
 import { connect } from 'react-redux';
 import {hideDataModal, onTableBackClick, loadUserTemplateForFile, submitUserTemplate, searchMiraklOrders, onTagClick, onTableClick} from '../lib/actions';
 import SearchDataTable from '../components/SearchDataTable';
@@ -59,8 +59,16 @@ class DataTableModal extends Component {
               />
           </Modal.Body>
           <Modal.Footer>
-            <Button onClick={this.onTableBackClick}>Back</Button>
-            <Button onClick={this.onHide}>Close</Button>
+            <Button 
+                color="danger"
+                size="lg"
+                rel="noopener noreferrer" 
+                onClick={this.onTableBackClick}>Back</Button>
+            <Button 
+                color="danger"
+                size="lg"
+                rel="noopener noreferrer" 
+                onClick={this.onHide}>Close</Button>
           </Modal.Footer>
         </Modal>
       ) : <React.Fragment />;

@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import Modal from 'react-bootstrap/Modal';
-import Button from 'react-bootstrap/Button';
+import Button from "../components/CustomButtons/Button.js";
 import { connect } from 'react-redux';
 import {onTagClick, onCheckClick} from '../lib/actions';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
@@ -62,7 +62,11 @@ class TagModal extends Component {
             </div>
           </Modal.Body>
           <Modal.Footer>
-            <Button onClick={(event) => this.props.onTagClick(this.props.header)}>Close</Button>
+          <Button 
+                color="danger"
+                size="lg"
+                rel="noopener noreferrer"
+                onClick={(event) => this.props.onTagClick(this.props.header)}>Close</Button>
           </Modal.Footer>
         </Modal>
       );

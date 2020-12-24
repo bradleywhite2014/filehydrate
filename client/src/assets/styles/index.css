@@ -5155,9 +5155,6 @@ b, strong {
   left: -5px;
 }
 
-.modal-content .modal-footer button + button {
-  margin-bottom: 16px;
-}
 
 .modal-content .modal-body + .modal-footer {
   padding-top: 0;
