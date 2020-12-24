@@ -35,7 +35,7 @@ export default function ProductSection() {
           <GridItem xs={12} sm={12} md={4}>
             <InfoArea
               title="Get"
-              description="Fetch your data source by either using loading Google Sheets or a any API. "
+              description="Configure an authorized call to your data and let File Hydrate automatically unpack the response. "
               icon={GetApp}
               iconColor="info"
               vertical
@@ -44,7 +44,7 @@ export default function ProductSection() {
           <GridItem xs={12} sm={12} md={4}>
             <InfoArea
               title="Map"
-              description="Configure the incoming data values to map into the correct locations on the file."
+              description="Match the incoming data values with a Google Doc template."
               icon={MergeType}
               iconColor="danger"
               vertical
@@ -52,8 +52,8 @@ export default function ProductSection() {
           </GridItem>
           <GridItem xs={12} sm={12} md={4}>
             <InfoArea
-              title="Magic"
-              description="Let custom algorithms automate your task to generate the perfect file. Every time."
+              title="Go"
+              description="Select the rows to generate documents from and let File Hydrate do the rest."
               icon={VerifiedUser}
               iconColor="success"
               vertical

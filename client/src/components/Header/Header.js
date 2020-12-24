@@ -16,6 +16,8 @@ import Menu from "@material-ui/icons/Menu";
 // core components
 import styles from "../../assets/jss/material-kit-react/components/headerStyle.js";
 
+import {NavHamburger} from '../NavHamburger';
+
 const useStyles = makeStyles(styles);
 
 export default function Header(props) {
@@ -66,6 +68,7 @@ export default function Header(props) {
       <Toolbar className={classes.container}>
         {leftLinks !== undefined ? brandComponent : null}
         <div className={classes.flex}>
+        <NavHamburger history={history}/>
           {leftLinks !== undefined ? (
             <Hidden smDown implementation="css">
               {leftLinks}

@@ -25,7 +25,8 @@ const iconStyles = {width: '40px', height: '40px', color: 'white', marginRight: 
 export const Navigation = ({toggle}) => (
   <motion.ul onClick={toggle} variants={variants}>
     <MenuItem location={"/"} icon={<HomeIcon style={iconStyles}/>} text={'Home'} key={'home'} />
-    <MenuItem location={"/fileMerge"} icon={<MergeTypeIcon style={iconStyles}/>} text={'File Merge'} key={'fileMerge'} />
+    <MenuItem location={"/merge"} icon={<MergeTypeIcon style={iconStyles}/>} text={'Dashboard'} key={'fileMerge'} />
+    <MenuItem location={"/template_management"} icon={<SettingsIcon style={iconStyles}/>} text={'Template Management'} key={'api-settings'} />
     <MenuItem location={"/apiconfiguration"} icon={<BuildIcon style={iconStyles}/>} text={'Api Management'} key={'api-settings'} />
     <MenuItem location={"/profile"} icon={<PersonIcon style={iconStyles}/>} text={'Profile'} key={'profile'} />
     <MenuItem location={"/help"} icon={<ContactSupportIcon style={iconStyles}/>} text={'Help'} key={'help'} />
