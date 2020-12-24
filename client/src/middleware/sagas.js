@@ -1,5 +1,5 @@
 /* global URL */
-import {takeEvery,takeLatest, fork, put, call, all} from 'redux-saga/effects'
+import {takeEvery,takeLatest, takeLeading, fork, put, call, all} from 'redux-saga/effects'
 
 import * as constants from '../utils/constants'
 import * as actions from '../lib/actions'
@@ -31,8 +31,7 @@ export function* fetchMergeFields({payload}) {
 //https://fxr009j313.execute-api.us-east-2.amazonaws.com/main
 export function* submitMergeFields({payload}) {
   try{
-    const results = yield call(post,'https://lipyjnw0f8.execute-api.us-east-2.amazonaws.com/main'  + '?docId=' + payload.docId + '&access_token=' + sessionStorage.getItem('filehydrate:accessToken'), payload.formFields)
-    
+    let results = yield call(post,'https://lipyjnw0f8.execute-api.us-east-2.amazonaws.com/main'  + '?docId=' + payload.docId + '&access_token=' + sessionStorage.getItem('filehydrate:accessToken'), payload.formFields)
     if(results.error){
       if(results.error.code === 401 || results.error.code === 403) {
         //lets go a head and get logged out
@@ -325,7 +324,7 @@ function * watcher () {
     //yield takeEvery(constants.GET_TEAMS, getTeams)
     yield takeEvery(constants.FETCH_MERGE_FIELDS, fetchMergeFields)
     yield takeEvery(constants.SUBMIT_MERGE_FIELDS, submitMergeFields)
-    yield takeLatest(constants.PERFORM_FILE_SEARCH, performFileSearch)
+    yield takeLeading(constants.PERFORM_FILE_SEARCH, performFileSearch)
     yield takeEvery(constants.CREATE_BLANK_GOOGLE_DOC, createBlankGoogleDoc)
     yield takeEvery(constants.SEARCH_MIRAKL_ORDERS, performMiraklSearch)
     yield takeEvery(constants.CHECK_AUTH_STATUS, performAuthCheck)

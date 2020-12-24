@@ -305,14 +305,11 @@ def merge_template(tmpl_id, source, service, docs, merge_items):
     return copy_id
 
 
-def go(event, context, merge_items): 
+def go(event, context, merge_items, docId, access_token): 
 
 
     # Fill-in IDs of your Docs template & any Sheets data sourcekey1
-    DOCS_FILE_ID = event['queryStringParameters']['docId']
-
-    merges = event['body']
-
+    DOCS_FILE_ID = docId
 
     def get_http_client(token):
         creds = client.AccessTokenCredentials(token,
@@ -320,7 +317,7 @@ def go(event, context, merge_items):
         return creds.authorize(Http())
 
     # service endpoints to Google APIs
-    HTTP = get_http_client(event['queryStringParameters']['access_token'])
+    HTTP = get_http_client(access_token)
 
 
     DRIVE = discovery.build('drive', 'v3', http=HTTP)
@@ -333,9 +330,13 @@ def go(event, context, merge_items):
 def lambda_handler(event, context):
     # TODO lambda handler
     created_ids = []
-    merge_items = json.loads(event['body'])
+    print(event)
+    # TODO FIX THIS DUMB EVENT PARSING
+    merge_items = event['merges']
+    docId = event['docId']
+    access_token = event['access_token']
     for merge_obj in merge_items:        # Second Example
-        created_ids.append(go(event, context, merge_obj))
+        created_ids.append(go(event, context, merge_obj, docId, access_token))
     #return event['queryStringParameters']['docId']
     return {
         'statusCode': 200,
