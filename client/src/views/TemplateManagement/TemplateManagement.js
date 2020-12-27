@@ -8,7 +8,7 @@ import { makeStyles } from "@material-ui/core/styles";
 
 // bkw components
 import Merge from '../Merge'
-import ProfileDetails from '../ProfileDetails'
+import TemplateCreation from '../TemplateCreation'
 import DataTableModal from '../../components/DataTableModal'
 import ToastMessage from '../../components/ToastMessage'
 import GlobalModal from '../../components/GlobalModal'
@@ -29,7 +29,7 @@ const dashboardRoutes = [];
 
 const useStyles = makeStyles(styles);
 
-export default function ProfilePage(props) {
+export default function TemplateManagement(props) {
   const classes = useStyles();
   const { ...rest } = props;
   return (
@@ -46,7 +46,7 @@ export default function ProfilePage(props) {
       <div>
         <div className={classes.main}>
           <div className={classes.container}>
-            <ProfileDetails />
+            <TemplateCreation />
             <ToastMessage />
             <GlobalModal/>
           </div>

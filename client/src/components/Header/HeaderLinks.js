@@ -73,7 +73,7 @@ class HeaderLinks extends Component {
         sessionStorage.setItem('filehydrate:accessToken', result.credential.accessToken);
         sessionStorage.setItem('filehydrate:idToken', result.credential.idToken);
         this.props.setUserInfo({name: result.user.displayName, imageUrl: result.user.photoURL, idToken: result.credential.idToken, uid: user.uid})
-        
+        this.props.getMiraklTokenStatus();
         this.props.findOrCreateUserSubStatus(user.uid);
 
         Auth.setLoggedIn(true) 

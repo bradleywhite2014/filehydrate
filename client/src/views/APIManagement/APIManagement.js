@@ -3,12 +3,14 @@ import React from "react";
 import classNames from "classnames";
 // @material-ui/core components
 import { makeStyles } from "@material-ui/core/styles";
+import Container from '@material-ui/core/Container';
+import TextField from '@material-ui/core/TextField';
 
 // @material-ui/icons
 
 // bkw components
 import Merge from '../Merge'
-import ProfileDetails from '../ProfileDetails'
+import MiraklApiManagement from '../MiraklApiManagement'
 import DataTableModal from '../../components/DataTableModal'
 import ToastMessage from '../../components/ToastMessage'
 import GlobalModal from '../../components/GlobalModal'
@@ -29,7 +31,7 @@ const dashboardRoutes = [];
 
 const useStyles = makeStyles(styles);
 
-export default function ProfilePage(props) {
+export default function APIMangagement(props) {
   const classes = useStyles();
   const { ...rest } = props;
   return (
@@ -46,7 +48,7 @@ export default function ProfilePage(props) {
       <div>
         <div className={classes.main}>
           <div className={classes.container}>
-            <ProfileDetails />
+            <MiraklApiManagement />
             <ToastMessage />
             <GlobalModal/>
           </div>

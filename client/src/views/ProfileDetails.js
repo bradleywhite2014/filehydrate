@@ -79,7 +79,7 @@ const styles = theme => ({
   }
 });
 
-class FileSelect extends Component {
+class ProfileDetails extends Component {
 
     constructor(props) {
       super(props)
@@ -171,125 +171,20 @@ class FileSelect extends Component {
           <Container className={styles.container}>
             <Container className={styles.container_horizontal}>
               {
-                this.props.state.docId ?
-                  <a style={{marginLeft: '8px'}} href={`https://docs.google.com/document/d/${this.props.state.docId}/edit`}>Edit Google Doc Template</a>
-                :
-                <React.Fragment/>
+                this.props.state.sub_type === 'pro' ?
+                <div style={{color: 'black'}}>Current status: PRO</div> : 
+                this.props.state.sub_type === 'basic' ?
+                <div style={{color: 'black'}}>Current status: Basic</div> :
+                <div style={{color: 'black'}}>Current status: Inactive</div>
               }
-            <AutoComplete
-              id="tags-standard"
-              options={this.props.state.fileList}
-              getOptionLabel={(option) => option.label}
-              getOptionSelected={(option, value) => option.value}
-              onChange={this.selectFile}
-              onInputChange={this.onUpdateInput}
-              style={{marginTop: "16px"}}
-              renderInput={(params) => (
-                <TextField
-                  {...params}
-                  variant="standard"
-                  label="File Search"
-                  placeholder="Type to search..."
-                />
-              )}
-            />
-          </Container>
-          <Container className={styles.container}>
-            <Grid style={{marginTop: "36px", marginBottom: "8px"}} item>
-              <Typography style={{marginTop: "8px"}} variant="h5" marked="center" component="h2">
-                Data Source:
-              </Typography>
-              <ToggleButtonGroup size="large" value={this.props.state.mergeStyle} exclusive onChange={this.changeMergeStyle}>
-                <ToggleButton key={1} value="manual">
-                  <Typography style={{marginTop: "8px"}} variant="h5" marked="center" component="h2">
-                    Manual
-                  </Typography>
-                </ToggleButton>,
-                <ToggleButton key={2} value="mirakl">
-                  <Typography style={{marginTop: "8px"}} variant="h5" marked="center" component="h2">
-                    Mirakl
-                  </Typography>
-                </ToggleButton>,
-                <ToggleButton key={3} value="gsheet" disabled={true}>
-                  <Typography style={{marginTop: "8px"}} variant="h5" marked="center" component="h2">
-                    Google Sheets
-                  </Typography>
-                </ToggleButton>,
-              </ToggleButtonGroup>
-            </Grid>
-          </Container>
-         { this.props.state.docId && this.props.state.mergeStyle === 'manual' ?
-        <div style={{marginTop: "36px", marginBottom: "8px"}}>
-        <Grid container spacing={5}>
-            <Grid item xs={12} md={6}>
-            <Card elevation={5}>
-              <CardContent>
-                {
-                  this.props.state.loadingFields ? (
-                    <React.Fragment>
-                      <Skeleton animation="wave" height={60} />
-                      <Skeleton animation="wave" height={600} />
-                    </React.Fragment>
-                  ) : (
-                    <iframe id="viewer" src={"https://docs.google.com/document/d/" + this.props.state.docId + "/preview"} style={{width: "100%", height: "700px" ,marginTop: "15px"}}></iframe>
-                  )
-                }
-              </CardContent>
-            </Card>
-              
-            </Grid>
-            <Grid item xs={12} md={6}>
-            <Card elevation={5}>
-            <Merge docId={this.props.state.docId} />
-              </Card>
-            </Grid>
-          </Grid>
-        </div>
-        : this.props.state.docId && this.props.state.mergeStyle === 'mirakl' ?
-          <div>
-            {this.props.state.loadingOrders ? 
-              <React.Fragment>
-              <Skeleton animation="wave" height={60} />
-              <Skeleton animation="wave" height={600} />
-            </React.Fragment> : 
-            this.props.state.tableList && this.props.state.tableList.length > 0 && !this.props.state.modalTableListKey ? 
-            <SearchDataTable
-              modalTableListKey={this.props.state.modalTableListKey}
-              modalTableListKeyList={this.props.state.modalTableListKeyList}
-              isLoadingTemplate={this.props.state.loadingTemplate}
-              triggerLoadTemplate={() => this.props.loadUserTemplateForFile(this.props.state.docId)}
-              triggerSaveTemplate={() => this.props.submitUserTemplate({userDetails: {docId: this.props.state.docId, formFields: this.props.state.mappingFields}})}
-              triggerRefresh={this.props.searchMiraklOrders}
-              loadingOrders={this.props.state.loadingOrders}
-              miraklHeaders={this.props.state.miraklHeaders} 
-              onTagClick={this.props.onTagClick}
-              onTableClick={this.props.onTableClick}
-              formFields={this.props.state.formFields}
-              mappingFields={this.props.state.mappingFields}
-              docId={this.props.state.docId}
-              submitMergeFields={this.props.submitMergeFields}
-              tableList={this.props.state.tableList}
-              formToMappingFields={this.props.state.formToMappingFields}
-            />
-            :
-            <React.Fragment />
-            } 
-          </div>
-        :
-        <div style={{marginTop: "36px", marginBottom: "8px"}}>
-        <Typography style={{marginTop: "8px"}} variant="h5" marked="center" component="h2">
-            Please select a document...
-          </Typography>
-        </div>
-      }
-        
+            </Container>
           </Container>
         </section>
       )
   }
 }
 
-FileSelect.propTypes = {
+ProfileDetails.propTypes = {
 };
 
 export default connect((state) => (
@@ -314,4 +209,4 @@ export default connect((state) => (
     updateDocTemplateName
   }
 )
-(withStyles(styles)(FileSelect));
+(withStyles(styles)(ProfileDetails));

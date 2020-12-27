@@ -79,7 +79,7 @@ const styles = theme => ({
   }
 });
 
-class FileSelect extends Component {
+class TemplateCreation extends Component {
 
     constructor(props) {
       super(props)
@@ -170,126 +170,31 @@ class FileSelect extends Component {
         <section className={styles.root}>
           <Container className={styles.container}>
             <Container className={styles.container_horizontal}>
-              {
-                this.props.state.docId ?
-                  <a style={{marginLeft: '8px'}} href={`https://docs.google.com/document/d/${this.props.state.docId}/edit`}>Edit Google Doc Template</a>
-                :
-                <React.Fragment/>
-              }
-            <AutoComplete
-              id="tags-standard"
-              options={this.props.state.fileList}
-              getOptionLabel={(option) => option.label}
-              getOptionSelected={(option, value) => option.value}
-              onChange={this.selectFile}
-              onInputChange={this.onUpdateInput}
-              style={{marginTop: "16px"}}
-              renderInput={(params) => (
-                <TextField
-                  {...params}
-                  variant="standard"
-                  label="File Search"
-                  placeholder="Type to search..."
-                />
-              )}
-            />
-          </Container>
-          <Container className={styles.container}>
-            <Grid style={{marginTop: "36px", marginBottom: "8px"}} item>
-              <Typography style={{marginTop: "8px"}} variant="h5" marked="center" component="h2">
-                Data Source:
-              </Typography>
-              <ToggleButtonGroup size="large" value={this.props.state.mergeStyle} exclusive onChange={this.changeMergeStyle}>
-                <ToggleButton key={1} value="manual">
-                  <Typography style={{marginTop: "8px"}} variant="h5" marked="center" component="h2">
-                    Manual
-                  </Typography>
-                </ToggleButton>,
-                <ToggleButton key={2} value="mirakl">
-                  <Typography style={{marginTop: "8px"}} variant="h5" marked="center" component="h2">
-                    Mirakl
-                  </Typography>
-                </ToggleButton>,
-                <ToggleButton key={3} value="gsheet" disabled={true}>
-                  <Typography style={{marginTop: "8px"}} variant="h5" marked="center" component="h2">
-                    Google Sheets
-                  </Typography>
-                </ToggleButton>,
-              </ToggleButtonGroup>
-            </Grid>
-          </Container>
-         { this.props.state.docId && this.props.state.mergeStyle === 'manual' ?
-        <div style={{marginTop: "36px", marginBottom: "8px"}}>
-        <Grid container spacing={5}>
-            <Grid item xs={12} md={6}>
-            <Card elevation={5}>
-              <CardContent>
+              <TextField onChange={(event) => this.updateTemplateName(event)} style={{width: '-webkit-fill-available' , marginTop: 8, marginBottom: 8}} label={'Template Name'} variant="outlined" />
+              <Button
+                  color="danger"
+                  size="lg"
+                  rel="noopener noreferrer"
+                  onClick={this.onClickCreateDoc}
+                  disabled={!this.props.state.docTemplateNameInput}
+                >
+                  <i className="fas fa-play" />
+                  Create New Template
+                </Button>
                 {
-                  this.props.state.loadingFields ? (
-                    <React.Fragment>
-                      <Skeleton animation="wave" height={60} />
-                      <Skeleton animation="wave" height={600} />
-                    </React.Fragment>
-                  ) : (
-                    <iframe id="viewer" src={"https://docs.google.com/document/d/" + this.props.state.docId + "/preview"} style={{width: "100%", height: "700px" ,marginTop: "15px"}}></iframe>
-                  )
+                  this.props.state.docId ?
+                    <a style={{marginLeft: '8px'}} href={`https://docs.google.com/document/d/${this.props.state.docId}/edit`}>Edit Google Doc Template</a>
+                  :
+                  <React.Fragment/>
                 }
-              </CardContent>
-            </Card>
-              
-            </Grid>
-            <Grid item xs={12} md={6}>
-            <Card elevation={5}>
-            <Merge docId={this.props.state.docId} />
-              </Card>
-            </Grid>
-          </Grid>
-        </div>
-        : this.props.state.docId && this.props.state.mergeStyle === 'mirakl' ?
-          <div>
-            {this.props.state.loadingOrders ? 
-              <React.Fragment>
-              <Skeleton animation="wave" height={60} />
-              <Skeleton animation="wave" height={600} />
-            </React.Fragment> : 
-            this.props.state.tableList && this.props.state.tableList.length > 0 && !this.props.state.modalTableListKey ? 
-            <SearchDataTable
-              modalTableListKey={this.props.state.modalTableListKey}
-              modalTableListKeyList={this.props.state.modalTableListKeyList}
-              isLoadingTemplate={this.props.state.loadingTemplate}
-              triggerLoadTemplate={() => this.props.loadUserTemplateForFile(this.props.state.docId)}
-              triggerSaveTemplate={() => this.props.submitUserTemplate({userDetails: {docId: this.props.state.docId, formFields: this.props.state.mappingFields}})}
-              triggerRefresh={this.props.searchMiraklOrders}
-              loadingOrders={this.props.state.loadingOrders}
-              miraklHeaders={this.props.state.miraklHeaders} 
-              onTagClick={this.props.onTagClick}
-              onTableClick={this.props.onTableClick}
-              formFields={this.props.state.formFields}
-              mappingFields={this.props.state.mappingFields}
-              docId={this.props.state.docId}
-              submitMergeFields={this.props.submitMergeFields}
-              tableList={this.props.state.tableList}
-              formToMappingFields={this.props.state.formToMappingFields}
-            />
-            :
-            <React.Fragment />
-            } 
-          </div>
-        :
-        <div style={{marginTop: "36px", marginBottom: "8px"}}>
-        <Typography style={{marginTop: "8px"}} variant="h5" marked="center" component="h2">
-            Please select a document...
-          </Typography>
-        </div>
-      }
-        
+            </Container>
           </Container>
         </section>
       )
   }
 }
 
-FileSelect.propTypes = {
+TemplateCreation.propTypes = {
 };
 
 export default connect((state) => (
@@ -314,4 +219,4 @@ export default connect((state) => (
     updateDocTemplateName
   }
 )
-(withStyles(styles)(FileSelect));
+(withStyles(styles)(TemplateCreation));
