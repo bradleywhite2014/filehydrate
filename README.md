@@ -1,3 +1,3 @@
 # file-hydrate
 
-in order for api gateway to report logs, you must create a role and turn on logging. This will allow it to report to cloudwatch.
+Custom application which can compile Google Document content and provide mail merge technology in order to automate document creation from raw JSON structure
